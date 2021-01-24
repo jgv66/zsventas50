@@ -13,6 +13,8 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { PipesModule } from './pipes/pipes.module';
 import { ComponentsModule } from './components/components.module';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [AppComponent],
@@ -21,7 +23,8 @@ import { ComponentsModule } from './components/components.module';
             HttpClientModule,
             PipesModule,
             IonicModule.forRoot(),
-            AppRoutingModule],
+            AppRoutingModule,
+            ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })],
   providers: [
     StatusBar,
     SplashScreen,
