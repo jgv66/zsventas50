@@ -1,0 +1,27 @@
+<ion-header no-border>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="salir()">
+                <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <img src="./assets/imgs/logo-zs.png" alt="" class="navbar-img">
+        <ion-title>Buscar Vendedores</ion-title>
+    </ion-toolbar>
+    <ion-searchbar animated (ionChange)="buscarVendedores( $event )" [debounce]="450"></ion-searchbar>
+</ion-header>
+
+<ion-progress-bar *ngIf=" buscando " type="indeterminate"></ion-progress-bar>
+
+<ion-content>
+    <ion-list>
+        <ion-item *ngFor="let vend of vendedores" (click)="salirConData( vend )">
+            <ion-label class="ion-text-wrap">
+                <ion-text>
+                    <h2><b>{{ vend.kofu }}</b></h2>
+                    <h3>{{ vend.nombre }}</h3>
+                </ion-text>
+            </ion-label>
+        </ion-item>
+    </ion-list>
+</ion-content>

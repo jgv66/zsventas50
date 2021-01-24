@@ -1,0 +1,48 @@
+<ion-header>
+    <ion-toolbar>
+        <img src="assets/imgs/logo-zs.png" alt="" class="navbar-img">
+        <ion-title>Ingresar al sistema</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <img src="assets/imgs/auto-00{{autoArriba}}.jpg" alt="">
+
+    <p style="font-size: 120%; text-align: center; padding-top: 5px; padding-bottom: 5px; margin-top: 5px; margin-bottom: 5px;">
+        Acceda con sus datos al sistema.
+    </p>
+
+    <ion-card class="ion-no-padding">
+
+        <ion-list>
+
+            <ion-item lines='none'>
+                <ion-label position="floating">Correo electrónico</ion-label>
+                <ion-input type="text" name="rutocorreo" [(ngModel)]="rutocorreo" required clearInput=true></ion-input>
+            </ion-item>
+
+            <ion-item lines='none'>
+                <ion-label position="floating">Su clave...</ion-label>
+                <ion-input type="password" name="clave" [(ngModel)]="clave" required clearInput=true></ion-input>
+            </ion-item>
+
+            <ion-progress-bar *ngIf=" buscando " type="indeterminate"></ion-progress-bar>
+
+            <ion-grid>
+                <ion-row>
+                    <ion-col size="4">
+                        <ion-button expand="block" size="small" (click)="salir()">Salir</ion-button>
+                    </ion-col>
+                    <ion-col size="8">
+                        <ion-button expand="block" size="small" (click)="logearme()">Ingresar</ion-button>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+
+        </ion-list>
+
+    </ion-card>
+
+    <img src="assets/imgs/logo-kinetik.png" alt="" class="logo-kinetik">
+
+</ion-content>

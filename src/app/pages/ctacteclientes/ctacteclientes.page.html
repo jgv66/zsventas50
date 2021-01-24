@@ -1,0 +1,47 @@
+<ion-header>
+
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button text=' '></ion-back-button>
+        </ion-buttons>
+        <img src="./assets/imgs/logo-zs.png" alt="" class="navbar-img">
+        <ion-title>Documentos Impagos</ion-title>
+    </ion-toolbar>
+
+    <ion-toolbar>
+        <ion-segment (ionChange)="segmentChanged($event)" color="primary">
+            <!-- <ion-segment [(ngModel)]="impagos">   -->
+            <ion-segment-button value="todos">
+                <ion-label>Todos </ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="vencido">
+                <ion-label>Vencidos </ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="por vencer">
+                <ion-label>Por Vencer</ion-label>
+            </ion-segment-button>
+        </ion-segment>
+    </ion-toolbar>
+
+</ion-header>
+
+<ion-progress-bar *ngIf=" buscando " type="indeterminate"></ion-progress-bar>
+
+<ion-content>
+
+    <ion-list *ngIf=" documentos ">
+        <ion-item *ngFor="let documento of documentos | filtro: segmento: 'estado' " detail (click)="muestraID( documento.id )">
+            <ion-label>
+                <h2>{{ documento.tipo }}:{{ documento.numero }} </h2>
+                <p style="font-size: 85%">Emisión:<b>{{ documento.emision }}</b></p>
+                <p style="font-size: 85%">Vencim.:<b>{{ documento.fultvenc }}</b></p>
+                <p style="font-size: 85%">DIAS:<b>{{ documento.dias | number:"1.0-0" }}</b></p>
+            </ion-label>
+            <ion-label slot="end" class="ion-text-right" color="danger">
+                <p style="font-size: 105%">Monto:<b>${{ documento.monto | number:"1.0-0" }}</b></p>
+                <p style="font-size: 105%">Saldo:<b>${{ documento.saldo | number:"1.0-0" }}</b></p>
+            </ion-label>
+        </ion-item>
+    </ion-list>
+
+</ion-content>

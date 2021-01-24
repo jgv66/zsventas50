@@ -1,0 +1,32 @@
+.fs75 {
+    font-size: 75%;
+}
+
+.boton-modif {
+    padding-top: 0px;
+    margin-top: -5px;
+    height: 20px;
+    border-top-width: 0px;
+}
+
+ion-card-header {
+    background-color: white;
+    position: relative;
+    ion-icon {
+        position: absolute;
+        right: 1.5rem;
+    }
+}
+
+// Ref.: https://css-tricks.com/using-css-transitions-auto-dimensions/
+// This stuff matters!
+ion-card-content {
+    overflow: hidden;
+    transition: max-height 0.5s ease-out; // note that we're transitioning max-height, not height!
+    height: auto;
+    max-height: 600px; // still have to hard-code a value!
+}
+
+ion-card-content.collapsed {
+    max-height: 0;
+}

@@ -1,0 +1,52 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="salir()">
+                <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <img src="./assets/imgs/logo-zs.png" alt="" class="navbar-img">
+        <ion-title>Creación de Patentes</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content color="fondozs">
+
+    <ion-card style="border-bottom-width: 11px;padding-bottom: 20px;">
+        <ion-card-header>
+            <ion-card-subtitle>Todos estos datos serán guardados como datos anexos en la ficha del cliente</ion-card-subtitle>
+            <ion-card-title>Nueva Placa Patente</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-list>
+                <ion-item>
+                    <ion-label position="stacked">Patente</ion-label>
+                    <ion-input color="primary" type="text" style="text-transform: uppercase;" name="patente" [(ngModel)]="patente"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="stacked">Marca</ion-label>
+                    <ion-input color="primary" type="text" style="text-transform:uppercase;" name="marca" [(ngModel)]="marca"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="stacked">Modelo</ion-label>
+                    <ion-input color="primary" type="text" style="text-transform:uppercase;" name="modelo" [(ngModel)]="modelo"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="stacked">Color</ion-label>
+                    <ion-input color="primary" type="text" style="text-transform:uppercase;" name="color" [(ngModel)]="color"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="stacked">Año</ion-label>
+                    <ion-input color="primary" type="text" style="text-transform:uppercase;" name="anno" [(ngModel)]="anno"></ion-input>
+                </ion-item>
+            </ion-list>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-progress-bar *ngIf=" modificando " type="indeterminate"></ion-progress-bar>
+
+    <ion-button [disabled]=" patente === '' || marca === '' || modelo === '' " expand="block" size="small" (click)="crearPatente()" style="margin-left:16px;margin-right:16px;">
+        Actualizar los datos
+    </ion-button>
+
+</ion-content>

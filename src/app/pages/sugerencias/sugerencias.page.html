@@ -1,0 +1,81 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button>
+                <!-- <ion-icon slot="icon-only" name="arrow-back"></ion-icon> -->
+            </ion-back-button>
+        </ion-buttons>
+        <img src="./assets/imgs/logo-zs.png" alt="" class="navbar-img">
+        <ion-title>Sugerencias al Artículo</ion-title>
+        <ion-buttons slot="end" (click)="limpiar()" style="margin-right: 15px;">
+            <ion-icon slot="icon-only" name="sync"></ion-icon>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+    <ion-card class="ion-padding" style="margin-top: 5px;
+                                          margin-left: 5px;
+                                          margin-right: 5px;
+                                          padding-left: 10px;
+                                          padding-right: 10px;
+                                          padding-top: 5px;
+                                          padding-bottom: 5px;
+                                          margin-bottom: 10px;">
+        <p class="ion-text-justify">Sus comentarios y sugerencias respecto del producto involucrado, nos sirven para mejorar su venta, exhibición y mercadeo.</p>
+    </ion-card>
+
+    <ion-list lines="none">
+        <ion-list-header mode='ios'>
+            <h3 class="ion-text-center"><b>Calidad del producto</b></h3>
+        </ion-list-header>
+        <ion-item>
+            <ion-label>El producto es de buena calidad</ion-label>
+            <ion-select mode="ios" interface="popover" value="prodbueno" [(ngModel)]="prodbueno">
+                <ion-select-option value="si">Si</ion-select-option>
+                <ion-select-option value="no">No</ion-select-option>
+            </ion-select>
+        </ion-item>
+        <ion-item>
+            <ion-label>El precio del producto es correcto</ion-label>
+            <ion-select mode="ios" interface="popover" value="preciomuybarato" [(ngModel)]="preciomuybarato">
+                <ion-select-option value="si">Si</ion-select-option>
+                <ion-select-option value="no">No</ion-select-option>
+            </ion-select>
+        </ion-item>
+        <ion-item>
+            <ion-label>El stock del producto es correcto</ion-label>
+            <ion-select mode="ios" interface="popover" value="prodconstock" [(ngModel)]="prodconstock">
+                <ion-select-option value="si">Si</ion-select-option>
+                <ion-select-option value="no">No</ion-select-option>
+            </ion-select>
+        </ion-item>
+        <ion-item>
+            <ion-label>Recomienda comprar?</ion-label>
+            <ion-select mode="ios" interface="popover" value="prodconquiebre" [(ngModel)]="prodconquiebre">
+                <ion-select-option value="si">Si</ion-select-option>
+                <ion-select-option value="no">No</ion-select-option>
+            </ion-select>
+        </ion-item>
+        <ion-item *ngIf=" prodconquiebre ">
+            <ion-label>Cantidad recomendada :</ion-label>
+            <ion-input type="number" name="cantidad" [(ngModel)]="cantidad"></ion-input>
+        </ion-item>
+        <ion-list-header mode='ios'>
+            <h3 class="ion-text-center"><b>Comentarios</b></h3>
+        </ion-list-header>
+        <ion-item>
+            <ion-textarea name="observaciones" [(ngModel)]="observaciones" clearOnEdit="true" rows="6" placeholder="Ingrese sus notas aquí...">
+            </ion-textarea>
+        </ion-item>
+    </ion-list>
+
+    <ion-progress-bar *ngIf=" enviando " type="indeterminate"></ion-progress-bar>
+
+    <ion-button size="small" expand="block" (click)="enviarSugerencia()" style="margin-top:15px;">
+        <ion-icon slot="start" name="send"></ion-icon>
+        Enviar mis sugerencias
+    </ion-button>
+
+</ion-content>

@@ -1,0 +1,196 @@
+<ion-header>
+    <ion-toolbar [color]=" baseLocal.soloCotizar === true ? 'success' : 'primary' ">
+        <img src="assets/imgs/logo-zs.png" alt="" class="navbar-img">
+        <ion-title class="ion-text-center">Pre-venta en Curso</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+    <ion-button *ngIf=" sumaCarrito() > 0 " expand="block" [color]=" baseLocal.soloCotizar === true ? 'success' : 'primary' ">Total del Pedido: ${{ sumaCarrito() | number:"1.0-0" }}</ion-button>
+
+    <ion-list *ngIf=" sumaCarrito() > 0 " #lista>
+
+        <ion-item-sliding *ngFor="let producto of funciones.miCarrito">
+            <!-- menu cantidad e info -->
+            <ion-item-options side="start" class="item1">
+                <ion-item-option color="primary" (click)="cambiarCantidad(producto)">
+                    <ion-icon name="refresh-circle" size="large"></ion-icon>
+                </ion-item-option>
+                <ion-item-option color="secondary" (click)="infoProducto(producto)">
+                    <ion-icon name="information-circle" size="large"></ion-icon>
+                </ion-item-option>
+                <ion-item-option color="warning" (click)="cambiarKofu(producto)">
+                    <ion-icon name="person-add" size="large"></ion-icon>
+                </ion-item-option>
+            </ion-item-options>
+            <ion-item-options side="end" class="item1">
+                <ion-item-option color="danger" (click)="quitarDelCarro( producto )">
+                    <ion-icon name="trash" size="large"></ion-icon>
+                </ion-item-option>
+            </ion-item-options>
+            <ion-item class="item1">
+                <ion-grid class="grid1">
+                    <!-- prod + bod -->
+                    <ion-row style="height:25px;">
+                        <ion-col size="1.8" class="ion-text-right">
+                            <p>SKU : </p>
+                        </ion-col>
+                        <ion-col size="4.8" class="ion-text-left">
+                            <p><b>{{ producto.codigo }}</b></p>
+                        </ion-col>
+                        <ion-col size="3.5" class="ion-text-left">
+                            <p>Bod : <b>{{ producto.bodega }}</b></p>
+                        </ion-col>
+                        <ion-col size="1.9" class="ion-text-left" *ngIf=" producto.vendedor !== baseLocal.user.KOFU ">
+                            <p><b class="rojo">( {{ producto.vendedor }} )</b></p>
+                        </ion-col>
+                    </ion-row>
+                    <!-- precio sin desc -->
+                    <ion-row *ngIf=" producto.descuentomax <= 0 " style="height:25px;">
+                        <ion-col size="1.8" class="ion-text-right">
+                            <p>Pre.: </p>
+                        </ion-col>
+                        <ion-col size="3" class="ion-text-right">
+                            <b><p>${{ producto.precio | number:"1.0-0" }}</p></b>
+                        </ion-col>
+                        <ion-col size="0.5" class="ion-text-center">
+                            <p>x</p>
+                        </ion-col>
+                        <ion-col size="1.5" class="ion-text-center">
+                            <b><p>{{ producto.cantidad }}</p></b>
+                        </ion-col>
+                        <ion-col size="0.5" class="ion-text-center">
+                            <p>=</p>
+                        </ion-col>
+                        <ion-col size="3" class="ion-text-left">
+                            <b><p>$ {{ producto.precio * producto.cantidad | number:"1.0-0" }}</p></b>
+                        </ion-col>
+                    </ion-row>
+                    <!-- precio con desc -->
+                    <ion-row *ngIf=" producto.descuentomax > 0" style="height:25px;">
+                        <ion-col size="1.8" class="ion-text-right">
+                            <p>May.: </p>
+                        </ion-col>
+                        <ion-col size="3" class="ion-text-right">
+                            <b><p>${{ producto.preciomayor | number:"1.0-0" }}</p></b>
+                        </ion-col>
+                        <ion-col size="0.5" class="ion-text-center">
+                            <p>x</p>
+                        </ion-col>
+                        <ion-col size="1.5" class="ion-text-center">
+                            <b><p>{{ producto.cantidad }}</p></b>
+                        </ion-col>
+                        <ion-col size="0.5" class="ion-text-center">
+                            <p>=</p>
+                        </ion-col>
+                        <ion-col size="3" class="ion-text-center">
+                            <b><p>$ {{ producto.preciomayor * producto.cantidad | number:"1.0-0" }}</p></b>
+                        </ion-col>
+                    </ion-row>
+                    <!-- descrip -->
+                    <ion-row style="height:25px;padding-left: 5px; margin-bottom: 25px;">
+                        <ion-col size="1.8" class="ion-text-right">
+                            <p>Des.: </p>
+                        </ion-col>
+                        <ion-col size="9" class="ion-text-wrap">
+                            <p><b>{{ producto.descrip }}</b></p>
+                        </ion-col>
+                        <ion-col size="1.2">
+                            <ion-button (click)="addAvisoServicio( producto )" fill="clear" style="margin-left:-15px;">
+                                <ion-icon slot="icon-only" name="notifications-outline"></ion-icon>
+                            </ion-button>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-item>
+        </ion-item-sliding>
+
+        <!-- orden de compra -->
+        <ion-card style="margin: 10px;">
+            <ion-card-header (click)="toggleAccordion(1)">
+                <ion-card-title class="ion-text-left">OC Cliente
+                    <ion-icon style="margin-left: 50px" mode="ios" [name]=" (collapsedOcc) ? 'arrow-forward' : 'arrow-down' "></ion-icon>
+                </ion-card-title>
+            </ion-card-header>
+            <!-- <h5 style="margin-left: 10px;"><b>Orden de Compra Cliente</b></h5> -->
+            <ion-card-content [ngClass]="{ 'collapsed': collapsedOcc }" style="padding: 0px">
+                <ion-item>
+                    <ion-label>Número de OCC: </ion-label>
+                    <ion-input type="text" name="textoOcc" [(ngModel)]="textoOcc"></ion-input>
+                </ion-item>
+            </ion-card-content>
+        </ion-card>
+
+        <!-- observaciones -->
+        <ion-card style="margin: 10px; margin-bottom: 15px;">
+            <!-- <h5 style="margin-left: 10px;"><b>Observaciones</b></h5> -->
+            <ion-card-header (click)="toggleAccordion(2)">
+                <ion-card-title class="ion-text-left">Observaciones
+                    <ion-icon style="margin-left: 50px" mode="ios" [name]=" (collapsedObs) ? 'arrow-forward' : 'arrow-down' "></ion-icon>
+                </ion-card-title>
+            </ion-card-header>
+            <ion-card-content [ngClass]="{ 'collapsed': collapsedObs }" style="padding: 0px">
+                <ion-item>
+                    <ion-label style="width:225px;max-width:225px;">Kilometraje en su marcador? </ion-label>
+                    <ion-input type="number" name="cantidadKM" [(ngModel)]="cantidadKM"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-textarea type="text" name="textoObs" [(ngModel)]="textoObs" clearInput="true" rows="6" placeholder="escriba aquí sus observaciones..."></ion-textarea>
+                </ion-item>
+            </ion-card-content>
+        </ion-card>
+
+        <!-- que se graba? -->
+        <ion-card style="margin: 10px;" *ngIf=" sumaCarrito() > 0 ">
+            <!-- <h5 style="margin-left: 10px;"><b>Opciones de grabación</b></h5> -->
+            <ion-card-header (click)="toggleAccordion(4)">
+                <ion-card-title class="ion-text-left">Opción de grabación
+                    <ion-icon style="margin-left: 50px" mode="ios" [name]=" (collapsedSave) ? 'arrow-forward' : 'arrow-down' "></ion-icon>
+                </ion-card-title>
+            </ion-card-header>
+            <ion-card-content [ngClass]="{ 'collapsed': collapsedSave }" style="padding: 0px">
+                <ion-list lines="none">
+                    <ion-radio-group name="queHacerConCarrito" [(ngModel)]="queHacerConCarrito">
+                        <ion-item *ngIf=" !baseLocal.soloCotizar && !baseLocal.user.esuncliente ">
+                            <ion-label>Grabar una pre-venta</ion-label>
+                            <ion-radio value="Grabar una Pre-Venta"></ion-radio>
+                        </ion-item>
+                        <ion-item *ngIf=" !baseLocal.soloCotizar || baseLocal.user.esuncliente ">
+                            <ion-label>Grabar una cotización</ion-label>
+                            <ion-radio value="Grabar una cotización"></ion-radio>
+                        </ion-item>
+                        <ion-item *ngIf=" !baseLocal.soloCotizar && !baseLocal.user.esuncliente ">
+                            <ion-label>Grabar NVV definitiva</ion-label>
+                            <ion-radio value="Grabar NVV definitiva"></ion-radio>
+                        </ion-item>
+                        <ion-item *ngIf=" ( !baseLocal.soloCotizar && !baseLocal.user.esuncliente ) || baseLocal.soloCotizar ">
+                            <ion-label>Solo enviar un correo</ion-label>
+                            <ion-radio value="Solo enviar un correo"></ion-radio>
+                        </ion-item>
+                        <!-- correo -->
+                        <ion-item *ngIf=" queHacerConCarrito === 'Solo enviar un correo' " style="margin-left: 15px;">
+                            <ion-label>Email : </ion-label>
+                            <ion-input type="text" name="cTo" [(ngModel)]="cTo"></ion-input>
+                        </ion-item>
+                        <ion-item *ngIf=" queHacerConCarrito === 'Solo enviar un correo' " style="margin-left: 15px;">
+                            <ion-label>Copia : </ion-label>
+                            <ion-input type="text" name="cCc" [(ngModel)]="cCc"></ion-input>
+                        </ion-item>
+                    </ion-radio-group>
+                    <ion-progress-bar *ngIf=" enviando " type="indeterminate"></ion-progress-bar>
+                    <ion-row>
+                        <ion-col size="12">
+                            <ion-button expand="block" size="small" (click)="accionDelCarrito()">
+                                <ion-icon slot="start" name="pulse"></ion-icon>
+                                {{ queHacerConCarrito }}
+                            </ion-button>
+                        </ion-col>
+                    </ion-row>
+                </ion-list>
+            </ion-card-content>
+        </ion-card>
+
+    </ion-list>
+
+</ion-content>

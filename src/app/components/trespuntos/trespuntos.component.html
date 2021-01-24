@@ -1,0 +1,6 @@
+<ion-list lines="none">
+    <ion-item *ngFor="let item of aDesplegar; let i = index;" detail (click)="onClick( i )">
+        <ion-icon style="margin-right: 10px;" size="small" slot="start" [name]="item.icon"></ion-icon>
+        <ion-label style="font-size: 80%;" color="primary">{{ item.texto }}</ion-label>
+    </ion-item>
+</ion-list>

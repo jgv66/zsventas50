@@ -1,0 +1,97 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button text=' '></ion-back-button>
+        </ion-buttons>
+        <img src="./assets/imgs/logo-zs.png" alt="" class="navbar-img">
+        <ion-title>Detalle del documento</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-progress-bar *ngIf=" buscando " type="indeterminate"></ion-progress-bar>
+
+<ion-content class="animated fadeIn">
+
+    <ion-item *ngIf=" detalle ">
+        <ion-label>
+            <h2 class="ion-text-center"><b>{{ detalle[0].td }} : {{ detalle[0].numero }}</b></h2>
+        </ion-label>
+    </ion-item>
+
+    <ion-item-sliding *ngFor="let linea of detalle">
+
+        <ion-item>
+
+            <ion-grid style="font-size: 80%;">
+
+                <ion-row style="height: 25px;">
+                    <ion-col class="ion-text-right" size="3">
+                        <p>Código :</p>
+                    </ion-col>
+                    <ion-col class="ion-text-left" size="6">
+                        <p><b>{{ linea.codigo }}</b></p>
+                    </ion-col>
+                    <ion-col class="ion-text-left" size="3">
+                        <p>Bod: <b>{{ linea.bodega }}</b></p>
+                    </ion-col>
+                </ion-row>
+                <ion-row style="height: 25px;">
+                    <ion-col class="ion-text-right" size="3">
+                        <p>Netos :</p>
+                    </ion-col>
+                    <ion-col class="ion-text-right" size="3">
+                        <b><p>${{ linea.precio | number:"1.0-0" }}</p></b>
+                    </ion-col>
+                    <ion-col class="ion-text-center" size="1">
+                        <p>x</p>
+                    </ion-col>
+                    <ion-col class="ion-text-right" size="1">
+                        <b><p>{{ linea.cantidad | number:"1.0-0"  }}</p></b>
+                    </ion-col>
+                    <ion-col class="ion-text-center" size="1">
+                        <p>=</p>
+                    </ion-col>
+                    <ion-col class="ion-text-right" size="3">
+                        <b><p>$ {{ linea.precio * linea.cantidad | number:"1.0-0"  }}</p></b>
+                    </ion-col>
+                </ion-row>
+
+                <ion-row style="height: 25px; color:red" *ngIf=" linea.porcentaje !== 0 ">
+                    <ion-col class="ion-text-center" size="12">
+                        <p>( Valor incluye un <b>{{ linea.porcentaje | number:"1.0-2" }}%</b> de Descuento )</p>
+                    </ion-col>
+                </ion-row>
+
+                <ion-row>
+                    <ion-col class="ion-text-right" size="3">
+                        <p>Descrip.:</p>
+                    </ion-col>
+                    <ion-col class="ion-text-wrap">
+                        <p><b>{{ linea.descrip }}</b></p>
+                    </ion-col>
+                </ion-row>
+
+            </ion-grid>
+
+        </ion-item>
+
+    </ion-item-sliding>
+
+    <ion-item *ngIf=" detalle ">
+        <ion-label>
+            <h2 class="ion-text-right"><b>Total Neto : ${{ detalle[0].netodoc | number:"1.0-0" }}</b></h2>
+        </ion-label>
+    </ion-item>
+    <ion-item *ngIf=" detalle ">
+        <ion-label>
+            <h2 class="ion-text-right"><b>Total IVA : ${{ detalle[0].ivadoc | number:"1.0-0" }}</b></h2>
+        </ion-label>
+    </ion-item>
+
+    <ion-item *ngIf=" detalle ">
+        <ion-label>
+            <h2 class="ion-text-right"><b>Total Bruto : ${{ detalle[0].brutodoc | number:"1.0-0" }}</b></h2>
+        </ion-label>
+    </ion-item>
+
+</ion-content>

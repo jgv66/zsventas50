@@ -1,0 +1,34 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button text=' '></ion-back-button>
+        </ion-buttons>
+        <ion-title>Compartir vía Redes Sociales</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-progress-bar *ngIf=" buscando " type="indeterminate" reversed="true"></ion-progress-bar>
+
+<ion-content>
+
+    <ion-card style="border-radius: 5px;">
+        <ion-card-header>
+            <ion-card-title style="text-align: center;">Información</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-item>
+                <ion-label class="ion-text-wrap">{{ texto }}</ion-label>
+            </ion-item>
+            <ion-item>
+                <!-- <ion-label>Imagen</ion-label> -->
+                <img [src]="url" alt="Imágen a compartir">
+            </ion-item>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-button expand="block" (click)="basicShare()">
+        <ion-icon slot="start" name="share"></ion-icon>
+        Compartir
+    </ion-button>
+
+</ion-content>

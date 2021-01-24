@@ -1,0 +1,179 @@
+<ion-header>
+    <ion-toolbar>
+        <img src="./assets/imgs/logo-zs.png" alt="" class="navbar-img">
+        <ion-title>Ajustes y Configuración</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+    <ion-card style="top: 0px; margin-top: 10px; margin-bottom: 15px;" *ngIf=" usuario.esuncliente ">
+        <ion-card-header (click)="toggleAccordion(1)">
+            <ion-card-title class="ion-text-center">Filtros y vistas
+                <!-- <ion-icon style="margin-left: 50px" mode="ios" [name]=" (collapsedFiltro) ? 'arrow-forward' : 'arrow-down' "></ion-icon> -->
+            </ion-card-title>
+        </ion-card-header>
+        <ion-card-content [ngClass]="{ 'collapsed': collapsedFiltro }" style="padding: 0px">
+            <ion-list lines="none">
+                <ion-item no-lines>
+                    <ion-label>Ver imágenes</ion-label>
+                    <ion-toggle name="config.imagenes" [(ngModel)]="config.imagenes"></ion-toggle>
+                </ion-item>
+                <ion-item no-lines>
+                    <ion-label>Ver descripción ampliada</ion-label>
+                    <ion-toggle name="config.descripcionamplia" [(ngModel)]="config.descripcionamplia"></ion-toggle>
+                </ion-item>
+                <ion-item no-lines>
+                    <ion-label>Ver código técnico</ion-label>
+                    <ion-toggle name="config.codigotecnico" [(ngModel)]="config.codigotecnico"></ion-toggle>
+                </ion-item>
+            </ion-list>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card style="top: 0px; margin-top: 10px; margin-bottom: 15px;" *ngIf=" !usuario.esuncliente ">
+        <ion-card-header (click)="toggleAccordion(1)">
+            <ion-card-title class="ion-text-center">Filtros y vistas
+                <!-- <ion-icon style="margin-left: 50px" mode="ios" [name]=" (collapsedFiltro) ? 'arrow-forward' : 'arrow-down' "></ion-icon> -->
+            </ion-card-title>
+        </ion-card-header>
+        <ion-card-content [ngClass]="{ 'collapsed': collapsedFiltro }" style="padding: 0px;">
+            <ion-list lines="none">
+                <ion-item no-lines>
+                    <ion-label>Ver imágenes</ion-label>
+                    <ion-toggle name="config.imagenes" [(ngModel)]="config.imagenes"></ion-toggle>
+                </ion-item>
+                <ion-item no-lines>
+                    <ion-label>Ver descripción ampliada</ion-label>
+                    <ion-toggle name="config.descripcionamplia" [(ngModel)]="config.descripcionamplia"></ion-toggle>
+                </ion-item>
+                <ion-item no-lines>
+                    <ion-label>Ver código técnico</ion-label>
+                    <ion-toggle name="config.codigotecnico" [(ngModel)]="config.codigotecnico"></ion-toggle>
+                </ion-item>
+                <ion-item no-lines>
+                    <ion-label>Solo ver productos con stock</ion-label>
+                    <ion-toggle name="config.soloconstock" [(ngModel)]="config.soloconstock"></ion-toggle>
+                </ion-item>
+                <ion-item no-lines>
+                    <ion-label>Solo productos con importación</ion-label>
+                    <ion-toggle name="config.soloverimport" [(ngModel)]="config.soloverimport"></ion-toggle>
+                </ion-item>
+                <ion-item no-lines>
+                    <ion-label>Ocultar descuentos</ion-label>
+                    <ion-toggle name="config.ocultardscto" [(ngModel)]="config.ocultardscto"></ion-toggle>
+                </ion-item>
+            </ion-list>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card style="top: 0px; margin-top: 10px; margin-bottom: 10px;" *ngIf=" !usuario.esuncliente ">
+        <ion-card-header (click)="toggleAccordion(2)">
+            <ion-card-title class="ion-text-center">Modalidad
+                <!-- <ion-icon style="margin-left: 50px" mode="ios" [name]=" (collapsedConfig) ? 'arrow-forward' : 'arrow-down' "></ion-icon> -->
+            </ion-card-title>
+        </ion-card-header>
+        <ion-card-content [ngClass]="{ 'collapsed': collapsedConfig }" style="padding: 0px;">
+            <ion-list lines="none">
+                <ion-grid style="font-size: 90%;">
+                    <ion-row>
+                        <ion-col size="3.3" class="ion-text-right">
+                            <ion-label>Modalidad</ion-label>
+                        </ion-col>
+                        <ion-col size="8.7">
+                            <ion-label><b>{{ usuario.MODALIDAD }}</b></ion-label>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col size="3.3" class="ion-text-right">
+                            <ion-label>Sucursal</ion-label>
+                        </ion-col>
+                        <ion-col size="8.7">
+                            <ion-label><b>{{ usuario.KOSU }}</b> {{ usuario.nombresuc }}</ion-label>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col size="3.3" class="ion-text-right">
+                            <ion-label>Bodega</ion-label>
+                        </ion-col>
+                        <ion-col size="8.7">
+                            <ion-label><b>{{ usuario.BODEGA }}</b> {{ usuario.nombrebod }}</ion-label>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col size="3.3" class="ion-text-right">
+                            <ion-label>Lista</ion-label>
+                        </ion-col>
+                        <ion-col size="8.7">
+                            <ion-label><b>{{ usuario.LISTAMODALIDAD }}</b> {{ usuario.nombrelista }}</ion-label>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col size="3.3" class="ion-text-right">
+                            <ion-label>Usuario</ion-label>
+                        </ion-col>
+                        <ion-col size="8.7">
+                            <ion-label><b>{{ usuario.KOFU }}</b> {{ usuario.NOKOFU }}</ion-label>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col size="3.3" class="ion-text-right">
+                            <ion-label>Email</ion-label>
+                        </ion-col>
+                        <ion-col size="8.7">
+                            <ion-label><b>{{ usuario.EMAIL }}</b></ion-label>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+                <ion-grid>
+                    <ion-progress-bar type="indeterminate" *ngIf=" buscando "></ion-progress-bar>
+                    <ion-row>
+                        <ion-col size="6">
+                            <ion-button expand="block" size="small" (click)="cambiarLista()">
+                                <ion-icon slot="start" name="color-wand"></ion-icon>Cambiar lista</ion-button>
+                        </ion-col>
+                        <ion-col size="6">
+                            <ion-button expand="block" size="small" (click)="cambiarBodega()">
+                                <ion-icon slot="start" name="card"></ion-icon>Cambiar bodega</ion-button>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-list>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card style="top: 0px; margin-top: 10px; margin-bottom: 10px;">
+        <ion-card-header (click)="toggleAccordion(3)">
+            <ion-card-title class="ion-text-center">Orden al visualizar
+                <!-- <ion-icon style="margin-left: 50px" mode="ios" [name]=" (collapsedOrden) ? 'arrow-forward' : 'arrow-down' "></ion-icon> -->
+            </ion-card-title>
+        </ion-card-header>
+        <ion-card-content [ngClass]="{ 'collapsed': collapsedOrden }" style="padding: 0px;">
+            <ion-list lines="none">
+                <ion-radio-group name="config.ordenar" [(ngModel)]="config.ordenar">
+                    <ion-item>
+                        <ion-label>Precio menor a mayor</ion-label>
+                        <ion-radio value="preciomenormayor"></ion-radio>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>Precio mayor a menor</ion-label>
+                        <ion-radio value="preciomayormenor"></ion-radio>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>Stock menor a mayor</ion-label>
+                        <ion-radio value="stockmenormayor"></ion-radio>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>Stock mayor a menor</ion-label>
+                        <ion-radio value="stockmayormenor"></ion-radio>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>Código del producto</ion-label>
+                        <ion-radio value=""></ion-radio>
+                    </ion-item>
+                </ion-radio-group>
+            </ion-list>
+        </ion-card-content>
+    </ion-card>
+
+</ion-content>

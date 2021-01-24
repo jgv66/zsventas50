@@ -1,0 +1,72 @@
+/*
+*  Flip animation by David Walsh: https://davidwalsh.name/css-flip
+*/
+
+/* entire container, keeps perspective */
+.flip-container {
+    perspective: 1000px;
+}
+
+/* flip the pane when hovered */
+.flip-container.flipped .flipper {
+    transform: rotateY(180deg);
+}
+
+.flip-container, .front, .back {
+    width: 90vw;
+    height: 21vh;
+    margin: 15px auto;
+}
+
+/* flip speed goes here */
+.flipper {
+    transition: 0.5s;
+    transform-style: preserve-3d;
+    position: relative;
+}
+
+/* hide back of pane during swap */
+.front, .back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ecf0f1;
+    backface-visibility: hidden;
+    -webkit-box-shadow: 0px 8px 4px -4px rgba(163,163,163,0.25);
+    -moz-box-shadow: 0px 8px 4px -4px rgba(163,163,163,0.25);
+    box-shadow: 0px 8px 4px -4px rgba(163,163,163,0.25);
+    border: 1px solid #dee2e3;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    /*
+    background-image: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/9632/bobdylan.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    */
+}
+
+/* front pane, placed above back */
+.front {
+    z-index: 2;
+    /* for firefox 31 */
+    transform: rotateY(0deg);
+}
+
+/* back, initially hidden pane */
+.back {
+    transform: rotateY(180deg);
+}
+
+ion-card {
+    --background: rgb( 255,255,255);
+}
+
+.masgrande {
+    font-size: 120%;
+}
+
+table {
+
+}

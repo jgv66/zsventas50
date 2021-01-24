@@ -1,0 +1,37 @@
+<ion-header>
+
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button text=' '></ion-back-button>
+        </ion-buttons>
+        <img src="./assets/imgs/logo-zs.png" alt="" class="navbar-img">
+        <ion-title>Últimos Movimientos</ion-title>
+    </ion-toolbar>
+
+</ion-header>
+
+<ion-progress-bar *ngIf=" buscando " type="indeterminate"></ion-progress-bar>
+
+<ion-content class="animated fadeIn">
+
+    <ion-list *ngIf=" documentos ">
+
+        <ion-item *ngFor="let documento of documentos" detail (click)="muestraID( documento.id )">
+
+            <ion-label>
+                <h2>{{ documento.td }}: {{ documento.numero }} </h2>
+                <p style="font-size: 85%">Emisión:<b>{{ documento.emision }}</b></p>
+                <p style="font-size: 85%">Hora:<b>{{documento.lahora }}</b></p>
+                <p style="font-size: 85%">Estado:<b>{{ documento.estado }}</b></p>
+                <p style="font-size: 85%">Vend.:<b>{{ documento.nombrevendedor }}</b></p>
+            </ion-label>
+            <ion-label slot="end" class="ion-text-right" color="danger" style="max-width: 150px;">
+                <p style="font-size: 105%">Monto:<b>${{ documento.monto | number:"1.0-0" }}</b></p>
+                <!-- <p style="font-size: 105%">Saldo:<b>${{ documento.saldo | number:"1.0-0" }}</b></p> -->
+            </ion-label>
+
+        </ion-item>
+
+    </ion-list>
+
+</ion-content>

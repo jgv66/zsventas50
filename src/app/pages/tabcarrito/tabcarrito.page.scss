@@ -1,0 +1,35 @@
+.item1 {
+    // height: 125px;
+    padding-top: 5px;
+    border-top-width: 5px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.grid1 {
+    font-size: 75%;
+    border-bottom-width: 10px;
+    margin-bottom: 20px
+}
+
+.rotar {
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    max-height: 25%;
+    display: block;
+}
+
+.rojo {
+    color: #f04141;
+}
+
+ion-card-content {
+    overflow: hidden;
+    transition: max-height 0.5s ease-out; // note that we're transitioning max-height, not height!
+    height: auto;
+    max-height: 600px; // still have to hard-code a value!
+}
+
+ion-card-content.collapsed {
+    max-height: 0;
+}

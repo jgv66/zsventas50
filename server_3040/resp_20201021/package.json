@@ -1,0 +1,19 @@
+{
+  "requires": true,
+  "lockfileVersion": 1,
+  "dependencies": {
+    "async": "^3.1.0",
+    "express": "^4.17.1",
+    "mssql": "^6.0.0",
+    "nodemailer": "^6.3.1"
+  },
+  "name": "zsventas",
+  "version": "1.0.0",
+  "description": "servidor en zsmotorapp.cl/zsventas",
+  "main": "ktp_server_mssql.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "kinetik.cl",
+  "license": "ISC"
+}

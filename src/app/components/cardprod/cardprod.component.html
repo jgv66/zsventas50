@@ -1,0 +1,128 @@
+<!-- 
+<ion-card *ngFor="let producto of listaProductos" >
+
+    <div *ngIf=" config.imagenes " >
+        <ion-img src="http://www.zsmotor.cl/img/Producto/{{ producto.codigo }}/{{ producto.codigo }}.jpg"
+            onerror=" this.src='assets/imgs/no-img.png' ">
+        </ion-img>
+    </div>
+
+    <ion-card-content>
+
+        <ion-grid class="grid-productos">
+
+            <ion-row>
+                <ion-col  class="ion-text-right" size="4"> <p>Código :</p>                       </ion-col> 
+                <ion-col  class="ion-text-left">           <p><b>{{ producto.codigo }}</b></p>   </ion-col>
+            </ion-row>
+
+            <ion-row>
+                <ion-col  class="ion-text-right" size="4"> <p>Descripción :</p>                      </ion-col>
+                <ion-col  class="ion-text-left">           <p><b>{{ producto.descripcion }}</b></p>  </ion-col>
+            </ion-row>
+
+            <ion-row *ngIf=" producto.stock_ud1 > 0 "> 
+                <ion-col  class="ion-text-right" size="4">
+                    <p>Bod. ({{ producto.bodega }}) :</p> 
+                </ion-col>
+                <ion-col size="4">
+                    <ion-badge color="indigo" item-end (click)="cargaBodegas(producto)">Stock : {{ producto.stock_ud1 }}</ion-badge>
+                </ion-col>
+                <ion-col  class="ion-text-right" size="4">
+                    <p><b>(Tot.: {{ producto.stock_total_ud1 | number:0 }})</b></p>
+                </ion-col>
+            </ion-row>
+
+            <ion-row *ngIf=" producto.stock_ud1 <= 0 && producto.sucursal != undefined ">
+                <ion-col  class="ion-text-right" size="4">
+                    <p>Bod. ({{ producto.bodega }}) :</p> 
+                </ion-col>
+                <ion-col size="4">
+                    <ion-badge color="danger" item-end (click)="cargaBodegas(producto)">Sin stock</ion-badge>
+                </ion-col>
+                <ion-col  class="ion-text-right" size="4">
+                    <p><b>(Tot.: {{ producto.stock_total_ud1 | number:0 }})</b></p>
+                </ion-col>
+            </ion-row>
+
+            <ion-row *ngIf=" producto.sucursal == undefined ">
+                <ion-col  class="ion-text-right" size="4">
+                    <p>Bod. (n/e) :</p> 
+                </ion-col>
+                <ion-col size="4">
+                    <ion-badge color="danger" item-end (click)="cargaBodegas(producto)">No/Asig</ion-badge>
+                </ion-col>
+                <ion-col  class="ion-text-right" size="4">
+                    <p><b>(Tot.: {{ producto.stock_total_ud1 | number:0 }})</b></p>
+                </ion-col>
+            </ion-row>
+        
+            <ion-row *ngIf=" producto.descuentomax <= 0 || config.ocultardscto ">
+                <ion-col  class="ion-text-right" size="4">
+                    <p>Precio {{ producto.tipolista }}: </p>
+                </ion-col>
+                <ion-col  class="ion-text-left" size="5">
+                    <ion-badge color="danger" item-end (click)="cargaListas(producto)">${{ producto.precio | number:0 }}</ion-badge>
+                </ion-col>
+                <ion-col text-center size="3">
+                    <p>(<b>{{ producto.metodolista }}/{{ producto.listaprecio }}</b>)</p>
+                </ion-col>
+            </ion-row>
+
+            <ion-row *ngIf=" ( producto.descuentomax > 0 && !config.ocultardscto ) ">
+                <ion-col  class="ion-text-right" size="4">
+                    <p><s>{{ producto.tipolista }}: </s></p>
+                </ion-col>
+                <ion-col  class="ion-text-left">
+                    <p><s><b>${{ producto.precio | number:0 }}</b></s></p>
+                </ion-col>
+                <ion-col text-center size="3">
+                    <p>(<b>{{ producto.metodolista }}/{{ producto.listaprecio }}</b>)</p>
+                </ion-col>
+            </ion-row>    
+
+            <ion-row *ngIf=" producto.descuentomax > 0 && !config.ocultardscto ">
+                <ion-col  class="ion-text-right" size="4">
+                    <p>Descuento : </p>
+                </ion-col>
+                <ion-col  class="ion-text-left" size="5">
+                    <p><b>${{ producto.dsctovalor | number:0 }}</b></p>
+                </ion-col>
+                <ion-col *ngIf=" usuario.puedemodifdscto ">
+                    <ion-badge color="danger" item-end  (click)="cambiaDescuento(producto)">{{ producto.descuentomax }}%</ion-badge>                           
+                </ion-col>
+                <ion-col *ngIf=" !usuario.puedemodifdscto ">
+                    <ion-badge color="danger" item-end                                     >{{ producto.descuentomax }}%</ion-badge>                           
+                </ion-col>
+            </ion-row>    
+
+            <ion-row *ngIf=" producto.descuentomax > 0 && !config.ocultardscto ">
+                <ion-col  class="ion-text-right" size="4">
+                    <p>Precio {{ producto.tipolista }}: </p>
+                </ion-col>
+                <ion-col  class="ion-text-left" size="5">
+                    <ion-badge color="danger" item-end (click)="cargaListas(producto)">${{ producto.preciomayor | number:0 }}</ion-badge>
+                </ion-col>
+            </ion-row>    
+
+            <ion-row *ngIf=" producto.sucursal != undefined && cliente?.codigo.trim() != '' && producto.stock_ud1 > 0 && producto.preciomayor > 0 ">
+                <ion-col>
+                    <button (click)="agregarAlCarro(producto,cliente)" ion-button icon-left small full>
+                        <ion-icon name="cart"></ion-icon>
+                        Agregar al carro
+                    </button>
+                </ion-col>
+            </ion-row>
+                        
+        </ion-grid>
+
+        <button *ngIf=" producto.importado > 0 || config.soloverimport " ion-button icon-left icon-only clear small color="indigo" (click)="cargaDatoImportado(producto.codigo)" >
+            <ion-icon name="boat"></ion-icon>
+            On Board: {{ producto.importado }}
+        </button>
+
+    </ion-card-content>
+
+</ion-card>        
+-->
+

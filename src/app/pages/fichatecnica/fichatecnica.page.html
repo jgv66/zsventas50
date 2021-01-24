@@ -1,0 +1,29 @@
+<ion-header>
+
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button text=' '></ion-back-button>
+        </ion-buttons>
+        <img src="./assets/imgs/logo-zs.png" alt="" class="navbar-img">
+        <ion-title>Ficha Técnica</ion-title>
+    </ion-toolbar>
+
+</ion-header>
+
+<ion-progress-bar *ngIf=" buscando " type="indeterminate"></ion-progress-bar>
+
+<ion-content>
+
+    <ion-card *ngIf=" producto " style="padding-top: 10px; ">
+        <ion-card-header>
+            <ion-card-subtitle>{{ producto.descripcion }}</ion-card-subtitle>
+            <ion-card-title>{{ producto.codigo }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-text color="dark" style="word-wrap: break-word; white-space: pre;">
+                <p><b>{{ ficha }}</b></p>
+            </ion-text>
+        </ion-card-content>
+    </ion-card>
+
+</ion-content>

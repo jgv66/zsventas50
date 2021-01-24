@@ -1,0 +1,59 @@
+<ion-header no-border>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="salir()">
+                <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <img src="./assets/imgs/logo-zs.png" alt="" class="navbar-img">
+        <ion-title>Buscar Clientes</ion-title>
+    </ion-toolbar>
+    <ion-grid>
+        <ion-row style="max-height: 42px;margin-top:10px;">
+            <ion-col size="9" style="max-height: 40px;top:-14px;">
+                <!-- <ion-searchbar animated (ionChange)="buscarClientes( $event )" [debounce]="1500"></ion-searchbar> -->
+                <ion-searchbar mode="ios" animated search-icon="x" type="text" name="texto" [(ngModel)]="texto" showCancelButton="focus" cancelButtonText=" " placeholder="Digite aquí..."></ion-searchbar>
+            </ion-col>
+            <ion-col size="3" style="height: 32px; padding-top: 0px;">
+                <ion-button expand="block" (click)="aBuscarClientes()" style="height:32px;">
+                    Buscar
+                </ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-header>
+<ion-progress-bar *ngIf=" buscando " type="indeterminate"></ion-progress-bar>
+
+<ion-content>
+
+    <ion-list>
+
+        <ion-item *ngFor="let cliente of clientes" (click)="salirConData( cliente )">
+            <ion-label class="ion-text-wrap">
+                <h2><b>{{ cliente.codigo }}</b>
+                    <ion-text *ngIf=" cliente.sucursal !== '' " style="display:flex;margin-top:-20px; margin-left: 200px;">
+                        <b>Suc: {{ cliente.sucursal }}</b>
+                    </ion-text>
+                </h2>
+                <h3><b>{{ cliente.razonsocial }}</b></h3>
+                <p>{{ cliente.direccion }} - {{ cliente.comuna }} - {{ cliente.ciudad }}</p>
+                <ion-text *ngIf=" cliente.vendedor.trim() !== '' ">
+                    <p>({{cliente.vendedor}}) {{ cliente.nombrevendedor }}</p>
+                </ion-text>
+                <ion-text *ngIf=" cliente.vendedor.trim() === '' ">
+                    <p>Vendedor no asignado</p>
+                </ion-text>
+
+                <ion-text *ngIf=" cliente.listaprecios.trim() !== '' ">
+                    <p>({{cliente.listaprecios}}) {{ cliente.nombrelista }}</p>
+                </ion-text>
+                <ion-text *ngIf=" cliente.listaprecios.trim() === '' ">
+                    <p>Lista sin asignar</p>
+                </ion-text>
+
+            </ion-label>
+        </ion-item>
+
+    </ion-list>
+
+</ion-content>

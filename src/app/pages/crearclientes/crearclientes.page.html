@@ -1,0 +1,65 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button text=" "></ion-back-button>
+        </ion-buttons>
+        <img src="./assets/imgs/logo-zs.png" alt="" class="navbar-img">
+        <ion-title>Nuevos Clientes</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+    <ion-card>
+        <ion-list>
+
+            <h3 class="ion-text-center">Datos del Nuevo Cliente</h3>
+
+            <ion-item>
+                <ion-label position="stacked">Rut (incluya guión y dígito verificador)</ion-label>
+                <ion-input color="primary" type="text" name="rut" [(ngModel)]="rut"></ion-input>
+            </ion-item>
+
+            <ion-item>
+                <ion-label position="stacked">Nombre o Razón Social</ion-label>
+                <ion-input color="primary" type="text" style="text-transform:uppercase;" name="nombre" [(ngModel)]="nombre"></ion-input>
+            </ion-item>
+
+            <ion-item>
+                <ion-label position="stacked">Dirección</ion-label>
+                <ion-input color="primary" type="text" style="text-transform:uppercase;" name="direccion" [(ngModel)]="direccion"></ion-input>
+            </ion-item>
+
+            <ion-item>
+                <ion-label position="stacked">Comuna, Ciudad</ion-label>
+                <ion-input color="primary" type="text" name="comunayciudad" [(ngModel)]="comunayciudad" disabled="true"></ion-input>
+                <ion-button style="margin-top: 27px;" slot="end" (click)="buscarCiudad()" fill="clear" color="primary">
+                    <ion-icon slot="icon-only" name="search"></ion-icon>
+                </ion-button>
+            </ion-item>
+
+            <ion-item>
+                <ion-label position="stacked">Email</ion-label>
+                <ion-input color="primary" type="email" style="text-transform:lowercase;" name="email" [(ngModel)]="email"></ion-input>
+            </ion-item>
+
+            <ion-item>
+                <ion-label position="stacked">Número de Teléfono</ion-label>
+                <ion-input color="primary" type="number" name="nrocelu" [(ngModel)]="nrocelu"></ion-input>
+            </ion-item>
+
+            <ion-item>
+                <ion-label position="stacked">Giro (obligatorio para facturación)</ion-label>
+                <ion-input color="primary" type="text" style="text-transform:uppercase;" name="giro" [(ngModel)]="giro"></ion-input>
+            </ion-item>
+
+        </ion-list>
+    </ion-card>
+
+    <ion-progress-bar *ngIf=" creando " type="indeterminate"></ion-progress-bar>
+    <ion-button [disabled]=" rut === '' || nombre === '' || direccion === '' || comunayciudad === '' || email === '' || nrocelu === '' || giro === '' " expand="block" size="small" (click)="confirmaCrearCliente()" style="margin-left: 16px;margin-right: 16px;">
+        <ion-icon slot="start" name="add-circle-outline"></ion-icon>
+        Crear al nuevo cliente
+    </ion-button>
+
+</ion-content>

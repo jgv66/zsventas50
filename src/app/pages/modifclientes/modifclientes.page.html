@@ -1,0 +1,35 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="salir()">
+                <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <img src="./assets/imgs/logo-zs.png" alt="" class="navbar-img">
+        <ion-title>Cliente Activo</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content color="fondozs">
+
+    <ion-card style="border-bottom-width: 11px;padding-bottom: 20px;">
+        <ion-list>
+            <h3 class="ion-text-center">Datos a modificar</h3>
+            <ion-item>
+                <ion-label position="stacked">Email</ion-label>
+                <ion-input color="primary" type="email" style="text-transform:lowercase;" name="email" [(ngModel)]="email"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label position="stacked">Número de Teléfono</ion-label>
+                <ion-input color="primary" type="text" name="nrocelu" [(ngModel)]="nrocelu"></ion-input>
+            </ion-item>
+        </ion-list>
+    </ion-card>
+
+    <ion-progress-bar *ngIf=" modificando " type="indeterminate"></ion-progress-bar>
+
+    <ion-button [disabled]=" email === '' || nrocelu === '' " expand="block" size="small" (click)="actualizarCliente()" style="margin-left:16px;margin-right:16px;">
+        Actualizar los datos
+    </ion-button>
+
+</ion-content>

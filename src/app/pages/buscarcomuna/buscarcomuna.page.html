@@ -1,0 +1,28 @@
+<ion-header no-border>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="salir()">
+                <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <img src="./assets/imgs/logo-zs.png" alt="" class="navbar-img">
+        <ion-title>Buscar Comunas/Ciudades</ion-title>
+    </ion-toolbar>
+    <ion-searchbar animated (ionChange)="buscarComuna( $event )" [debounce]="250"></ion-searchbar>
+</ion-header>
+
+<ion-progress-bar *ngIf=" buscando " type="indeterminate"></ion-progress-bar>
+
+<ion-content>
+
+    <ion-list *ngIf="comunas">
+        <ion-item *ngFor="let cmci of comunas | filtro: textoBuscar: 'comuna' " (click)="salirConData( cmci )">
+            <ion-label class="ion-text-wrap">
+                <ion-text color="dark">
+                    <h3>{{ cmci.comuna }}, {{ cmci.ciudad }}</h3>
+                </ion-text>
+            </ion-label>
+        </ion-item>
+    </ion-list>
+
+</ion-content>

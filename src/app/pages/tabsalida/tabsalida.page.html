@@ -1,0 +1,29 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button text=' '></ion-back-button>
+        </ion-buttons>
+        <img src="./assets/imgs/logo-zs.png" alt="" class="navbar-img">
+        <ion-title>Salir del Sistema</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+    <ion-list style="margin-bottom: 15px;">
+        <h3>Esto ha sido todo por hoy?</h3>
+        <p>Ok, será hasta la próxima, que tengas una excelente jornada !!</p>
+    </ion-list>
+
+    <ion-button expand="block" size="small" color="primary" (click)="salirDelSistema()">Salir</ion-button>
+
+    <ion-item lines="none" style="margin-bottom:25px;margin-top:25px;">
+        <ion-label>No recuerdes mis datos</ion-label>
+        <ion-checkbox slot="start" [(ngModel)]="norecordar"></ion-checkbox>
+    </ion-item>
+
+    <img src="./assets/imgs/auto-003.jpg" class="logo-salir">
+
+    <img src="./assets/imgs/logo-kinetik.png" class="logo-kinetik">
+
+</ion-content>
