@@ -16,6 +16,8 @@ import { ComponentsModule } from './components/components.module';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
+import { BrMaskerModule } from 'br-mask';
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -24,6 +26,7 @@ import { environment } from '../environments/environment';
             PipesModule,
             IonicModule.forRoot(),
             AppRoutingModule,
+            BrMaskerModule,
             ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })],
   providers: [
     StatusBar,

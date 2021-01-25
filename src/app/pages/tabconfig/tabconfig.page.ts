@@ -37,7 +37,7 @@ export class TabconfigPage {
   }
 
   ionViewWillLeave() {
-    console.log('saliendo',this.config);
+    // console.log('saliendo',this.config);
     this.baseLocal.guardaUltimoConfig( this.config );
   }
 

@@ -1,0 +1,87 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-button (click)="salir()">
+                <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <img src="./assets/imgs/logo-zs.png" alt="" class="navbar-img">
+        <ion-title class="ion-text-center">Ingreso de medidas nuevas</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-progress-bar *ngIf=" grabando " type="indeterminate"></ion-progress-bar>
+
+<ion-content class="animated fadeIn">
+
+    <ion-list>
+        <ion-item>
+            <ion-label>Marca</ion-label>
+            <ion-input class="ion-text-right" type="text" name="marca" [(ngModel)]="marca"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Modelo</ion-label>
+            <ion-input class="ion-text-right" type="text" name="modelo" [(ngModel)]="modelo"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Año</ion-label>
+            <ion-input class="ion-text-right" type="text" name="anno" [(ngModel)]="anno"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Versión</ion-label>
+            <ion-input class="ion-text-right" type="text" name="version" [(ngModel)]="version"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Marca Neumático</ion-label>
+            <ion-input class="ion-text-right" type="text" name="marcaneu" [(ngModel)]="marcaneu"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Modelo Neumático</ion-label>
+            <ion-input class="ion-text-right" type="text" name="modeloneu" [(ngModel)]="modeloneu"></ion-input>
+        </ion-item>
+        <ion-item lines="none">
+            <ion-label>Medida Delantera</ion-label>
+            <ion-input class="ion-text-right" type="text" name="medidadelantera" [(ngModel)]="medidadelantera" [brmasker]="{mask:'999/99/99', len:9}"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Indice Velocidad</ion-label>
+            <ion-input class="ion-text-left" type="text" name="ivdelantera" [(ngModel)]="ivdelantera"></ion-input>
+            <ion-label>Indice Carga</ion-label>
+            <ion-input class="ion-text-left" type="text" name="icdelantera" [(ngModel)]="icdelantera"></ion-input>
+        </ion-item>
+        <ion-item lines="none">
+            <ion-label>Medida Trasera</ion-label>
+            <ion-input class="ion-text-right" type="text" name="medidatrasera" [(ngModel)]="medidatrasera" [brmasker]="{mask:'999/99/99', len:9}"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Indice Velocidad</ion-label>
+            <ion-input class="ion-text-left" type="text" name="ivtrasera" [(ngModel)]="ivtrasera"></ion-input>
+            <ion-label>Indice Carga</ion-label>
+            <ion-input class="ion-text-left" type="text" name="ictrasera" [(ngModel)]="ictrasera"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Runflat</ion-label>
+            <ion-toggle name="runflat" [(ngModel)]="runflat"></ion-toggle>
+        </ion-item>
+        <ion-item>
+            <ion-label>Comentarios</ion-label>
+            <ion-textarea name="comentarios" [(ngModel)]="comentarios"></ion-textarea>
+        </ion-item>
+        <ion-grid fixed>
+            <ion-row>
+                <ion-col size="4">
+                    <ion-button (click)="salir()" expand="block">
+                        Salir
+                    </ion-button>
+                </ion-col>
+                <ion-col size="8">
+                    <ion-button (click)="grabar()" expand="block">
+                        Guardar datos
+                    </ion-button>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-list>
+
+
+</ion-content>

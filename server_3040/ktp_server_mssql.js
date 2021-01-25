@@ -891,6 +891,16 @@ app.post('/ksp_rescatarMisNotificaciones',
                 res.json(data); /* data viene en formato correcto */
             });
     });
+app.post('/ksp_crearMedidasNuevas',
+    function(req, res) {
+        //
+        console.log(req.body);
+        servicios.crearMedidasNuevas(sql, req.body)
+            .then(function(data) {
+                // }
+                res.json(data); /* data viene en formato correcto */
+            });
+    });
 app.post('/ksp_avisoProximoServicio',
     function(req, res) {
         //

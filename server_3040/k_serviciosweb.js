@@ -184,7 +184,34 @@ module.exports = {
                 return results.recordset;
             });
     },
-
+    crearMedidasNuevas: (sql, body) => {
+        //
+        // console.log(body);
+        const query = `
+                exec ksp_crearMedidasNuevas '${body.datos.marca          }',
+                                            '${body.datos.modelo         }',
+                                            '${body.datos.periodo        }',
+                                            '${body.datos.version        }',
+                                            '${body.datos.marcaneu       }',
+                                            '${body.datos.modeloneu      }',
+                                            '${body.datos.medidadelantera}',
+                                            '${body.datos.ivdelantera    }',
+                                            '${body.datos.icdelantera    }',
+                                            '${body.datos.medidatrasera  }',
+                                            '${body.datos.ivtrasera      }',
+                                            '${body.datos.ictrasera      }',
+                                            '${body.datos.runflat        }',
+                                            '${body.datos.comentarios    }',
+                                            '${body.user.codigo          }';
+            `;
+        console.log(query);
+        var request = new sql.Request();
+        return request.query(query)
+            .then(function(results) {
+                return results.recordset;
+            });
+    },
+    //
     ins_dataconce: function(sql, body) {
         var request = new sql.Request();
         return request.query(`

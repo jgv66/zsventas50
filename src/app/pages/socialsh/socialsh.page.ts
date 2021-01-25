@@ -28,7 +28,7 @@ export class SocialshPage implements OnInit {
 
   ngOnInit() {
     //
-    console.log(this.item);
+    // console.log(this.item);
     //
     this.texto = this.item.producto.codigo +' - '+
                  this.item.producto.descripcion +
