@@ -15,11 +15,12 @@ export class AvisoservicioPage implements OnInit {
   @Input() producto;
 
   enviando = false;
-  email;
-  nombre;
-  fono;
-  observaciones;
-  dias;
+  email='';
+  nombre='';
+  fono='';
+  observaciones='';
+  cantidadKM=0;
+  dias='';
   periodos = [{dias:'7 días',  cantidad:7  },
               {dias:'15 días', cantidad:15 },
               {dias:'1 mes',   cantidad:30 },
@@ -59,7 +60,7 @@ export class AvisoservicioPage implements OnInit {
   }
 
   enviarAviso() {
-    if ( this.email === '' || this.dias === 0 ) {
+    if ( this.email === '' || this.dias === '' ) {
       this.funciones.msgAlertErr('Debe completar los datos obligatorios');
     } else {
       this.enviando = true;
@@ -73,7 +74,8 @@ export class AvisoservicioPage implements OnInit {
                                         nombre:        this.nombre,
                                         email:         this.email,
                                         fono:          this.fono,
-                                        observaciones: '',
+                                        km:            this.cantidadKM,
+                                        observaciones: this.observaciones,
                                         dias:          this.dias },
                                       { codigo:        this.baseLocal.user.KOFU,
                                         nombre:        this.baseLocal.user.NOKOFU,

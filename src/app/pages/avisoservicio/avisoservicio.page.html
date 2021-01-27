@@ -35,11 +35,19 @@
                     <ion-label position="fixed">Teléfono</ion-label>
                     <ion-input readonly type="text" name="fono" [(ngModel)]="fono"></ion-input>
                 </ion-item>
+                <ion-item>
+                    <ion-label style="width:225px;max-width:225px;">Kilometraje en su marcador? </ion-label>
+                    <ion-input clearOnEdit="true" class="ion-text-right" type="text" name="cantidadKM" [(ngModel)]="cantidadKM"></ion-input>
+                </ion-item>
                 <ion-item class="requerido">
                     <ion-label>Avisar en...</ion-label>
                     <ion-select name="dias" [(ngModel)]="dias" interface="popover" mode="ios">
                         <ion-select-option *ngFor="let p of periodos" value="{{ p.cantidad }}">{{ p.dias }}</ion-select-option>
                     </ion-select>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="fixed" style="width:150px;min-width:150px;">Observaciones</ion-label>
+                    <ion-textarea type="text" name="observaciones" [(ngModel)]="observaciones"></ion-textarea>
                 </ion-item>
             </ion-list>
             <ion-progress-bar *ngIf=" enviando " type="indeterminate"></ion-progress-bar>

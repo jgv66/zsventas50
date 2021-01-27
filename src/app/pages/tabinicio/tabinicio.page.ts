@@ -536,7 +536,7 @@ export class TabinicioPage implements OnInit {
             this.router.navigate(['/tabs/socialsh', dataParam]);
             break;
           //
-          case 'Copiar Información':
+          case 'Copy & Paste':
             this.copyPaste( producto )
             break;
           //
@@ -584,9 +584,14 @@ export class TabinicioPage implements OnInit {
     
     Clipboard.write({ string: texto,
                       url: 'http://www.zsmotor.cl/img/Producto/'+producto.codigo.trim()+'/'+producto.codigo.trim()+'.jpg',
-                      label: 'ZSMotor' });
+                      label: 'ZSMotor' })
+        .then( response=>{ 
+          this.funciones.muestraySale('Copiado al porta-papeles. Puedo Pegarlo en cualquier aplicación.',1.5,'middle');
+        })
+        .catch( err => {
+          this.funciones.muestraySale('problemas al copiar -> '+ err,2,'middle');
+        });
     //
-    this.funciones.muestraySale('Copiado al porta-papeles. Puedo Pegarlo en cualquier aplicación.',1.5,'middle');
     //
   }
 

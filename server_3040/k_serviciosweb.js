@@ -249,7 +249,8 @@ module.exports = {
             body.codprod + "','" +
             body.nombre + "','" +
             body.email + "','" +
-            body.fono + "','" +
+            body.fono + "'," +
+            body.km.toString() + ",'" +
             body.observaciones + "'," +
             body.dias.toString() + " ;";
         //

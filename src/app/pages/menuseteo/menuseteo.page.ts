@@ -59,8 +59,14 @@ export class MenuseteoPage {
       this.cliente = data.dato;
       this.baseLocal.cliente = data.dato;
       //
-      if ( data.listaprecios !== this.baseLocal.user.LISTAMODALIDAD ) {
-        this.baseLocal.user.LISTAMODALIDAD = data.listaprecios;
+      if ( data.dato.listaprecios !== this.baseLocal.user.listamodalidad && data.dato.listaprecios !== '' ) {
+        //
+        // console.log('63->',data.dato.listaprecios);
+        // console.log('64->',this.baseLocal.user)
+        //
+        this.baseLocal.user.LISTAMODALIDAD = data.dato.listaprecios;
+        this.baseLocal.user.listamodalidad = data.dato.listaprecios;
+        //
       }
     }
   }

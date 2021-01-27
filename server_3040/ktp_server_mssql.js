@@ -419,7 +419,7 @@ app.post('/grabadocumentos',
                                                 htmlBody = correos.primeraParte(xObs, nombreVend, rsocial, carro[0].cliente, carro[0].suc_cliente, rs.recordset[0].numero, tipodoc, xOcc, correoVend, fonoVend) + lineas + correos.segundaParte();
                                                 //
                                                 mailList.push({ cc: [x2, copiasadic], to: x1 });
-                                                correos.enviarCorreo(null, nodemailer, mailList, htmlBody);
+                                                correos.enviarCorreo(res, nodemailer, mailList, htmlBody);
                                             });
                                     });
                             });

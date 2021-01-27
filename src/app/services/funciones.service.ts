@@ -183,22 +183,29 @@ export class FuncionesService {
   }
 
   async pideCantidadyDescrip( producto ) {
+    //
     const cantidad = producto.apedir;
     const descrip  = producto.descripcion;
+    const precio   = producto.precio;
+    //
     const prompt = await this.alertCtrl.create({
       cssClass: 'alert-ancho',
       header:   'Stock Bodega : ' + producto.stock_ud1.toString(),
       subHeader: 'Ingrese la cantidad a solicitar de este producto.',
       message: 'No debe sobrepasar el stock actual ni lo pedido si ya existe en el carro. El sistema lo validará',
       inputs: [
-        { name: 'cantidad', type: 'number', placeholder: cantidad },
-        { name: 'descrip', type: 'text',    placeholder: descrip  }
+        { name: 'cantidad', type: 'number', placeholder: 'cantidad' },
+        { name: 'descrip',  type: 'text',   placeholder: 'descripcion'  },
+        { name: 'precio',   type: 'number', placeholder: 'precio del servicio'   }
       ],
       buttons: [
         { text: 'Cancelar', handler: ()   => {} },
-        { text: 'Guardar',  handler: data => {  producto.apedir      = parseInt( data.cantidad, 0 ) || 1 ;
-                                                producto.descripcion = data.descrip;
-                                                this.Add2Cart( producto ); } }
+        { text: 'Guardar',  handler: data => { producto.apedir       = parseInt( data.cantidad, 0 ) || 1 ;
+                                               producto.descripcion  = data.descrip;
+                                               producto.precio       = parseInt( data.precio, 0 );
+                                               producto.preciomayor  = parseInt( data.precio, 0 );
+                                               producto.descuentomax = 0;
+                                               this.Add2Cart( producto ); } }
       ]
     });
     await prompt.present();
@@ -238,6 +245,7 @@ export class FuncionesService {
   }
 
   Add2Cart( producto ) {
+    console.log(producto);
     if ( this.stockAlcanza( producto )  ) {
         if ( this.aunVacioElCarrito() ) {
             this.miCarrito[0].empresa      = this.baseLocal.user.EMPRESA;
@@ -292,6 +300,9 @@ export class FuncionesService {
     return ( this.baseLocal.soloCotizar || (stock + producto.apedir ) <= producto.stock_ud1 ) ;
   }
   existeEnCarrito( producto ) {
+    if ( this.baseLocal.soloCotizar === true ) {
+      return false;
+    }
     const posicion = this.miCarrito.findIndex( item => item.codigo === producto.codigo  && item.bodega === producto.bodega );
     return ( posicion !== -1 ? true : false );
   }

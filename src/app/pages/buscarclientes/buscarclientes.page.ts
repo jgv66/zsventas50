@@ -38,6 +38,7 @@ export class BuscarclientesPage {
   }
 
    revisaRespuesta( data ) {
+    // console.log(data);
     this.clientes = [];
     if ( data === undefined || data.length === 0 ) {
         this.funciones.msgAlert('ATENCION', 'Su búsqueda no tiene resultados. Intente con otros datos.');
@@ -57,7 +58,7 @@ export class BuscarclientesPage {
     this.funciones.initCarro();
     this.funciones.refreshCarrito();
     //
-    // console.log(cliente);
+    // console.log('cliente->',cliente);
     this.modalCtrl.dismiss( {
       dato: cliente
     } );
