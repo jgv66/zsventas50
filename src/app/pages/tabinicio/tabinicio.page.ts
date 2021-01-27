@@ -165,7 +165,7 @@ export class TabinicioPage implements OnInit {
     }
   }
   revisaExitooFracaso( data, xdesde, infiniteScroll ) {
-    console.log(data);
+    // console.log(data);
     if ( data === undefined || data.length === 0 ) {
       this.funciones.msgAlert('ATENCION', 'Su búsqueda no tiene resultados. Intente con otros datos.');
     } else if ( data.length > 0 ) {
