@@ -69,13 +69,13 @@ export class LoginPage implements OnInit {
     if ( rs.length === 0 ) {
         this.funciones.msgAlert('', 'Los datos ingresados no coinciden con usuarios registrados.');
     } else {
-        // console.log(rs);
+        //
         this.rescataConfiguracion();
         rs.LISTACLIENTE = '';
-        this.funciones.muestraySale( 'Hola ' + rs.NOKOFU.trim() + ', ' + this.funciones.textoSaludo(), 0.7 );
+        this.funciones.muestraySale( 'Hola ' + rs.NOKOFU.trim() + ', ' + this.funciones.textoSaludo(), 1 );
         this.baseLocal.guardaUltimoUsuario( rs );
         this.baseLocal.user = rs;
-        // console.log(rs);
+        //
         this.router.navigate(['/tabs/inicio']);
     }
   }

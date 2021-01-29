@@ -69,43 +69,57 @@ export class TabinicioPage implements OnInit {
     this.codSuperFam   = '';
     this.firstcall     = true;
     this.cliente = this.baseLocal.initCliente();
-    this.baseLocal.obtenUltimoConfig().then( data => this.config = data );
+    //
   }
-
+  
   ngOnInit() {
     if ( !this.baseLocal.user ) {
       this.router.navigateByUrl('/login');
     }
-    // this.baseLocal.user = this.baseLocal.user;
-    this.baseLocal.soloCotizar = false;
-    // this.config  = this.baseLocal.initConfig();
     this.funciones.initCarro();
+    this.baseLocal.soloCotizar = false;
+    //
+    this.baseLocal.obtenUltimoConfig()
+        .then( data => { 
+          this.config = data;
+        });
     // console.log('oninit', this.baseLocal.user, this.baseLocal.user);
     if ( this.baseLocal.user.esuncliente === true ) {
-      this.baseLocal.user.LISTACLIENTE = '';
-        // cliente debe seleccionarse aqui...
-        this.netWork.traeUnSP( 'ksp_buscarDeNuevoClientes',
-                              { dato:    this.baseLocal.user.codigoentidad,
-                                codusr:  this.baseLocal.user.KOFU,
-                                empresa: this.baseLocal.user.EMPRESA,
-                                solouno: true } )
-            .subscribe( (cli: any) => {
-                // console.log(cli[0]);
-                this.baseLocal.cliente = cli[0];
-                this.cliente = cli[0];
-                this.baseLocal.user.LISTACLIENTE = cli[0].listaprecios;
-            });
-        this.config.imagenes      = true;
-        this.config.soloconstock  = false;
-        this.config.ocultardscto  = false;
-        this.config.soloverimport = false;
+      // console.log(this.baseLocal.user);
+      this.esUnCliente();
     }
   }
+
+  esUnCliente() {
+    //
+    this.baseLocal.user.LISTACLIENTE = '';
+    // cliente aqui...
+    this.netWork.traeUnSP( 'ksp_buscarDeNuevoClientes',
+                          { dato:    this.baseLocal.user.codigoentidad,
+                            codusr:  this.baseLocal.user.KOFU,
+                            empresa: this.baseLocal.user.EMPRESA,
+                            solouno: true } )
+        .subscribe( (cli: any) => {
+            // console.log(cli[0]);
+            this.baseLocal.cliente = cli[0];
+            this.cliente = cli[0];
+            this.baseLocal.user.LISTACLIENTE = cli[0].listaprecios;
+        });
+    //
+    // console.log(this.baseLocal.config);
+    // this.baseLocal.config.imagenes      = true;
+    // this.baseLocal.config.soloconstock  = false;
+    // this.baseLocal.config.ocultardscto  = false;
+    // this.baseLocal.config.soloverimport = false;
+    //
+  }
+
   ionViewDidLoad() {}
   ionViewDidEnter() {}
   ionViewWillEnter() {
     this.cliente = this.baseLocal.cliente;
-    this.config  = this.baseLocal.config;
+    // this.config  = this.baseLocal.config;
+    // console.log('ionViewWillEnter()');
   }
   ionViewWillLeave() {}
 

@@ -13,7 +13,7 @@
             <ion-badge *ngIf=" count " color="danger">{{ count | async }}</ion-badge>
         </ion-tab-button>
 
-        <ion-tab-button tab="tareas">
+        <ion-tab-button tab="tareas" *ngIf=" !baseLocal.user.esuncliente ">
             <ion-icon name="car-sport-outline"></ion-icon>
             <ion-label>Tareas</ion-label>
         </ion-tab-button>

@@ -87,8 +87,8 @@ export class BaselocalService {
              soloconstock:          false,
              usarlistacli:          false,
              ordenar:               '',
-             imagenes:              false,
-             ocultardscto:          false,
+             imagenes:              true,
+             ocultardscto:          true,
              puedevercosto:         false,
              puedemoddscto:         false,
              adq_imagenes:          true,
@@ -159,11 +159,11 @@ export class BaselocalService {
       try {
         this.config = cfg;
       } catch (error) {
-        this.config = this.initConfig();
+        this.config = await this.initConfig();
         this.guardaUltimoConfig( this.config );
       }
     } else {
-      this.config = this.initConfig();
+      this.config = await this.initConfig();
     }
     //
     return this.config;

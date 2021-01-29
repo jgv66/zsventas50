@@ -10,8 +10,8 @@ module.exports = {
 
     enviarCorreo: function(res, nodemailer, mailList, htmlBody, textoSubject) {
         //
-        sender = 'preventa@zsmotor.cl';
-        psswrd = 'zsmotor3762';
+        sender = 'admin@zsmotor.cl'; // 'preventa@zsmotor.cl';
+        psswrd = 'tek789//@TEK/**/'; // 'zsmotor3762';
         //
         cTo = mailList[0].to;
         cCc = mailList[0].cc;

@@ -25,7 +25,8 @@ export class FuncionesService {
   pendientes: number;
   documento: any;
   nPos = 0;
-  miCarrito: Array<{  empresa: string,
+  miCarrito: Array<{  idLinea: number,
+                      empresa: string,
                       vendedor: string,
                       nombrevend?: string,
                       bodega: string,
@@ -140,11 +141,12 @@ export class FuncionesService {
     this.cliente    = this.baseLocal.initCliente();
     this.config     = this.baseLocal.initConfig();
     this.pendientes = 0;
+    this.nPos       = 0;
     this.initCarro();
   }
 
   initCarro() {
-    this.miCarrito = [{ empresa: '', vendedor: '', nombrevend: '', bodega: '', sucursal: '',
+    this.miCarrito = [{ idLinea: 0, empresa: '', vendedor: '', nombrevend: '', bodega: '', sucursal: '',
                         cliente: '', suc_cliente: '',
                         codigo: '', descrip: '', cantidad: 0, stock_ud1: 0, precio: 0, preciomayor: 0, descuentomax: 0,
                         listapre: '', metodolista: '' }];
@@ -245,9 +247,11 @@ export class FuncionesService {
   }
 
   Add2Cart( producto ) {
-    console.log(producto);
+    // console.log(producto);
     if ( this.stockAlcanza( producto )  ) {
+        ++this.nPos;
         if ( this.aunVacioElCarrito() ) {
+            this.miCarrito[0].idLinea      = this.nPos;
             this.miCarrito[0].empresa      = this.baseLocal.user.EMPRESA;
             this.miCarrito[0].vendedor     = this.baseLocal.user.KOFU;
             this.miCarrito[0].bodega       = producto.bodega;
@@ -263,10 +267,11 @@ export class FuncionesService {
             this.miCarrito[0].descuentomax = producto.descuentomax;
             this.miCarrito[0].listapre     = producto.listaprecio;
             this.miCarrito[0].metodolista  = producto.metodolista;
-        } else if ( this.existeEnCarrito( producto ) ) {
-            this.agregaACarrito( producto );
+        // } else if ( this.existeEnCarrito( producto ) ) {
+        //     this.agregaACarrito( producto );
         } else {
-            this.miCarrito.push({ empresa:      this.baseLocal.user.EMPRESA,
+            this.miCarrito.push({ idLinea:      this.nPos,
+                                  empresa:      this.baseLocal.user.EMPRESA,
                                   vendedor:     this.baseLocal.user.KOFU,
                                   bodega:       producto.bodega,
                                   sucursal:     producto.sucursal,
@@ -299,22 +304,23 @@ export class FuncionesService {
     });
     return ( this.baseLocal.soloCotizar || (stock + producto.apedir ) <= producto.stock_ud1 ) ;
   }
-  existeEnCarrito( producto ) {
-    if ( this.baseLocal.soloCotizar === true ) {
-      return false;
-    }
-    const posicion = this.miCarrito.findIndex( item => item.codigo === producto.codigo  && item.bodega === producto.bodega );
-    return ( posicion !== -1 ? true : false );
-  }
-  agregaACarrito( producto ) {
-    const posicion = this.miCarrito.findIndex( item => item.codigo === producto.codigo  && item.bodega === producto.bodega );
-    this.miCarrito[posicion].cantidad += producto.apedir;
-  }
+  // existeEnCarrito( producto ) {
+  //   if ( this.baseLocal.soloCotizar === true ) {
+  //     return false;
+  //   }
+  //   const posicion = this.miCarrito.findIndex( item => item.codigo === producto.codigo  && item.bodega === producto.bodega );
+  //   return ( posicion !== -1 ? true : false );
+  // }
+  // agregaACarrito( producto ) {
+  //   const posicion = this.miCarrito.findIndex( item => item.codigo === producto.codigo  && item.bodega === producto.bodega );
+  //   this.miCarrito[posicion].cantidad += producto.apedir;
+  // }
   modificaCarrito( producto ) {
     if ( producto.apedir <= 0 ) {
       this.muestraySale( 'Solo están permitidos valores positivos mayores a cero.', 1.5, 'middle' );
     } else {
-      const posicion = this.miCarrito.findIndex( item => item.codigo === producto.codigo  && item.bodega === producto.bodega );
+      // const posicion = this.miCarrito.findIndex( item => item.codigo === producto.codigo  && item.bodega === producto.bodega );
+      const posicion = this.miCarrito.findIndex( item => item.idLinea === producto.idLinea );
       this.miCarrito[posicion].cantidad -= this.miCarrito[posicion].cantidad;
       this.miCarrito[posicion].cantidad += producto.apedir;
     }
@@ -337,7 +343,7 @@ export class FuncionesService {
     //
     if ( !this.aunVacioElCarrito() ) {
         for (let i = 0; i < this.miCarrito.length; i++) {
-          if ( this.miCarrito[i].codigo === producto.codigo && this.miCarrito[i].bodega === producto.bodega ) {
+          if ( this.miCarrito[i].idLinea === producto.idLinea ) {
             this.miCarrito.splice(i, 1);
           }
         }
