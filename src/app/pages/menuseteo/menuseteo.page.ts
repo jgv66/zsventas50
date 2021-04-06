@@ -140,7 +140,7 @@ export class MenuseteoPage {
     if ( this.baseLocal.cliente.codigo !== '') {
       const popover = await this.popoverCtrl.create({
         component: TrespuntosComponent,
-        componentProps: { escliente: true },
+        componentProps: { quees: 'cliente' },
         event,
         mode: 'ios',
         translucent: false

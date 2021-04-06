@@ -9,7 +9,7 @@ import { BaselocalService } from 'src/app/services/baselocal.service';
 })
 export class TrespuntosComponent implements OnInit {
 
-  @Input() escliente;
+  @Input() quees;
 
   aDesplegar = [];
 
@@ -29,12 +29,27 @@ export class TrespuntosComponent implements OnInit {
     { texto: 'Agregar Patente',  icon: 'car' },
   ];
 
+  usuario = [
+    { texto: 'Ayer',          icon: '' },
+    { texto: 'Esta semana',   icon: '' },
+    { texto: 'Semana pasada', icon: '' },
+    { texto: 'Este mes',      icon: '' },
+    { texto: 'Mes pasado',    icon: '' },
+  ];
   constructor( private popoverCtrl: PopoverController,
                public  baseLocal: BaselocalService ) {}
 
   ngOnInit() {
     // console.log(this.escliente);
-    this.aDesplegar = ( this.escliente === true ) ? this.clientes : this.sugerencias;
+    if ( this.quees === 'cliente' ) {
+      this.aDesplegar = this.clientes;
+    }
+    if ( this.quees === 'usuario' ) {
+      this.aDesplegar = this.usuario;
+    }
+    if ( this.quees === 'sugerencia' ) {
+      this.aDesplegar = this.sugerencias;
+    }
   }
 
   onClick( pos: number ) {

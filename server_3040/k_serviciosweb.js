@@ -142,7 +142,7 @@ module.exports = {
             body.cantidad.toString() + "," +
             body.prodconquiebre + " ;";
         //
-        // console.log(query);
+        console.log(query);
         //
         var request = new sql.Request();
         return request.query(query)
@@ -184,6 +184,31 @@ module.exports = {
                 return results.recordset;
             });
     },
+    //
+    rescatarSugerencias: function(sql, body) {
+        //
+        // console.log(body);
+        var query = "exec ksp_rescatarSugerencias '" + body.user.codigo + "' ;";
+        console.log(query);
+        var request = new sql.Request();
+        return request.query(query)
+            .then(function(results) {
+                return results.recordset;
+            });
+    },
+    //
+    informarSugerencia: (sql, body) => {
+        //
+        console.log('informarSugerencia->', body);
+        const query = `exec ksp_darPorRecibidaSugerencia ${body.value} ; `;
+        console.log(query);
+        var request = new sql.Request();
+        return request.query(query)
+            .then(function(results) {
+                return results.recordset;
+            });
+    },
+    //
     crearMedidasNuevas: (sql, body) => {
         //
         // console.log(body);
@@ -265,7 +290,7 @@ module.exports = {
     //
     cierraNotificacion: function(sql, body) {
         //
-        var query = "exec ksp_cierraNotificacion '" + body.id + "' ;";
+        var query = "exec ksp_cierraNotificacion " + body.id + " ;";
         //
         console.log(query);
         //
@@ -275,5 +300,139 @@ module.exports = {
                 return results.recordset;
             });
     },
-    //    
+    //
+    cierraSugerencia: function(sql, body) {
+        //
+        var query = "exec ksp_cierraSugerencia " + body.id + " ;";
+        //
+        console.log(query);
+        //
+        var request = new sql.Request();
+        return request.query(query)
+            .then(function(results) {
+                return results.recordset;
+            });
+    },
+    //
+    saveDefinitionIMG: function(sql, ib64, extension, usuario) {
+        // 
+        var query = `insert into ktp_images ( usuario,        fechains,  img_exten,        img_name ) 
+                                     values ( '${ usuario }', getdate(), '${ extension }', '${ ib64 }' ) ;`;
+        console.log('saveIMG', query);
+        const request = new sql.Request();
+        return request.query(query)
+            .then(resultado => {
+                return resultado.recordset;
+            })
+            .then(resultado => {
+                return { resultado: 'ok', datos: resultado };
+            })
+            .catch(err => {
+                console.log('saveIMG error ', err);
+                return { resultado: 'error', datos: err };
+            });
+    },
+    // 
+    getImage: function(sql, body) {
+        // --------------------------------------------------------------------------------------------------
+        const query = `
+            if exists ( select * from ktp_images with (nolock) where usuario = '${ body.datos.usuario }' ) begin
+                select 'ok' as resultado, img_name as image_name
+                from ktp_images with (nolock) 
+                where usuario = '${ body.datos.usuario }';
+            end
+            else begin
+                select 'nodata' as resultado
+            end; 
+        `;
+        //
+        // console.log(query);
+        //
+        const request = new sql.Request();
+        return request.query(query)
+            .then(resultado => {
+                return resultado.recordset;
+            })
+            .then(resultado => {
+                if (resultado) {
+                    return { resultado: 'ok', datos: resultado };
+                } else {
+                    return { resultado: 'error', datos: resultado };
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                return { resultado: 'error', datos: err };
+            });
+    },
+    //
+    misDeberes: (sql, body) => {
+        // 
+        const query = `exec ksp_misDeberes '${ body.datos.usuario }','${ body.datos.empresa }','${ body.datos.desde }','${ body.datos.hasta }' ;`;
+        console.log(query);
+        //
+        const request = new sql.Request();
+        return request.query(query)
+            .then(resultado => {
+                return resultado.recordset;
+            })
+            .then(resultado => {
+                if (resultado) {
+                    return { resultado: 'ok', datos: resultado };
+                } else {
+                    return { resultado: 'error', datos: resultado };
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                return { resultado: 'error', datos: err };
+            });
+    },
+    //        
+    misDeberesTop: (sql, body) => {
+        // 
+        const query = `exec ksp_misDeberesTop '${ body.datos.usuario }','${ body.datos.tipodoc }','${ body.datos.empresa }','${ body.datos.desde }','${ body.datos.hasta }' ;`;
+        console.log(query);
+        //
+        const request = new sql.Request();
+        return request.query(query)
+            .then(resultado => {
+                return resultado.recordset;
+            })
+            .then(resultado => {
+                if (resultado) {
+                    return { resultado: 'ok', datos: resultado };
+                } else {
+                    return { resultado: 'error', datos: resultado };
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                return { resultado: 'error', datos: err };
+            });
+    },
+    //        
+    misContribuciones: (sql, body) => {
+        // 
+        const query = `exec ksp_misContribuciones '${ body.datos.usuario }','${ body.datos.desde }','${ body.datos.hasta }' ;`;
+        console.log(query);
+        //
+        const request = new sql.Request();
+        return request.query(query)
+            .then(resultado => {
+                return resultado.recordset;
+            })
+            .then(resultado => {
+                if (resultado) {
+                    return { resultado: 'ok', datos: resultado };
+                } else {
+                    return { resultado: 'error', datos: resultado };
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                return { resultado: 'error', datos: err };
+            });
+    },
+    //   
 };

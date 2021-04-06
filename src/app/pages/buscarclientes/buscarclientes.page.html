@@ -1,5 +1,5 @@
 <ion-header no-border>
-    <ion-toolbar>
+    <ion-toolbar color="dark">
         <ion-buttons slot="start">
             <ion-button (click)="salir()">
                 <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
@@ -11,7 +11,6 @@
     <ion-grid>
         <ion-row style="max-height: 42px;margin-top:10px;">
             <ion-col size="9" style="max-height: 40px;top:-14px;">
-                <!-- <ion-searchbar animated (ionChange)="buscarClientes( $event )" [debounce]="1500"></ion-searchbar> -->
                 <ion-searchbar mode="ios" animated search-icon="x" type="text" name="texto" [(ngModel)]="texto" showCancelButton="focus" cancelButtonText=" " placeholder="Digite aquí..."></ion-searchbar>
             </ion-col>
             <ion-col size="3" style="height: 32px; padding-top: 0px;">
@@ -25,9 +24,7 @@
 <ion-progress-bar *ngIf=" buscando " type="indeterminate"></ion-progress-bar>
 
 <ion-content>
-
     <ion-list>
-
         <ion-item *ngFor="let cliente of clientes" (click)="salirConData( cliente )">
             <ion-label class="ion-text-wrap">
                 <h2><b>{{ cliente.codigo }}</b>
@@ -53,7 +50,5 @@
 
             </ion-label>
         </ion-item>
-
     </ion-list>
-
 </ion-content>

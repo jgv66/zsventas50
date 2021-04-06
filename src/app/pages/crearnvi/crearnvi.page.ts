@@ -28,6 +28,7 @@ export class CrearnviPage implements OnInit {
 
   ngOnInit() {
     this.item = JSON.parse( this.parametros.snapshot.paramMap.get('dataP') );
+    console.log(this.item)
     this.cargaBodegas();
   }
 
@@ -35,7 +36,7 @@ export class CrearnviPage implements OnInit {
     const producto = this.item.producto.codigo;
     this.leyendo = true;
     this.netWork.traeUnSP( 'ksp_BodegaProducto',
-                          { codproducto: this.item.producto.codigo, usuario: this.baseLocal.user.KOFU, empresa: this.baseLocal.user.empresa, cualquierbodega: 1 },
+                          { codproducto: this.item.producto.codigo, usuario: this.baseLocal.user.KOFU, empresa: this.baseLocal.user.empresa, cualquierbodega: -11 },
                           {codigo: this.baseLocal.user.KOFU, nombre: this.baseLocal.user.NOKOFU } )
         .subscribe( data => { this.revisaEoFBP( producto, data ); },
                     err  => { this.leyendo = false;
@@ -62,8 +63,8 @@ export class CrearnviPage implements OnInit {
       this.grabando = true;
       const miCarrito = [{empresa: this.baseLocal.user.empresa,
                           vendedor: this.baseLocal.user.KOFU,
-                          bodega: this.item.usuario.bodega,      // this.bodega,
-                          sucursal: this.item.usuario.sucursal,  // this.sucursal,
+                          bodega: this.item.producto.bodega,      // this.bodega,
+                          sucursal: this.item.producto.sucursal,  // this.sucursal,
                           cliente: '77358700-0',
                           suc_cliente: this.sucursal,
                           codigo: this.item.producto.codigo,

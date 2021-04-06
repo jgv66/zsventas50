@@ -2,6 +2,9 @@
     "folders": [
 		{
 			"path": "."
+		},
+		{
+			"path": "C:\\Users\\JOGV66\\Documents\\SQL Server Management Studio\\zsmotor"
 		}
 	],
     "settings": {}

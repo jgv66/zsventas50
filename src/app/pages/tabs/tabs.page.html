@@ -7,10 +7,15 @@
             <ion-label>Productos</ion-label>
         </ion-tab-button>
 
+        <ion-tab-button tab="miconfig">
+            <ion-icon name="settings-outline"></ion-icon>
+            <ion-label>Ajustes</ion-label>
+        </ion-tab-button>
+
         <ion-tab-button tab="carrito">
             <ion-icon name="cart-outline"></ion-icon>
             <ion-label>Mi carro</ion-label>
-            <ion-badge *ngIf=" count " color="danger">{{ count | async }}</ion-badge>
+            <ion-badge color="danger">{{ count | async }}</ion-badge>
         </ion-tab-button>
 
         <ion-tab-button tab="tareas" *ngIf=" !baseLocal.user.esuncliente ">
@@ -18,12 +23,12 @@
             <ion-label>Tareas</ion-label>
         </ion-tab-button>
 
-        <ion-tab-button tab="miconfig">
-            <ion-icon name="settings-outline"></ion-icon>
-            <ion-label>Ajustes</ion-label>
+        <ion-tab-button tab="usuario" *ngIf=" !baseLocal.user.esuncliente ">
+            <ion-icon name="person-outline"></ion-icon>
+            <ion-label>Mi Cuenta</ion-label>
         </ion-tab-button>
 
-        <ion-tab-button tab="salida">
+        <ion-tab-button tab="salida" *ngIf=" baseLocal.user.esuncliente ">
             <ion-icon name="log-out-outline"></ion-icon>
             <ion-label>Salir</ion-label>
         </ion-tab-button>

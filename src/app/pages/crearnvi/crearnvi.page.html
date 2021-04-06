@@ -1,5 +1,5 @@
 <ion-header>
-    <ion-toolbar>
+    <ion-toolbar color="dark">
         <ion-buttons slot="start">
             <ion-back-button text=' '></ion-back-button>
         </ion-buttons>
@@ -14,7 +14,8 @@
 
     <ion-card style="font-size: 90%; margin-top: 5px;">
 
-        <p style="margin-left: 10px; margin-right: 10px; padding: 10px; font-size: 75%; text-align: justify">Esta información será ingresada como un documento tipo NVI al ERP. El requerimiento podría no ser inmediato ya que su análisis corresponde a un grupo de documentos con la misma peticion u otras.</p>
+        <p style="margin-left: 10px; margin-right: 10px; padding: 10px; font-size: 75%; text-align: justify">Esta información será ingresada como un documento tipo NVI al ERP. El requerimiento podría no ser inmediato ya que su análisis corresponde a un grupo de documentos con la misma peticion u otras. La bodega de Origen siempre es la bodega Central
+            de Marathon <b>CLM</b></p>
 
         <ion-item>
             <ion-icon size="small" name="key" slot="start"></ion-icon>
@@ -35,7 +36,8 @@
         <ion-item>
             <!-- <ion-label position="fixed" style="width: 40px;max-width: 40px;">Bodega Dest.</ion-label> -->
             <ion-icon size="small" name="pin" slot="start"></ion-icon>
-            <ion-select name="sucursal" [(ngModel)]="sucursal" color="primary" interface="alert" ok-text="Ok" cancel-text="Cancelar" placeholder="Sucursal de destino..." style="width: 250px; max-width: 250px; padding-left: 0px;">
+            <!-- <ion-label>Sucursal de Destino</ion-label> -->
+            <ion-select mode="ios" name="sucursal" [(ngModel)]="sucursal" color="primary" interface="alert" ok-text="Ok" cancel-text="Cancelar" placeholder="Sucursal de destino..." style="width: 250px; max-width: 250px; padding-left: 0px;">
                 <ion-select-option *ngFor="let bod of bodegas" [value]="bod.sucursal">{{ bod.nombresuc }}</ion-select-option>
             </ion-select>
         </ion-item>
@@ -44,10 +46,9 @@
         <ion-progress-bar *ngIf=" grabando " type="indeterminate"></ion-progress-bar>
 
         <ion-card-header class="ion-no-padding">
-            <img src="//www.zsmotor.cl/img/Producto/{{ item.producto.codigo }}/{{ item.producto.codigo }}.jpg" onerror=" this.src='assets/imgs/no-img.png' " />
+            <img src="https://zsmotor.cl/storage/mobile/{{ item.producto.codigo }}/img_1.jpg" onerror=" this.src='assets/imgs/no-img.png' " />
         </ion-card-header>
 
     </ion-card>
-
 
 </ion-content>

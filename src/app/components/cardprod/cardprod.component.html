@@ -2,7 +2,7 @@
 <ion-card *ngFor="let producto of listaProductos" >
 
     <div *ngIf=" config.imagenes " >
-        <ion-img src="http://www.zsmotor.cl/img/Producto/{{ producto.codigo }}/{{ producto.codigo }}.jpg"
+        <ion-img src="https://zsmotor.cl/storage/mobile/{{ producto.codigo }}/{{ producto.codigo }}.jpg"
             onerror=" this.src='assets/imgs/no-img.png' ">
         </ion-img>
     </div>
@@ -125,4 +125,3 @@
 
 </ion-card>        
 -->
-

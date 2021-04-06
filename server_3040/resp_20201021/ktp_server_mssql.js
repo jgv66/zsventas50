@@ -167,7 +167,7 @@ app.post('/soloEnviarCorreo',
         console.log('detalle del correo...');
         carro.forEach(element => {
             lineas += '<tr>';
-            lineas += '<td align="center"><img src="http://www.zsmotor.cl/img/Producto/' + element.codigo.trim() + '/' + element.codigo.trim() + '.jpg" width="150px" height="150px"/></td>';
+            lineas += '<td align="center"><img src="https://zsmotor.cl/storage/mobile/' + element.codigo.trim() + '/' + element.codigo.trim() + '.jpg" width="150px" height="150px"/></td>';
             lineas += '<td align="center">' + element.cantidad.toString() + '</td>';
             lineas += '<td align="center">' + element.codigo + '</td>';
             lineas += '<td align="center">' + element.descrip + '</td>';
@@ -344,7 +344,7 @@ app.post('/grabadocumentos',
                                             .then(data => {
                                                 data.recordset.forEach(element => {
                                                     lineas += '<tr>';
-                                                    lineas += '<td align="center"><img src="http://www.zsmotor.cl/img/Producto/' + element.codigo.trim() + '/' + element.codigo.trim() + '.jpg" width="150px" height="150px"/></td>';
+                                                    lineas += '<td align="center"><img src="https://zsmotor.cl/storage/mobile/' + element.codigo.trim() + '/' + element.codigo.trim() + '.jpg" width="150px" height="150px"/></td>';
                                                     lineas += '<td align="center">' + element.cantidad.toString() + '</td>';
                                                     lineas += '<td align="center">' + element.codigo + '</td>';
                                                     lineas += '<td align="center">' + element.descripcion + '</td>';
@@ -469,7 +469,7 @@ app.post('/pregraba',
                             .then(data => {
                                 data.recordset.forEach(element => {
                                     lineas += '<tr>';
-                                    lineas += '<td align="center"><img src="http://www.zsmotor.cl/img/Producto/' + element.codigo.trim() + '/' + element.codigo.trim() + '.jpg" width="150px" height="150px"/></td>';
+                                    lineas += '<td align="center"><img src="https://zsmotor.cl/storage/mobile/' + element.codigo.trim() + '/' + element.codigo.trim() + '.jpg" width="150px" height="150px"/></td>';
                                     lineas += '<td align="center">' + element.cantidad.toString() + '</td>';
                                     lineas += '<td align="center">' + element.codigo + '</td>';
                                     lineas += '<td align="center">' + element.descripcion + '</td>';

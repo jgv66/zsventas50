@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Platform } from '@ionic/angular';
-
 import { BaselocalService } from 'src/app/services/baselocal.service';
-
 import { Plugins } from '@capacitor/core';
 const { Share, FileSharer } = Plugins;
 
@@ -35,7 +33,7 @@ export class SocialshPage implements OnInit {
                  // 'Precio '+this.item.tipolista+' : '+this.item.preciomayor.toString() + 
                  '\n\n';
     this.imagen = null;
-    this.url    = 'http://www.zsmotor.cl/img/Producto/' + this.item.producto.codigo.trim() + '/' + this.item.producto.codigo.trim() + '.jpg';
+    this.url    = 'https://zsmotor.cl/storage/mobile/' + this.item.producto.codigo.trim() + '/img_1.jpg';
     //
     // this.download();
   }

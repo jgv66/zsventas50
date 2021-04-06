@@ -7,11 +7,12 @@ const routes: Routes = [
     path: '',
     component: TabsPage,
     children: [
-      { path: 'inicio' ,   children: [ { path: '', loadChildren: () => import('../tabinicio/tabinicio.module')  .then(m => m.TabinicioPageModule ) }] },
-      { path: 'carrito',   children: [ { path: '', loadChildren: () => import('../tabcarrito/tabcarrito.module').then(m => m.TabcarritoPageModule) }] },
-      { path: 'miconfig',  children: [ { path: '', loadChildren: () => import('../tabconfig/tabconfig.module')  .then(m => m.TabconfigPageModule)  }] },      
-      { path: 'tareas',    children: [ { path: '', loadChildren: () => import('../tabtarea/tabtarea.module')    .then(m => m.TabtareaPageModule)   }] },
-      { path: 'salida',    children: [ { path: '', loadChildren: () => import('../tabsalida/tabsalida.module')  .then(m => m.TabsalidaPageModule)  }] },
+      { path: 'inicio' ,  children: [ { path: '', loadChildren: () => import('../tabinicio/tabinicio.module')  .then(m => m.TabinicioPageModule ) }] },
+      { path: 'carrito',  children: [ { path: '', loadChildren: () => import('../tabcarrito/tabcarrito.module').then(m => m.TabcarritoPageModule) }] },
+      { path: 'miconfig', children: [ { path: '', loadChildren: () => import('../tabconfig/tabconfig.module')  .then(m => m.TabconfigPageModule)  }] },      
+      { path: 'tareas',   children: [ { path: '', loadChildren: () => import('../tabtarea/tabtarea.module')    .then(m => m.TabtareaPageModule)   }] },
+      { path: 'salida',   children: [ { path: '', loadChildren: () => import('../tabsalida/tabsalida.module')  .then(m => m.TabsalidaPageModule)  }] },
+      { path: 'usuario',  children: [ { path: '', loadChildren: () => import('../tabusuario/tabusuario.module').then( m => m.TabusuarioPageModule)}] },
       { path: '', redirectTo: '/tabs/(inicio:inicio)', pathMatch: 'full' },
     ]
   },

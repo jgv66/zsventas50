@@ -1,5 +1,5 @@
 <ion-header>
-    <ion-toolbar>
+    <ion-toolbar color="dark">
         <img src="assets/imgs/logo-zs.png" alt="" class="navbar-img">
         <ion-title>Ingresar al sistema</ion-title>
     </ion-toolbar>
@@ -14,11 +14,11 @@
 
     <ion-card class="ion-no-padding">
 
-        <ion-list>
+        <ion-list style="margin-top: 20px;">
 
             <ion-item lines='none'>
                 <ion-icon slot="start" name="mail-outline" style="margin-right: 10px;"></ion-icon>
-                <ion-input type="text" name="rutocorreo" [(ngModel)]="rutocorreo" required clearInput=true></ion-input>
+                <ion-input inputmode="email" type="mail" name="rutocorreo" [(ngModel)]="rutocorreo" required clearInput=true></ion-input>
             </ion-item>
 
             <ion-item lines='none'>

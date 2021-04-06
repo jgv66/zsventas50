@@ -11,6 +11,11 @@ var servicios = require('./k_serviciosweb.js');
 var _Reportes = require('./k_reportes.js');
 var _Activity = require('./k_regactiv.js');
 //
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
+const fileExist = require('file-exists');
+//
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -22,12 +27,18 @@ exports.sendEmail = function(req, res) {
     console.log('enviando correo...');
 };
 //
+// body parser
 var bodyParser = require('body-parser');
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json({ limit: '5mb', extended: true }));
+app.use(bodyParser.urlencoded({ limit: '5mb', extended: false }));
 
 // carpeta de imagenes: desde donde se levanta el servidor es esta ruta -> /root/trial-server-001/public
-app.use(express.static('public'));
+// app.use(express.static('public'));
+app.use("/public", express.static('public'));
+publicpath = path.resolve(__dirname, 'public');
+app.use('/static', express.static(publicpath));
+CARPETA_IMG = publicpath + '/img/';
+console.log(CARPETA_IMG);
 
 // servidor escuchando puerto 3040
 var server = app.listen(3040, function() {
@@ -46,7 +57,6 @@ app.get('/ping',
         res.json({ resultado: "ok", datos: 'hola mundo' });
         //
     });
-
 // --------------------- concecionarios
 app.post('/ins_dataconcesionarios',
     function(req, res) {
@@ -165,7 +175,7 @@ app.post('/soloEnviarCorreo',
         console.log('detalle del correo...');
         carro.forEach(element => {
             lineas += '<tr>';
-            lineas += '<td align="center"><img src="http://www.zsmotor.cl/img/Producto/' + element.codigo.trim() + '/' + element.codigo.trim() + '.jpg" width="150px" height="150px"/></td>';
+            lineas += '<td align="center"><img src="https://zsmotor.cl/storage/mobile/' + element.codigo.trim() + '/img_1.jpg" width="150px" height="150px"/></td>';
             lineas += '<td align="center">' + element.cantidad.toString() + '</td>';
             lineas += '<td align="center">' + element.codigo + '</td>';
             lineas += '<td align="center">' + element.descrip + '</td>';
@@ -237,6 +247,7 @@ app.post('/grabadocumentos',
         var xObs = req.body.cObs || '';
         var xOcc = req.body.cOcc || ''; // incorporada 27/07/2018, se modifica ktp_encabezado -> occ varchar(40)
         let nKm = req.body.nKM || ''; // agregada el 21/10/2020, se modifica encabezado -> kilometraje varchar(20)
+        // const suc_destino = req.body.sucursalDestino || '';
         // variables
         var xhoy = new Date();
         var hora = xhoy.getTime();
@@ -276,13 +287,8 @@ app.post('/grabadocumentos',
                                                 fechaentrega,horainicio,horafinal) 
                                         values ('${carro[0].empresa}','${carro[0].cliente}','${carro[0].suc_cliente}','${carro[0].vendedor}',
                                                 getdate(),0,'${xObs.trim()}','${xOcc.trim()}','${nKm.toString()}','${modalidad}','',
-                                                getdate(),'${hora}','${hora}') ;
+                                                getdate(),'${hora}','${hora}' ) ;
                     --
-                    if ( @@ERROR <> 0 ) begin
-						set  @Error = @@ERROR;
-                        set @ErrMsg = ERROR_MESSAGE();
-                        THROW @Error, @ErrMsg, 0 ;  
-                    end;
                     set @id = IDENT_CURRENT('ktp_encabezado');
                     --
                     %%%%detalle%%%%
@@ -291,12 +297,7 @@ app.post('/grabadocumentos',
                                                     from ktp_detalle as d where d.id_preventa=ktp_encabezado.id_preventa )  
                     where id_preventa=@id ;
                     --
-                    if ( @@ERROR <> 0 ) begin
-						set  @Error = @@ERROR;
-                        set @ErrMsg = ERROR_MESSAGE();
-                        THROW @Error, @ErrMsg, 0 ;  
-                    end;
-                    --
+
                     `;
         //
         if (tipodoc == 'PRE') {
@@ -305,21 +306,25 @@ app.post('/grabadocumentos',
             query += "exec ksp_grabaDocumentoDef_v1 '" + tipodoc + "', @id, @nrodoc output, @id_edo output ;";
         }
         //
-        query += `            
-                --
-                if ( @@ERROR <> 0 ) begin
-                    set  @Error = @@ERROR;
-                    set @ErrMsg = ERROR_MESSAGE();
-                    THROW @Error, @ErrMsg, 0 ;  
-                end;
-                --
+        query += `       
+                    if ( @@ERROR <> 0 ) begin
+                        set  @Error = @@ERROR
+                        set @ErrMsg = ERROR_MESSAGE();
+                        THROW @Error, @ErrMsg, 0 ;  
+                    end;     
+                    --
                 commit transaction ;
                 select @nrodoc as numero, @id as id, @id_edo as id_edo ;
                 --
             end try
             begin catch
+                --
+                set @Error = @@ERROR;
+                set @ErrMsg = ERROR_MESSAGE();
+                --
                 if ( @@trancount > 0 ) ROLLBACK TRANSACTION ;
                 select '' as numero, 0 as id, 0 as id_edo, @ErrMsg as errormsg ;
+                --
             end catch;
             `;
         //
@@ -334,24 +339,19 @@ app.post('/grabadocumentos',
                                             1,'','',${carro[i].cantidad.toString()}, 0,'${carro[i].listapre}','${carro[i].metodolista}',
                                             ${carro[i].precio.toString()},${carro[i].descuentomax.toString()},${((carro[i].precio - carro[i].preciomayor) * carro[i].cantidad).toString()},0,0,'','' );
                     --
-                    if ( @@ERROR <> 0 ) begin
-                        set  @Error = @@ERROR;
-                        set @ErrMsg = ERROR_MESSAGE();
-                        THROW @Error, @ErrMsg, 0 ;  
-                    end;
-                    --
                `;
             //
         }
         //    
         query = query.replace('%%%%detalle%%%%', queryd);
-        // console.log(query);
+        //
+        console.log(query);
         //
         conex
             .then(function() {
                 //
                 lineas = '';
-                var request = new sql.Request();
+                const request = new sql.Request();
                 // 
                 request.query(query)
                     .then(function(rs) {
@@ -381,7 +381,7 @@ app.post('/grabadocumentos',
                                             .then(data => {
                                                 data.recordset.forEach(element => {
                                                     lineas += '<tr>';
-                                                    lineas += '<td align="center"><img src="http://www.zsmotor.cl/img/Producto/' + element.codigo.trim() + '/' + element.codigo.trim() + '.jpg" width="150px" height="150px"/></td>';
+                                                    lineas += '<td align="center"><img src="https://zsmotor.cl/storage/mobile/' + element.codigo.trim() + '/img_1.jpg" width="150px" height="150px"/></td>';
                                                     lineas += '<td align="center">' + element.cantidad.toString() + '</td>';
                                                     lineas += '<td align="center">' + element.codigo + '</td>';
                                                     lineas += '<td align="center">' + element.descripcion + '</td>';
@@ -506,7 +506,7 @@ app.post('/pregraba',
                             .then(data => {
                                 data.recordset.forEach(element => {
                                     lineas += '<tr>';
-                                    lineas += '<td align="center"><img src="http://www.zsmotor.cl/img/Producto/' + element.codigo.trim() + '/' + element.codigo.trim() + '.jpg" width="150px" height="150px"/></td>';
+                                    lineas += '<td align="center"><img src="https://zsmotor.cl/storage/mobile/' + element.codigo.trim() + '/img_1.jpg" width="150px" height="150px"/></td>';
                                     lineas += '<td align="center">' + element.cantidad.toString() + '</td>';
                                     lineas += '<td align="center">' + element.codigo + '</td>';
                                     lineas += '<td align="center">' + element.descripcion + '</td>';
@@ -578,9 +578,17 @@ app.post('/cliproalma',
             if (xdatos.codproducto == undefined) { xdatos.codproducto = ''; } else { xdatos.codproducto = xdatos.codproducto.trim(); }
             if (xdatos.usuario == undefined) { xdatos.usuario = ''; } else { xdatos.usuario = xdatos.usuario.trim(); }
             if (xdatos.empresa == undefined) { xdatos.empresa = ''; } else { xdatos.empresa = xdatos.empresa.trim(); }
-            if (xdatos.cualquierbodega == undefined) { xdatos.cualquierbodega = '0'; } else { xdatos.cualquierbodega = '1'; }
             //
-            query = "exec " + xsp + " '" + xdatos.codproducto + "','" + xdatos.usuario + "','" + xdatos.empresa + "'," + xdatos.cualquierbodega + " ;";
+            console.log('xdatos->', xdatos);
+
+            if (xdatos.cualquierbodega == undefined) {
+                xdatos.cualquierbodega = '0';
+            } else if (xdatos.cualquierbodega === 1) {
+                xdatos.cualquierbodega = '1';
+            }
+            //
+            query = `exec ${xsp} '${xdatos.codproducto}','${xdatos.usuario}','${xdatos.empresa}', ${xdatos.cualquierbodega} ;`;
+            console.log(query);
             _Activity.registra(sql, xdatos.usuario, xsp, xdatos.codproducto, xdatos.usuario, xdatos.empresa);
             //    
         } else if (xsp == 'ksp_buscarProductos_v7_zscli') {
@@ -602,7 +610,6 @@ app.post('/cliproalma',
         conex
             .then(function() {
                 //
-                //console.log( query );
                 var request = new sql.Request();
                 // 
                 request.query(query)
@@ -864,10 +871,22 @@ app.post('/ksp_enviarSugerencias',
             .then(function(data) {
                 console.log("/ksp_enviarSugerencias ", data);
                 if (data[0].resultado === true) {
-                    htmlBody = correos.sugerido(req.body.datos, req.body.user);
+                    htmlBody = correos.sugerido(req.body.datos, req.body.user, data[0].id);
                     correos.enviarCorreo(res, nodemailer, [{ to: 'ziad@zsmotor.cl', cc: ['kfarinez@zsmotor.cl', 'Doly@zsmotor.cl'] }], htmlBody);
+                    // correos.enviarCorreo(res, nodemailer, [{ to: 'jogv66@gmail.com' }], htmlBody);
                 }
                 res.json(data); /* data viene en formato correcto */
+            });
+    });
+app.get('/aSSevfdivDiff6549_kksdterm-htcallkksdterm',
+    function(req, res) {
+        //
+        console.log(req.query);
+        servicios.informarSugerencia(sql, req.query)
+            .then(function(data) {
+                console.log(data);
+                res.status(200)
+                    .send('Gracias, la sugerencia se informará como recibida.'); /* data viene en formato correcto */
             });
     });
 app.post('/ksp_enviarNotificaciones',
@@ -886,6 +905,15 @@ app.post('/ksp_rescatarMisNotificaciones',
     function(req, res) {
         //
         servicios.rescatarNotificacion(sql, req.body)
+            .then(function(data) {
+                // }
+                res.json(data); /* data viene en formato correcto */
+            });
+    });
+app.post('/ksp_rescatarMisSugerencias',
+    function(req, res) {
+        //
+        servicios.rescatarSugerencias(sql, req.body)
             .then(function(data) {
                 // }
                 res.json(data); /* data viene en formato correcto */
@@ -943,3 +971,101 @@ app.post('/ksp_cerrarNotificacion',
                 res.json(data); /* data viene en formato correcto */
             });
     });
+
+app.post('/ksp_cerrarSugerencia',
+    function(req, res) {
+        //
+        servicios.cierraSugerencia(sql, req.body.datos)
+            .then(async(data) => {
+                res.json(data); /* data viene en formato correcto */
+            });
+    });
+
+app.post('/ksp_traeMisDeberes',
+    function(req, res) {
+        //
+        console.log(req.body);
+        servicios.misDeberes(sql, req.body)
+            .then(function(data) {
+                res.json(data); /* data viene en formato correcto */
+            });
+    });
+
+app.post('/ksp_traeMisContribuciones',
+    function(req, res) {
+        //
+        console.log(req.body);
+        servicios.misContribuciones(sql, req.body)
+            .then(function(data) {
+                res.json(data); /* data viene en formato correcto */
+            });
+    });
+
+app.post('/ksp_misDeberesTop',
+    function(req, res) {
+        //
+        console.log(req.body);
+        servicios.misDeberesTop(sql, req.body)
+            .then(function(data) {
+                res.json(data); /* data viene en formato correcto */
+            });
+    });
+
+//---------------------------------- multer funcionó
+const upload = multer({ dest: CARPETA_IMG });
+app.post('/imgUp',
+    upload.single('kfoto'),
+    async(req, res, next) => {
+        //
+        // console.log('req.file->', req.file);
+        // console.log('req.body->', req.body);
+        try {
+            //
+            const newPath = req.file.destination + req.file.originalname;
+            const oldPath = req.file.path;
+            try {
+                // borrar antes de grabar
+                if (fileExist.sync(newPath)) {
+                    fs.unlinkSync(newPath);
+                }
+                //file removed
+            } catch (err) {
+                console.error(err);
+            }
+            fs.renameSync(oldPath, newPath);
+            // 
+            servicios.saveDefinitionIMG(sql, req.body.name, req.body.extension, req.body.usuario)
+                .then(() => {
+                    return res.status(200).json({ resultado: 'ok', mensaje: 'Imagen se guardó' });
+                })
+                .catch(function(error) {
+                    res.status(500).json({ resultado: 'error', datos: error });
+
+                });
+            //
+        } catch (e) {
+            next(e);
+        }
+    });
+
+app.post('/getimage',
+    function(req, res) {
+        //
+        servicios.getImage(sql, req.body)
+            .then(function(data) {
+                //
+                if (data.resultado === 'ok') {
+                    //
+                    if (data.resultado === 'ok') {
+                        res.json({ resultado: 'ok', datos: data.datos });
+                    } else {
+                        res.json({ resultado: 'error', datos: data.mensaje });
+                    }
+                }
+            })
+            .catch(function(err) {
+                console.log("/getimages ", err);
+                res.json({ resultado: 'error', datos: err });
+            });
+    });
+//---------------------------------- multer funcionó

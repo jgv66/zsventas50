@@ -1,10 +1,4 @@
 /*
- * App Global CSS
- * ----------------------------------------------------------------------------
- * Put style rules here that you want to apply globally. These styles are for
- * the entire app and not just one component. Additionally, this file can be
- * used as an entry point to import other CSS/Sass files to be included in the
- * output CSS.
  * For more information on global stylesheets, visit the documentation:
  * https://ionicframework.com/docs/layout/global-stylesheets
  */
@@ -28,6 +22,7 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+@import "~animate.css/animate.min.css";
 .navbar-img {
     height: 25px;
     float: left;
@@ -129,15 +124,3 @@ ion-content {
     min-width: fit-content;
     width: auto !important;
 }
-
-// ion-badge {
-//     top: 7px;
-//     left: calc(50% + 1px);
-//     font-size: 9px;
-//     font-weight: 500;
-//     border-radius: 10px;
-//     padding: 2px 2px 2px;
-//     min-width: 18px;
-//     min-height: 18px;
-//     line-height: 14px;
-// }

@@ -1,0 +1,115 @@
+<ion-header>
+    <ion-toolbar color="dark">
+        <img src="./assets/imgs/logo-zs.png" alt="" class="navbar-img">
+        <ion-title>Mi Cuenta</ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="opcionFechas( $event )">
+                <ion-icon slot="icon-only" name="calendar-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Tire para refrescar" refreshingSpinner="circles" refreshingText="Refrescando...">
+        </ion-refresher-content>
+    </ion-refresher>
+
+    <ion-card style="top: 0px; margin-top: 10px; margin-bottom: 15px;" mode="ios">
+        <ion-card-header style="padding-top: 5px;padding-bottom: 5px;">
+            <ion-card-title>
+                <ion-avatar>
+                    <img [src]="miFoto" onerror=" this.src='assets/imgs/no-img.png' " />
+                </ion-avatar>
+                <ion-button (click)="tomarFoto()" fill="clear" color="medium">
+                    <ion-icon slot="icon-only" name="camera-outline"></ion-icon>
+                </ion-button>
+            </ion-card-title>
+            <ion-card-subtitle class="ion-text-center">
+                <ion-label class="ion-text-center" style="text-transform:none !important;"><b>{{ baseLocal.user.usuario }} - {{ baseLocal.user.nombre }}</b></ion-label>
+                <br>
+                <ion-label class="ion-text-center" style="text-transform:none !important;"><b>{{ baseLocal.user.EMAIL }}</b></ion-label>
+            </ion-card-subtitle>
+        </ion-card-header>
+    </ion-card>
+
+    <ion-progress-bar *ngIf=" buscando " type="indeterminate"></ion-progress-bar>
+
+    <ion-segment (ionChange)="segmentChanged($event)" class="ion-text-center" value="venta" mode="ios">
+        <ion-segment-button value="venta">
+            <ion-label>
+                Ventas
+            </ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="contrib">
+            <ion-label>
+                Contribuciones
+            </ion-label>
+        </ion-segment-button>
+    </ion-segment>
+
+    <!-- <ion-list class="animate__animated animate__slideInUp animate__fast" style="background:transparent;" *ngIf="segment === 'venta'"> -->
+    <ion-list class="animated fadeIn" style="background:transparent;" *ngIf="segment === 'venta'">
+        <ion-card *ngFor="let item of deberes" style="margin-top: 10px; margin-bottom: 10px;" tappable="true" (click)="rescataDato(item)">
+            <ion-card-content style="padding-top: 5px;padding-bottom: 5px; padding-left: 10px;">
+                <ion-grid fixed>
+                    <ion-row>
+                        <ion-col size="2.2">
+                            <ion-button color="tertiary"><b>{{ item.cuantos }}</b></ion-button>
+                        </ion-col>
+                        <ion-col size="6">
+                            <h2 style="font-weight: bold;margin-left: 5px;">{{ item.tipo }}</h2>
+                            <p *ngIf=" desde !== hasta " style="font-size: 70%; color: medium; margin-left: 5px;">{{ desde | date:"dd/MM/yyyy" }} al {{ hasta | date:"dd/MM/yyyy" }}</p>
+                            <p *ngIf=" desde === hasta " style="font-size: 70%; color: medium; margin-left: 5px;">{{ desde | date:"dd/MM/yyyy" }}</p>
+                        </ion-col>
+                        <ion-col size="3.8">
+                            <h2 class="ion-text-right" style="font-weight: bold;">${{ item.cuanto | number:"1.0-0" }}</h2>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+                <div *ngIf=" item.detalle === true ">
+                    <ion-progress-bar *ngIf=" buscandoChico " type="indeterminate"></ion-progress-bar>
+                    <ion-card style="margin-top: 10px; margin-bottom: 10px;">
+                        <ion-item-divider>
+                            <ion-label>Productos: Top 10 sobre el total</ion-label>
+                        </ion-item-divider>
+                        <ion-card-content style="font-size: 80%; margin-right:7px; padding-left: 10px; padding-right: 10px;">
+                            <ion-grid fixed>
+                                <ion-row *ngFor="let detalle of deberesDet">
+                                    <ion-col size="1.7" style="text-align: right">{{ detalle.cuantos | number:"1.0-0" }}</ion-col>
+                                    <ion-col size="4.8">{{ detalle.codigo}}</ion-col>
+                                    <ion-col size="3" style="text-align: right">${{ detalle.cuanto | number:"1.0-0" }}</ion-col>
+                                    <ion-col size="2.2" style="text-align: right">{{ detalle.porcen | number:"1.0-2" }}%</ion-col>
+                                    <!-- <p>{{ detalle.nombre }}</p> -->
+                                </ion-row>
+                            </ion-grid>
+                        </ion-card-content>
+                    </ion-card>
+                </div>
+            </ion-card-content>
+        </ion-card>
+    </ion-list>
+
+    <!-- <ion-list class="animate__animated animate__slideInUp animate__fast" style="background:transparent;" *ngIf="segment === 'contrib'"> -->
+    <ion-list class="animated fadeIn" style="background:transparent;" *ngIf="segment === 'contrib'">
+        <ion-card *ngFor="let item of contribuciones" style="margin-top: 10px; margin-bottom: 10px;" tappable="true">
+            <ion-card-content style="padding-top: 5px;padding-bottom: 5px; padding-left: 10px;">
+                <ion-grid fixed>
+                    <ion-row>
+                        <ion-col size="3">
+                            <ion-button color="warning"><b>{{ item.cuantas }}</b></ion-button>
+                        </ion-col>
+                        <ion-col size="7">
+                            <h2 style="font-weight: bold;margin-left: 5px;">{{ item.tipo }}</h2>
+                            <p *ngIf=" desde !== hasta " style="font-size: 70%; color: medium; margin-left: 5px;">{{ desde | date:"dd/MM/yyyy" }} al {{ hasta | date:"dd/MM/yyyy" }}</p>
+                            <p *ngIf=" desde === hasta " style="font-size: 70%; color: medium; margin-left: 5px;">{{ desde | date:"dd/MM/yyyy" }}</p>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-card-content>
+        </ion-card>
+    </ion-list>
+
+</ion-content>

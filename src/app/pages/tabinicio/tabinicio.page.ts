@@ -44,6 +44,166 @@ export class TabinicioPage implements OnInit {
   pDesc           = '';
   pFami           = '';
   buscando        = false;
+  //
+  sin_imagen      = 'assets/imgs/no-img.png';
+  slideOpts       = {
+    loop: true,
+    lazy: true,
+    grabCursor: true,
+    cubeEffect: {
+      shadow: true,
+      slideShadows: true,
+      shadowOffset: 20,
+      shadowScale: 0.94,
+    },
+    on: {
+      beforeInit: function() {
+        const swiper = this;
+        swiper.classNames.push(`${swiper.params.containerModifierClass}cube`);
+        swiper.classNames.push(`${swiper.params.containerModifierClass}3d`);
+  
+        const overwriteParams = {
+          slidesPerView: 1,
+          slidesPerColumn: 1,
+          slidesPerGroup: 1,
+          watchSlidesProgress: true,
+          resistanceRatio: 0,
+          spaceBetween: 0,
+          centeredSlides: false,
+          virtualTranslate: true,
+        };
+  
+        this.params = Object.assign(this.params, overwriteParams);
+        this.originalParams = Object.assign(this.originalParams, overwriteParams);
+      },
+      setTranslate: function() {
+        const swiper = this;
+        const {
+          $el, $wrapperEl, slides, width: swiperWidth, height: swiperHeight, rtlTranslate: rtl, size: swiperSize,
+        } = swiper;
+        const params = swiper.params.cubeEffect;
+        const isHorizontal = swiper.isHorizontal();
+        const isVirtual = swiper.virtual && swiper.params.virtual.enabled;
+        let wrapperRotate = 0;
+        let $cubeShadowEl;
+        if (params.shadow) {
+          if (isHorizontal) {
+            $cubeShadowEl = $wrapperEl.find('.swiper-cube-shadow');
+            if ($cubeShadowEl.length === 0) {
+              $cubeShadowEl = swiper.$('<div class="swiper-cube-shadow"></div>');
+              $wrapperEl.append($cubeShadowEl);
+            }
+            $cubeShadowEl.css({ height: `${swiperWidth}px` });
+          } else {
+            $cubeShadowEl = $el.find('.swiper-cube-shadow');
+            if ($cubeShadowEl.length === 0) {
+              $cubeShadowEl = swiper.$('<div class="swiper-cube-shadow"></div>');
+              $el.append($cubeShadowEl);
+            }
+          }
+        }
+  
+        for (let i = 0; i < slides.length; i += 1) {
+          const $slideEl = slides.eq(i);
+          let slideIndex = i;
+          if (isVirtual) {
+            slideIndex = parseInt($slideEl.attr('data-swiper-slide-index'), 10);
+          }
+          let slideAngle = slideIndex * 90;
+          let round = Math.floor(slideAngle / 360);
+          if (rtl) {
+            slideAngle = -slideAngle;
+            round = Math.floor(-slideAngle / 360);
+          }
+          const progress = Math.max(Math.min($slideEl[0].progress, 1), -1);
+          let tx = 0;
+          let ty = 0;
+          let tz = 0;
+          if (slideIndex % 4 === 0) {
+            tx = -round * 4 * swiperSize;
+            tz = 0;
+          } else if ((slideIndex - 1) % 4 === 0) {
+            tx = 0;
+            tz = -round * 4 * swiperSize;
+          } else if ((slideIndex - 2) % 4 === 0) {
+            tx = swiperSize + (round * 4 * swiperSize);
+            tz = swiperSize;
+          } else if ((slideIndex - 3) % 4 === 0) {
+            tx = -swiperSize;
+            tz = (3 * swiperSize) + (swiperSize * 4 * round);
+          }
+          if (rtl) {
+            tx = -tx;
+          }
+  
+           if (!isHorizontal) {
+            ty = tx;
+            tx = 0;
+          }
+  
+           const transform$$1 = `rotateX(${isHorizontal ? 0 : -slideAngle}deg) rotateY(${isHorizontal ? slideAngle : 0}deg) translate3d(${tx}px, ${ty}px, ${tz}px)`;
+          if (progress <= 1 && progress > -1) {
+            wrapperRotate = (slideIndex * 90) + (progress * 90);
+            if (rtl) wrapperRotate = (-slideIndex * 90) - (progress * 90);
+          }
+          $slideEl.transform(transform$$1);
+          if (params.slideShadows) {
+            // Set shadows
+            let shadowBefore = isHorizontal ? $slideEl.find('.swiper-slide-shadow-left') : $slideEl.find('.swiper-slide-shadow-top');
+            let shadowAfter = isHorizontal ? $slideEl.find('.swiper-slide-shadow-right') : $slideEl.find('.swiper-slide-shadow-bottom');
+            if (shadowBefore.length === 0) {
+              shadowBefore = swiper.$(`<div class="swiper-slide-shadow-${isHorizontal ? 'left' : 'top'}"></div>`);
+              $slideEl.append(shadowBefore);
+            }
+            if (shadowAfter.length === 0) {
+              shadowAfter = swiper.$(`<div class="swiper-slide-shadow-${isHorizontal ? 'right' : 'bottom'}"></div>`);
+              $slideEl.append(shadowAfter);
+            }
+            if (shadowBefore.length) shadowBefore[0].style.opacity = Math.max(-progress, 0);
+            if (shadowAfter.length) shadowAfter[0].style.opacity = Math.max(progress, 0);
+          }
+        }
+        $wrapperEl.css({
+          '-webkit-transform-origin': `50% 50% -${swiperSize / 2}px`,
+          '-moz-transform-origin': `50% 50% -${swiperSize / 2}px`,
+          '-ms-transform-origin': `50% 50% -${swiperSize / 2}px`,
+          'transform-origin': `50% 50% -${swiperSize / 2}px`,
+        });
+  
+         if (params.shadow) {
+          if (isHorizontal) {
+            $cubeShadowEl.transform(`translate3d(0px, ${(swiperWidth / 2) + params.shadowOffset}px, ${-swiperWidth / 2}px) rotateX(90deg) rotateZ(0deg) scale(${params.shadowScale})`);
+          } else {
+            const shadowAngle = Math.abs(wrapperRotate) - (Math.floor(Math.abs(wrapperRotate) / 90) * 90);
+            const multiplier = 1.5 - (
+              (Math.sin((shadowAngle * 2 * Math.PI) / 360) / 2)
+              + (Math.cos((shadowAngle * 2 * Math.PI) / 360) / 2)
+            );
+            const scale1 = params.shadowScale;
+            const scale2 = params.shadowScale / multiplier;
+            const offset$$1 = params.shadowOffset;
+            $cubeShadowEl.transform(`scale3d(${scale1}, 1, ${scale2}) translate3d(0px, ${(swiperHeight / 2) + offset$$1}px, ${-swiperHeight / 2 / scale2}px) rotateX(-90deg)`);
+          }
+        }
+  
+        const zFactor = (swiper.browser.isSafari || swiper.browser.isUiWebView) ? (-swiperSize / 2) : 0;
+        $wrapperEl
+          .transform(`translate3d(0px,0,${zFactor}px) rotateX(${swiper.isHorizontal() ? 0 : wrapperRotate}deg) rotateY(${swiper.isHorizontal() ? -wrapperRotate : 0}deg)`);
+      },
+      setTransition: function(duration) {
+        const swiper = this;
+        const { $el, slides } = swiper;
+        slides
+          .transition(duration)
+          .find('.swiper-slide-shadow-top, .swiper-slide-shadow-right, .swiper-slide-shadow-bottom, .swiper-slide-shadow-left')
+          .transition(duration);
+        if (swiper.params.cubeEffect.shadow && !swiper.isHorizontal()) {
+          $el.find('.swiper-cube-shadow').transition(duration);
+        }
+      },
+    }
+  };
+  
   // familias zsmotor   jgv 01-05-2018
   listaFamilias: any = [ { cod: 'NEUM', descrip: 'Neumáticos'            },
                          { cod: 'LLAN', descrip: 'Llantas'               },
@@ -106,20 +266,12 @@ export class TabinicioPage implements OnInit {
             this.baseLocal.user.LISTACLIENTE = cli[0].listaprecios;
         });
     //
-    // console.log(this.baseLocal.config);
-    // this.baseLocal.config.imagenes      = true;
-    // this.baseLocal.config.soloconstock  = false;
-    // this.baseLocal.config.ocultardscto  = false;
-    // this.baseLocal.config.soloverimport = false;
-    //
   }
 
   ionViewDidLoad() {}
   ionViewDidEnter() {}
   ionViewWillEnter() {
     this.cliente = this.baseLocal.cliente;
-    // this.config  = this.baseLocal.config;
-    // console.log('ionViewWillEnter()');
   }
   ionViewWillLeave() {}
 
@@ -184,7 +336,9 @@ export class TabinicioPage implements OnInit {
       this.funciones.msgAlert('ATENCION', 'Su búsqueda no tiene resultados. Intente con otros datos.');
     } else if ( data.length > 0 ) {
       //
-      // this.listaProductos = ( this.offset === 0 ) ? rs : this.listaProductos.concat(rs);
+      data.forEach( item =>{
+        item.imagen = 'https://zsmotor.cl/storage/mobile/' + item.codigo + '/img_1.jpg';
+      });
       this.listaProductos.push( ...data  );
       //
       if ( infiniteScroll ) {
@@ -499,7 +653,7 @@ export class TabinicioPage implements OnInit {
       //
       const popover = await this.popoverCtrl.create({
         component: TrespuntosComponent,
-        componentProps: { escliente: false },
+        componentProps: { quees: 'sugerencia' },
         event,
         mode: 'ios',
         translucent: false
@@ -507,66 +661,42 @@ export class TabinicioPage implements OnInit {
       await popover.present();
       //
       const { data } = await popover.onDidDismiss();
-      let dataParam = '';
       //
       if ( data ) {
-        switch (data.opcion.texto) {
-          //
-          case 'Últimas Ventas':
-            dataParam = JSON.stringify({tipo: 'V', codigo: producto.codigo });
+        if (data.opcion.texto === 'Últimas Ventas' ) {
+            const dataParam = JSON.stringify({tipo: 'V', codigo: producto.codigo });
             this.router.navigate(['/tabs/ultmovs', dataParam]);
-            break;
-          //
-          case 'Últimas Compras':
+        } else if (data.opcion.texto === 'Últimas Compras' ) {
             if ( this.baseLocal.user.puedevercosto === true ) {
-              dataParam = JSON.stringify({tipo: 'C', codigo: producto.codigo });
+              const dataParam = JSON.stringify({tipo: 'C', codigo: producto.codigo });
               this.router.navigate(['/tabs/ultmovs', dataParam]);
             } else {
               this.funciones.msgAlert('ATENCION', 'Ud. no posee autorización para ver esta información.' );
             }
-            break;
-          //
-          case 'Sugerencias':
-            dataParam = JSON.stringify({ codigo: producto.codigo, tecnico: producto.codtecnico, descrip: producto.descripcion });
+        } else if (data.opcion.texto === 'Sugerencias' ) {
+            const dataParam = JSON.stringify({ codigo: producto.codigo, tecnico: producto.codtecnico, descrip: producto.descripcion });
             this.router.navigate(['/tabs/sugerencias', dataParam]);
-            break;
-          //
-          case 'Notificaciones':
-            dataParam = JSON.stringify({ codigo: producto.codigo, tecnico: producto.codtecnico, descrip: producto.descripcion });
+        } else if (data.opcion.texto === 'Notificaciones' ) {
+            const dataParam = JSON.stringify({ codigo: producto.codigo, tecnico: producto.codtecnico, descrip: producto.descripcion });
             this.router.navigate(['/tabs/notif', dataParam]);
-            break;
-          //
-          case 'NVI para reponer':
+        } else if (data.opcion.texto === 'NVI para reponer' ) {
             if ( this.baseLocal.user.puedecrearnvi === true ) {
-              dataParam = JSON.stringify({ producto, usuario: this.baseLocal.user.usuario });
+              const dataParam = JSON.stringify({ producto, usuario: this.baseLocal.user.usuario });
               this.router.navigate(['/tabs/crearnvi', dataParam]);
             } else {
               this.funciones.msgAlert('ATENCION', 'Ud. no posee autorización para crear este documento.' );
             }
-            break;
-          //
-          case 'Compartir':
-            dataParam = JSON.stringify({ producto, usuario: this.baseLocal.user.usuario });
+        } else if (data.opcion.texto === 'Compartir' ) {
+            const dataParam = JSON.stringify({ producto, usuario: this.baseLocal.user.usuario });
             this.router.navigate(['/tabs/socialsh', dataParam]);
-            break;
-          //
-          case 'Copy & Paste':
+        } else if (data.opcion.texto === 'Copy & Paste' ) {
             this.copyPaste( producto )
-            break;
-          //
-          case 'Ficha técnica':
-            dataParam = JSON.stringify({ producto, usuario: this.baseLocal.user.usuario });
+        } else if (data.opcion.texto === 'Ficha técnica' ) {
+            const dataParam = JSON.stringify({ producto, usuario: this.baseLocal.user.usuario });
             this.router.navigate(['/tabs/fichatecnica', dataParam]);
-            break;
-          //
-          case 'Redes Sociales':
-            dataParam = JSON.stringify({ producto, usuario: this.baseLocal.user.usuario });
+        } else if (data.opcion.texto === 'Redes Sociales' ) {
+            const dataParam = JSON.stringify({ producto, usuario: this.baseLocal.user.usuario });
             this.router.navigate(['/tabs/socialsh', dataParam]);
-            break;
-          //
-          default:
-            console.log('vacio');
-            break;
         }
       }
   }
@@ -594,10 +724,10 @@ export class TabinicioPage implements OnInit {
       texto += 'Precio '+producto.tipolista+' : '+producto.preciomayor.toLocaleString()+'\n\n' ;
     }
     //
-    texto +='http://www.zsmotor.cl/img/Producto/'+producto.codigo.trim()+'/'+producto.codigo.trim()+'.jpg'+'\n' ;
+    texto +='https://zsmotor.cl/storage/mobile/'+producto.codigo.trim()+'/img_1.jpg'+'\n' ;
     
     Clipboard.write({ string: texto,
-                      url: 'http://www.zsmotor.cl/img/Producto/'+producto.codigo.trim()+'/'+producto.codigo.trim()+'.jpg',
+                      url: 'https://zsmotor.cl/storage/mobile/'+producto.codigo.trim()+'/img_1.jpg',
                       label: 'ZSMotor' })
         .then( response=>{ 
           this.funciones.muestraySale('Copiado al porta-papeles. Puedo Pegarlo en cualquier aplicación.',1.5,'middle');

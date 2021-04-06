@@ -1,22 +1,22 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { LoadingController, AlertController, ToastController } from '@ionic/angular';
-
 import { Usuario, Cliente } from '../models/modelos.modelo';
 import { BaselocalService } from './baselocal.service';
-
 import { Subject, Observable } from 'rxjs';
-
-import { Plugins } from '@capacitor/core';
-const { Storage } = Plugins;
+import { Plugins, CameraResultType, CameraSource, CameraOptions } from '@capacitor/core';
+const { Storage, Camera } = Plugins;
 
 @Injectable({
   providedIn: 'root'
 })
 export class FuncionesService {
+  
+  url = 'https://zsmotorapps.cl/appventas';
 
   listSizeSubject: Subject<number>;
   misCompras: Observable<number>;
-
+  xfoto;
   loader: any;
   usuario: Usuario;
   cliente: Cliente;
@@ -46,7 +46,8 @@ export class FuncionesService {
   constructor(  private loadingCtrl: LoadingController,
                 private alertCtrl: AlertController,
                 private toastCtrl: ToastController,
-                private baseLocal: BaselocalService ) {
+                private baseLocal: BaselocalService,
+                private http: HttpClient ) {
       //
       console.log('<<< FuncionesService >>>');
       //
@@ -60,7 +61,7 @@ export class FuncionesService {
   }
   refreshCarrito() {
     //
-    this.listSizeSubject.next( this.miCarrito.length ); // next method updates the stream value
+    this.listSizeSubject.next( (this.miCarrito.length === 1 && this.miCarrito[0].codigo === '' ) ? 0 : this.miCarrito.length ); 
     //
   }
 
@@ -377,4 +378,86 @@ export class FuncionesService {
         return String(str).substring(iLen, iLen - n);
     }
   }
+
+  async addImage( usrCode ) {
+    //
+    this.xfoto = undefined;
+    //
+    const image = await Camera.getPhoto({
+      quality: 40,
+      allowEditing: false,
+      saveToGallery: false,
+      resultType: CameraResultType.Base64,
+      source: CameraSource.Camera, 
+    }).catch( err => {
+      console.log('cancelado');
+      this.xfoto = undefined;
+    });
+    //
+    if ( image ) {
+      //
+      this.xfoto = 'data:image/jpeg;base64,'+ image.base64String;
+      //
+      const blobData  = this.b64toBlob(image.base64String, `image/${image.format}`);
+      const imageName = usrCode +'.'+ image.format ;
+      //
+      this.uploadImageBlob( blobData, imageName, image.format, usrCode )
+        .subscribe((newImage) => {
+          console.log(newImage);
+        });
+    }
+  }
+
+  uploadImageBlob(blobData, name, ext, usr ) {
+    //
+    const url = this.url + '/imgUp';
+    //
+    const formData = new FormData();
+    formData.append('kfoto', blobData, name );
+    formData.append('name',      name);
+    
+    formData.append('extension', ext);
+    formData.append('usuario',   usr );    
+    //
+    console.log('uploadImageBlob->',formData);
+    return this.http.post( url, formData );
+    //
+  }
+ 
+  // Helper function
+  // https://stackoverflow.com/questions/16245767/creating-a-blob-from-a-base64-string-in-javascript
+  b64toBlob(b64Data, contentType = '', sliceSize = 512) {
+    const byteCharacters = atob(b64Data);
+    const byteArrays = [];
+ 
+    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      const slice = byteCharacters.slice(offset, offset + sliceSize);
+ 
+      const byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+ 
+      const byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+ 
+    const blob = new Blob(byteArrays, { type: contentType });
+    return blob;
+  }
+  
+  diaSemana( fecha: Date ) {
+    const dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    return dias[ fecha.getUTCDay() ];
+  }
+
+  nombreMes( fecha: Date ) {
+    const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    return meses[ fecha.getMonth() ];
+  }
+
+  fechaHumano( fecha ) {
+    return this.diaSemana( fecha ) + ' ' + fecha.getDate().toString() + ' de ' + this.nombreMes( fecha ) + ', ' + fecha.getFullYear().toString();
+  }
+
 }

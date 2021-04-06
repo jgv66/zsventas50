@@ -1,81 +1,225 @@
 <ion-header>
-    <ion-toolbar>
+    <ion-toolbar color="dark">
         <ion-buttons slot="start">
-            <ion-back-button>
-                <!-- <ion-icon slot="icon-only" name="arrow-back"></ion-icon> -->
-            </ion-back-button>
+            <ion-back-button text=' '></ion-back-button>
         </ion-buttons>
         <img src="./assets/imgs/logo-zs.png" alt="" class="navbar-img">
-        <ion-title>Sugerencias al Artículo</ion-title>
-        <ion-buttons slot="end" (click)="limpiar()" style="margin-right: 15px;">
+        <ion-title>Sugerencias para Artículos</ion-title>
+        <!-- <ion-buttons slot="end" (click)="limpiar()" style="margin-right: 15px;">
             <ion-icon slot="icon-only" name="sync"></ion-icon>
-        </ion-buttons>
+        </ion-buttons> -->
     </ion-toolbar>
+
+    <ion-segment (ionChange)="segmentChanged($event)" mode="ios" value="Ingreso" style="max-width: 90%;margin-left: 22px;margin-top: 10px;">
+        <ion-segment-button value="Ingreso" mode="ios">
+            <ion-label>Ingreso</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="Pendientes" mode="ios">
+            <ion-label>Pendientes</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="Recibidas" mode="ios">
+            <ion-label>Recibidas</ion-label>
+        </ion-segment-button>
+    </ion-segment>
+
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content class="animated fadeIn ion-padding">
 
-    <ion-card class="ion-padding" style="margin-top: 5px;
-                                          margin-left: 5px;
-                                          margin-right: 5px;
-                                          padding-left: 10px;
-                                          padding-right: 10px;
-                                          padding-top: 5px;
-                                          padding-bottom: 5px;
-                                          margin-bottom: 10px;">
-        <p class="ion-text-justify">Sus comentarios y sugerencias respecto del producto involucrado, nos sirven para mejorar su venta, exhibición y mercadeo.</p>
-    </ion-card>
+    <div *ngIf=" segmento === 'Ingreso' ">
 
-    <ion-list lines="none">
-        <ion-list-header mode='ios'>
-            <h3 class="ion-text-center"><b>Calidad del producto</b></h3>
-        </ion-list-header>
-        <ion-item>
-            <ion-label>El producto es de buena calidad</ion-label>
-            <ion-select mode="ios" interface="popover" value="prodbueno" [(ngModel)]="prodbueno">
-                <ion-select-option value="si">Si</ion-select-option>
-                <ion-select-option value="no">No</ion-select-option>
-            </ion-select>
-        </ion-item>
-        <ion-item>
-            <ion-label>El precio del producto es correcto</ion-label>
-            <ion-select mode="ios" interface="popover" value="preciomuybarato" [(ngModel)]="preciomuybarato">
-                <ion-select-option value="si">Si</ion-select-option>
-                <ion-select-option value="no">No</ion-select-option>
-            </ion-select>
-        </ion-item>
-        <ion-item>
-            <ion-label>El stock del producto es correcto</ion-label>
-            <ion-select mode="ios" interface="popover" value="prodconstock" [(ngModel)]="prodconstock">
-                <ion-select-option value="si">Si</ion-select-option>
-                <ion-select-option value="no">No</ion-select-option>
-            </ion-select>
-        </ion-item>
-        <ion-item>
-            <ion-label>Recomienda comprar?</ion-label>
-            <ion-select mode="ios" interface="popover" value="prodconquiebre" [(ngModel)]="prodconquiebre">
-                <ion-select-option value="si">Si</ion-select-option>
-                <ion-select-option value="no">No</ion-select-option>
-            </ion-select>
-        </ion-item>
-        <ion-item *ngIf=" prodconquiebre ">
-            <ion-label>Cantidad recomendada :</ion-label>
-            <ion-input type="number" name="cantidad" [(ngModel)]="cantidad"></ion-input>
-        </ion-item>
-        <ion-list-header mode='ios'>
-            <h3 class="ion-text-center"><b>Comentarios</b></h3>
-        </ion-list-header>
-        <ion-item>
-            <ion-textarea name="observaciones" [(ngModel)]="observaciones" clearOnEdit="true" rows="6" placeholder="Ingrese sus notas aquí...">
-            </ion-textarea>
-        </ion-item>
-    </ion-list>
+        <ion-card class="ion-padding" style="margin: 5px;margin-bottom: 10px importa !important;padding-left: 10px;padding-right: 10px;padding-top: 5px;padding-bottom: 5px;">
+            <p class="ion-text-justify">Sus comentarios y sugerencias respecto del producto <b>{{ sistema.codigo }}</b> ({{ sistema.descrip }}), nos sirven para mejorar su venta, exhibición y mercadeo.</p>
+        </ion-card>
 
-    <ion-progress-bar *ngIf=" enviando " type="indeterminate"></ion-progress-bar>
+        <ion-card class="card1">
+            <ion-list lines="none" style="padding-top: 0px;">
+                <ion-item-divider mode="ios">
+                    <h3 style="text-align:center;"><b>Calidad del producto</b></h3>
+                </ion-item-divider>
+                <ion-card-content>
+                    <ion-item>
+                        <ion-label>El producto es de buena calidad</ion-label>
+                        <ion-select mode="ios" interface="popover" value="prodbueno" [(ngModel)]="prodbueno">
+                            <ion-select-option value="si">Si</ion-select-option>
+                            <ion-select-option value="no">No</ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>El precio del producto es correcto</ion-label>
+                        <ion-select mode="ios" interface="popover" value="preciomuybarato" [(ngModel)]="preciomuybarato">
+                            <ion-select-option value="si">Si</ion-select-option>
+                            <ion-select-option value="no">No</ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>El stock del producto es correcto</ion-label>
+                        <ion-select mode="ios" interface="popover" value="prodconstock" [(ngModel)]="prodconstock">
+                            <ion-select-option value="si">Si</ion-select-option>
+                            <ion-select-option value="no">No</ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label>Recomienda comprar?</ion-label>
+                        <ion-select mode="ios" interface="popover" value="prodconquiebre" [(ngModel)]="prodconquiebre">
+                            <ion-select-option value="si">Si</ion-select-option>
+                            <ion-select-option value="no">No</ion-select-option>
+                        </ion-select>
+                    </ion-item>
+                    <ion-item *ngIf=" prodconquiebre === 'si' ">
+                        <ion-label>Cantidad recomendada :</ion-label>
+                        <ion-input type="number" name="cantidad" [(ngModel)]="cantidad"></ion-input>
+                    </ion-item>
+                    <ion-list-header mode='ios'>
+                        <h3 class="ion-text-center"><b>Comentarios</b></h3>
+                    </ion-list-header>
+                    <ion-item>
+                        <ion-textarea name="observaciones" [(ngModel)]="observaciones" clearOnEdit="true" rows="6" placeholder="Ingrese sus notas aquí...">
+                        </ion-textarea>
+                    </ion-item>
+                </ion-card-content>
+            </ion-list>
 
-    <ion-button size="small" expand="block" (click)="enviarSugerencia()" style="margin-top:15px;">
-        <ion-icon slot="start" name="send"></ion-icon>
-        Enviar mis sugerencias
-    </ion-button>
+            <ion-button size="small" expand="block" (click)="enviarSugerencia()" style="margin:10px;">
+                <ion-icon slot="start" name="send"></ion-icon>
+                Enviar mis sugerencias
+            </ion-button>
+            <ion-progress-bar *ngIf=" enviando " type="indeterminate"></ion-progress-bar>
+
+        </ion-card>
+
+    </div>
+
+    <div *ngIf=" segmento === 'Pendientes' " class="animated fadeIn">
+
+        <ion-card *ngFor="let pendiente of pendientes">
+
+            <div *ngIf=" config.imagenes ">
+                <ion-img src="https://zsmotor.cl/storage/mobile/{{ pendiente.codigoproducto }}/img_1.jpg" default="./assets/imgs/no-img.png" alt=" imagen no disponible"></ion-img>
+            </div>
+
+            <ion-card-header style="padding-top: 10px; padding-bottom: 10px;">
+                <ion-card-title>{{ pendiente.codigoproducto }}</ion-card-title>
+                <ion-card-subtitle>{{ pendiente.descripcion }}</ion-card-subtitle>
+            </ion-card-header>
+
+            <ion-grid style="margin-left: 11px;">
+                <ion-row>
+                    <ion-col size="7">
+                        <ion-badge color="danger">Ingreso: {{ pendiente.fsugerencia }}</ion-badge>
+                    </ion-col>
+                </ion-row>
+                <ion-row *ngIf=" pendiente.prodbueno !== null ">
+                    <ion-col size="9">
+                        <ion-label>El producto es de buena calidad ?</ion-label>
+                    </ion-col>
+                    <ion-col size="3">
+                        <ion-label color="dark" class="ion-text-left">{{ pendiente.prodbueno === false ? 'NO' : 'SI' }}</ion-label>
+                    </ion-col>
+                </ion-row>
+                <ion-row *ngIf=" pendiente.preciomuybarato !== null ">
+                    <ion-col size="9">
+                        <ion-label>El precio del producto es correcto ?</ion-label>
+                    </ion-col>
+                    <ion-col size="3">
+                        <ion-label color="dark" class="ion-text-left">{{ pendiente.preciomuybarato === false ? 'NO' : 'SI' }}</ion-label>
+                    </ion-col>
+                </ion-row>
+                <ion-row *ngIf=" pendiente.prodconstock !== null ">
+                    <ion-col size="9">
+                        <ion-label>El stock del producto es correcto ?</ion-label>
+                    </ion-col>
+                    <ion-col size="3">
+                        <ion-label color="dark" class="ion-text-left">{{ pendiente.prodconstock === false ? 'NO' : 'SI' }}</ion-label>
+                    </ion-col>
+                </ion-row>
+                <ion-row *ngIf=" pendiente.prodconquiebre !== null ">
+                    <ion-col size="9">
+                        <ion-label>Se recomendó comprar</ion-label>
+                    </ion-col>
+                    <ion-col size="3">
+                        <ion-label color="dark" class="ion-text-right">{{ pendiente.cantidad | number:"1.0-0" }}</ion-label>
+                    </ion-col>
+                </ion-row>
+                <ion-row *ngIf=" pendiente.observaciones !== '' ">
+                    <ion-col size="2">
+                        <ion-label color="dark" class="ion-text-right">Obs:</ion-label>
+                    </ion-col>
+                    <ion-col size="10">
+                        <ion-label color="dark" class="ion-text-wrap">{{ pendiente.observaciones }}</ion-label>
+                    </ion-col>
+                </ion-row>
+                <ion-row>
+                    <ion-col size="12">
+                        <ion-chip [color]=" pendiente.stsucursal>0 ? 'primary' : 'danger'">
+                            <ion-icon name="home"></ion-icon>
+                            <ion-label><b>{{ pendiente.stsucursal | number:'1.0-0' }}</b></ion-label>
+                        </ion-chip>
+                        <ion-chip [color]=" pendiente.stempresa>0 ? 'primary' : 'danger'">
+                            <ion-icon name="globe"></ion-icon>
+                            <ion-label><b>{{ pendiente.stempresa | number:'1.0-0' }}</b></ion-label>
+                        </ion-chip>
+                        <ion-chip color="primary">
+                            <ion-icon name="boat"></ion-icon>
+                            <ion-label><b>{{ pendiente.importado | number:'1.0-0' }}</b></ion-label>
+                        </ion-chip>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+
+        </ion-card>
+
+    </div>
+
+    <div *ngIf=" segmento === 'Recibidas' " class="animated fadeIn">
+
+        <ion-list class="ilistrounded">
+
+            <ion-item *ngFor="let informado of informados">
+
+                <ion-thumbnail slot="start" *ngIf=" config.imagenes ">
+                    <ion-img src="https://zsmotor.cl/storage/mobile/{{ informado.codigoproducto }}/img_1.jpg" default="./assets/imgs/no-img.png" alt="imagen no disponible"></ion-img>
+                </ion-thumbnail>
+
+                <ion-label style="font-size: 80%;">
+                    <ion-grid fixed>
+                        <ion-row>
+                            <ion-col size="7">
+                                <h2>{{ informado.codigoproducto }}</h2>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col size="12">
+                                <p color="black" class="ion-text-wrap">{{ informado.descripcion }}</p>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row *ngIf=" informado.observaciones !== '' ">
+                            <ion-col size="2">
+                                <ion-label color="dark" class="ion-text-left">Obs:</ion-label>
+                            </ion-col>
+                            <ion-col size="10">
+                                <ion-label color="dark" class="ion-text-wrap">{{ informado.observaciones }}</ion-label>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col size="6">F.Suger.: {{ informado.fsugerencia }}</ion-col>
+                            <ion-col size="6">F.Recib.: {{ informado.frecepcion }}</ion-col>
+                        </ion-row>
+                        <ion-row style="max-height: 28px;">
+                            <ion-col size="12" *ngIf=" informado.revisado === 0 " style="height: 46px;">
+                                <ion-item lines="none" style="margin-left: -20px; max-height: 46px;top:-10px;">
+                                    <ion-checkbox class="check" slot="start" [(ngModel)]="informado.estadorevisado" (ionChange)="darCierre(informado)"></ion-checkbox>
+                                    <ion-label style="margin-left: 10px; max-height: 46px;">Dar por cerrada la sugerencia</ion-label>
+                                </ion-item>
+                            </ion-col>
+                            <ion-col size="12" *ngIf=" informado.revisado === 1 " style="height: 46px;">
+                                <h3 style="color: red;font-weight: bold;">Fecha de Cierre: {{ informado.frevision }}</h3>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                </ion-label>
+            </ion-item>
+        </ion-list>
+    </div>
 
 </ion-content>

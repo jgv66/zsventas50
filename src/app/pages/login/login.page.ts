@@ -70,6 +70,7 @@ export class LoginPage implements OnInit {
         this.funciones.msgAlert('', 'Los datos ingresados no coinciden con usuarios registrados.');
     } else {
         //
+        // console.log(data);
         this.rescataConfiguracion();
         rs.LISTACLIENTE = '';
         this.funciones.muestraySale( 'Hola ' + rs.NOKOFU.trim() + ', ' + this.funciones.textoSaludo(), 1 );

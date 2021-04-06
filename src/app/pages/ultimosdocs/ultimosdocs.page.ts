@@ -14,6 +14,7 @@ export class UltimosdocsPage implements OnInit {
   buscando   = false;
   documentos = [];
   td;
+  scanActive=false;
 
   constructor( public baseLocal: BaselocalService,
                private router: Router,
@@ -35,7 +36,7 @@ export class UltimosdocsPage implements OnInit {
                     err  => { this.funciones.msgAlert( 'ATENCION', err ); });
   }
   revisa( data ) {
-    // console.log(data);
+    console.log(data);
     this.buscando = false;
     const rs = data;
     if ( data === undefined || data.length === 0 ) {

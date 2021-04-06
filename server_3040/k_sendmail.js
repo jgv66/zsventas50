@@ -10,8 +10,8 @@ module.exports = {
 
     enviarCorreo: function(res, nodemailer, mailList, htmlBody, textoSubject) {
         //
-        sender = 'admin@zsmotor.cl'; // 'preventa@zsmotor.cl';
-        psswrd = 'tek789//@TEK/**/'; // 'zsmotor3762';
+        sender = 'preventa@zsmotor.cl';
+        psswrd = '4*SJM4yj';
         //
         cTo = mailList[0].to;
         cCc = mailList[0].cc;
@@ -341,7 +341,7 @@ module.exports = {
         </body>
         </html>`;
     },
-    sugerido: function(suger, usuario) {
+    sugerido: (suger, usuario, id) => {
         //
         const prodbueno = suger.prodbueno === true ? 'SI' : 'NO';
         const preciomuybarato = suger.preciomuybarato === true ? 'SI' : 'NO';
@@ -440,7 +440,22 @@ module.exports = {
                     </td>
                 </tr>
             </table>
-  
+            <table width="100%" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td>
+                        <table cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td style="border-radius: 2px;" bgcolor="#ED2939">
+                                    <a href="https://zsmotorapps.cl/appventas/aSSevfdivDiff6549_kksdterm-htcallkksdterm?value=` + id.toString() + `" target="_blank" style="padding: 8px 12px; border: 1px solid #ED2939;border-radius: 2px;font-family: Helvetica, Arial, sans-serif;font-size: 14px; color: #ffffff;text-decoration: none;font-weight:bold;display: inline-block;">
+                                        Pulse este botón, para informar como RECIBIDA la sugerencia
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
         </body>
 
         </html>`;

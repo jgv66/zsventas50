@@ -1,5 +1,5 @@
-<ion-header translucent>
-    <ion-toolbar>
+<ion-header>
+    <ion-toolbar color="dark">
         <ion-buttons slot="start">
             <ion-button (click)="onoffCotizar()" fill="clear">
                 <img src="assets/imgs/logo-zs.png" alt="" class="navbar-img">
@@ -80,7 +80,17 @@
                 <ion-card style="font-size:90%;margin-top:10px;margin-bottom:10px;margin-left:5px;margin-right:5px;">
 
                     <ion-card-header *ngIf=" config.imagenes " class="ion-no-padding">
-                        <img src="//www.zsmotor.cl/img/Producto/{{ producto.codigo }}/{{ producto.codigo }}.jpg" onerror=" this.src='assets/imgs/no-img.png' " />
+                        <ion-slides pager="true" [options]="slideOpts">
+                            <ion-slide>
+                                <img src="https://zsmotor.cl/storage/mobile/{{ producto.codigo }}/img_1.jpg" loading="lazy" onerror=" this.src='assets/imgs/no-img.png' " />
+                            </ion-slide>
+                            <ion-slide>
+                                <img src="https://zsmotor.cl/storage/mobile/{{ producto.codigo }}/img_2.jpg" loading="lazy" onerror=" this.src='assets/imgs/no-img.png' " />
+                            </ion-slide>
+                            <ion-slide>
+                                <img src="https://zsmotor.cl/storage/mobile/{{ producto.codigo }}/img_3.jpg" loading="lazy" onerror=" this.src='assets/imgs/no-img.png' " />
+                            </ion-slide>
+                        </ion-slides>
                     </ion-card-header>
 
                     <ion-card-content class="ion-no-padding" style="font-size: 95%; ">

@@ -25,6 +25,7 @@ export class NotificacionesPage implements OnInit {
   cantidad ;
   pendientes = [];
   informados = [];
+  config;
 
   constructor( private funciones: FuncionesService,
                public baseLocal: BaselocalService,
@@ -43,6 +44,11 @@ export class NotificacionesPage implements OnInit {
     this.rescatarMisNotificaciones('P');
     this.rescatarMisNotificaciones('C');
     this.segment.value = this.segmento;
+    //
+    this.baseLocal.obtenUltimoConfig()
+        .then( data => { 
+          this.config = data;
+        });    
     //
     if ( this.baseLocal.cliente.codigo !== '' ) {
       this.nombre = this.baseLocal.cliente.razonsocial;
