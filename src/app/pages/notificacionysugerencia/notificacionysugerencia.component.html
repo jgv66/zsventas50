@@ -1,0 +1,61 @@
+<ion-header>
+    <ion-toolbar color="dark">
+        <ion-buttons slot="start">
+            <ion-button (click)="salir()">
+                <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <img src="./assets/imgs/logo-zs.png" alt="" class="navbar-img">
+        <ion-title>Sugerencias del Vendedor</ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-progress-bar *ngIf=" buscando " type="indeterminate"></ion-progress-bar>
+<ion-content>
+    <ion-list class="ilistrounded">
+
+        <ion-item *ngFor="let informado of sugerencias">
+
+            <ion-thumbnail slot="start" *ngIf=" baseLocal.config.imagenes ">
+                <ion-img src="https://zsmotor.cl/storage/mobile/{{ informado.codigoproducto }}/img_1.jpg" default="./assets/imgs/no-img.png" alt="imagen no disponible"></ion-img>
+            </ion-thumbnail>
+
+            <ion-label style="font-size: 80%;">
+                <ion-grid fixed>
+                    <ion-row>
+                        <ion-col size="7">
+                            <h2>{{ informado.codigoproducto }}</h2>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col size="12">
+                            <p color="black" class="ion-text-wrap">{{ informado.descripcion }}</p>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row *ngIf=" informado.observaciones !== '' ">
+                        <ion-col size="2">
+                            <ion-label color="dark" class="ion-text-left">Obs:</ion-label>
+                        </ion-col>
+                        <ion-col size="10">
+                            <ion-label color="dark" class="ion-text-wrap">{{ informado.observaciones }}</ion-label>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col size="6">F.Suger.: {{ informado.fsugerencia }}</ion-col>
+                        <ion-col size="6">F.Recib.: {{ informado.frecepcion }}</ion-col>
+                    </ion-row>
+                    <ion-row style="max-height: 28px;">
+                        <ion-col size="12" *ngIf=" informado.revisado === 0 " style="height: 46px;">
+                            <ion-item lines="none" style="margin-left: -20px; max-height: 46px;top:-10px;">
+                                <ion-checkbox class="check" slot="start" [(ngModel)]="informado.estadorevisado" (ionChange)="darCierre(informado)"></ion-checkbox>
+                                <ion-label style="margin-left: 10px; max-height: 46px;">Dar por cerrada la sugerencia</ion-label>
+                            </ion-item>
+                        </ion-col>
+                        <ion-col size="12" *ngIf=" informado.revisado === 1 " style="height: 46px;">
+                            <h3 style="color: red;font-weight: bold;">Fecha de Cierre: {{ informado.frevision }}</h3>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-label>
+        </ion-item>
+    </ion-list>
+</ion-content>

@@ -80,7 +80,8 @@
                 <ion-card style="font-size:90%;margin-top:10px;margin-bottom:10px;margin-left:5px;margin-right:5px;">
 
                     <ion-card-header *ngIf=" config.imagenes " class="ion-no-padding">
-                        <ion-slides pager="true" [options]="slideOpts">
+                        <img src="https://zsmotor.cl/storage/mobile/{{ producto.codigo }}/img_1.jpg" loading="lazy" onerror=" this.src='assets/imgs/no-img.png' " />
+                        <!-- <ion-slides pager="true" [options]="slideOpts">
                             <ion-slide>
                                 <img src="https://zsmotor.cl/storage/mobile/{{ producto.codigo }}/img_1.jpg" loading="lazy" onerror=" this.src='assets/imgs/no-img.png' " />
                             </ion-slide>
@@ -90,7 +91,7 @@
                             <ion-slide>
                                 <img src="https://zsmotor.cl/storage/mobile/{{ producto.codigo }}/img_3.jpg" loading="lazy" onerror=" this.src='assets/imgs/no-img.png' " />
                             </ion-slide>
-                        </ion-slides>
+                        </ion-slides> -->
                     </ion-card-header>
 
                     <ion-card-content class="ion-no-padding" style="font-size: 95%; ">

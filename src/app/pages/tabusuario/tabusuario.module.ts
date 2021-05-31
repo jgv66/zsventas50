@@ -8,6 +8,7 @@ import { TabusuarioPageRoutingModule } from './tabusuario-routing.module';
 
 import { TabusuarioPage } from './tabusuario.page';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { NotificacionysugerenciaComponent } from '../notificacionysugerencia/notificacionysugerencia.component';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { ComponentsModule } from 'src/app/components/components.module';
     TabusuarioPageRoutingModule,
     ComponentsModule
   ],
-  declarations: [TabusuarioPage]
+  declarations: [TabusuarioPage, NotificacionysugerenciaComponent],
+  entryComponents: [NotificacionysugerenciaComponent]
 })
 export class TabusuarioPageModule {}

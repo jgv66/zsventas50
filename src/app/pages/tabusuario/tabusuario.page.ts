@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { PopoverController, ModalController, IonRouterOutlet } from '@ionic/angular';
+import { Router } from '@angular/router';
 import { BaselocalService } from 'src/app/services/baselocal.service';
 import { FuncionesService } from '../../services/funciones.service';
 import { NetworkengineService } from '../../services/networkengine.service';
-import { PopoverController } from '@ionic/angular';
 import { TrespuntosComponent } from '../../components/trespuntos/trespuntos.component';
+import { DocuxvendPage } from '../docuxvend/docuxvend.page';
+import { NotificacionysugerenciaComponent } from '../notificacionysugerencia/notificacionysugerencia.component';
 
 const DUMMY_DATE = new Date();
 
@@ -22,17 +25,24 @@ export class TabusuarioPage implements OnInit {
   arr = new Array(8);
   buscando = false;
   buscandoChico = false;
-  desde;
-  hasta;
+  desde: Date;
+  hasta: Date;
 
   constructor( public baseLocal: BaselocalService,
                private funciones: FuncionesService,
                private netWork: NetworkengineService,
-               private popoverCtrl: PopoverController ) { }
+               private router: Router,
+               private popoverCtrl: PopoverController,
+               private modalCtrl: ModalController ) { }
 
   ngOnInit() {
-    this.desde = DUMMY_DATE;
-    this.hasta = DUMMY_DATE;
+    if ( !this.baseLocal.user ) {
+      this.router.navigateByUrl('/login');
+    }
+    const dateStr = new Date();
+    this.hasta    = dateStr;
+    this.desde    = new Date(new Date(dateStr).setDate(new Date(dateStr).getDate() - ( dateStr.getDate() - 1 ) ) ); 
+    //
     this.getMyImage()
     this.getMisVentas();
     this.getMisContribuciones();
@@ -144,18 +154,27 @@ export class TabusuarioPage implements OnInit {
       item.detalle = false;
     }
   }
-  revisaDato( data ) {
-    // console.log(data);
-    this.buscandoChico = false;
-    // const rs = data;
-    if ( data === undefined || data.datos.length === 0 ) {
-      this.funciones.muestraySale('Usuario/Documento/Fecha no presenta información', 1.2 );
-      this.deberesDet = []
-    } else {
-      this.deberesDet = data.datos;
-    }
+  async revisaDato( data ){
+    const modal = await this.modalCtrl.create({
+      component: DocuxvendPage,
+      componentProps: { data: data.datos },
+    });
+    return await modal.present();
   }
-  
+
+  async rescataInformacion( item ) {
+    const modal = await this.modalCtrl.create({
+      component: NotificacionysugerenciaComponent,
+      componentProps: { item,
+                        desde: this.desde,
+                        hasta: this.hasta,
+                        tipo: item.tipomov,
+                        estado: item.estado,
+                      },
+    });
+    return await modal.present();
+  }
+
   segmentChanged(ev: any) {
     this.segment = ev.detail.value;
   }

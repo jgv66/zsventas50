@@ -28,6 +28,7 @@ const routes: Routes = [
   { path: 'crearnvi/:dataP',     children: [ { path: '', loadChildren: () => import('../crearnvi/crearnvi.module')             .then(m => m.CrearnviPageModule       ) }] },
   { path: 'socialsh/:dataP',     children: [ { path: '', loadChildren: () => import('../socialsh/socialsh.module')             .then(m => m.SocialshPageModule       ) }] },  
   { path: 'fichatecnica/:dataP', children: [ { path: '', loadChildren: () => import('../fichatecnica/fichatecnica.module')     .then(m => m.FichatecnicaPageModule   ) }] },
+  { path: 'docuxvend',           children: [ { path: '', loadChildren: () => import('../docuxvend/docuxvend.module')           .then(m => m.DocuxvendPageModule      ) }] },
 ];
 
 @NgModule({

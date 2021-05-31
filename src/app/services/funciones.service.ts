@@ -460,4 +460,14 @@ export class FuncionesService {
     return this.diaSemana( fecha ) + ' ' + fecha.getDate().toString() + ' de ' + this.nombreMes( fecha ) + ', ' + fecha.getFullYear().toString();
   }
 
+  async setter( data ) {
+    await Storage.set( { key: 'bypass',
+                         value: data 
+                       });
+  }
+  async getter() {
+    const ret = await Storage.get( { key: 'bypass'});
+    return ret.value;
+  }
+
 }
