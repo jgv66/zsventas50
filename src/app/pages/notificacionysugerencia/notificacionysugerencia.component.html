@@ -6,12 +6,12 @@
             </ion-button>
         </ion-buttons>
         <img src="./assets/imgs/logo-zs.png" alt="" class="navbar-img">
-        <ion-title>Sugerencias del Vendedor</ion-title>
+        <ion-title>{{ titulo }} del Vendedor</ion-title>
     </ion-toolbar>
 </ion-header>
 <ion-progress-bar *ngIf=" buscando " type="indeterminate"></ion-progress-bar>
 <ion-content>
-    <ion-list class="ilistrounded">
+    <ion-list *ngIf=" tipo === 'S' " class="ilistrounded">
 
         <ion-item *ngFor="let informado of sugerencias">
 
@@ -58,4 +58,58 @@
             </ion-label>
         </ion-item>
     </ion-list>
+
+    <ion-list *ngIf=" tipo === 'N' " class="ilistrounded">
+
+        <ion-item *ngFor="let informado of sugerencias">
+
+            <ion-thumbnail slot="start" *ngIf=" baseLocal.config.imagenes " style="margin-right: 5px;">
+                <ion-img src="https://zsmotor.cl/storage/mobile/{{ informado.codigoproducto }}/img_1.jpg" onerror=" this.src='assets/imgs/no-img.png' "></ion-img>
+            </ion-thumbnail>
+
+            <ion-label style="font-size: 80%;">
+                <ion-grid fixed>
+                    <ion-row>
+                        <ion-col size="7">
+                            <h2>{{ informado.codigoproducto }}</h2>
+                        </ion-col>
+                        <ion-col size="5">
+                            <ion-badge color="primary">Pedido : {{ informado.cantidad | number:"1.0-2" }}</ion-badge>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col size="12">
+                            <p color="black" class="ion-text-wrap">{{ informado.descripcion }}</p>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row *ngIf=" informado.cliente !== '' ">
+                        <ion-col size="12">
+                            <h3>{{ informado.cliente }} - {{ informado.email }}</h3>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row *ngIf=" informado.fono !== '' ">
+                        <ion-col size="12">
+                            <h3>Teléfono: <a href="tel:{{ informado.fono }}"><b> {{ informado.fono }}</b></a></h3>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col size="6">F.Solic.: {{ informado.fsolicitud }}</ion-col>
+                        <ion-col size="6">F.Infor.: {{ informado.fcierre }}</ion-col>
+                    </ion-row>
+                    <ion-row style="max-height: 28px;">
+                        <ion-col size="12" *ngIf=" informado.revisado === 0 " style="height: 46px;">
+                            <ion-item lines="none" style="margin-left: -20px; max-height: 46px;top:-10px;">
+                                <ion-checkbox class="check" slot="start" [(ngModel)]="informado.estadorevisado" (ionChange)="darCierre(informado)"></ion-checkbox>
+                                <ion-label style="margin-left: 10px; max-height: 46px;">Cerrar la notificación</ion-label>
+                            </ion-item>
+                        </ion-col>
+                        <ion-col size="12" *ngIf=" informado.revisado === 1 " style="height: 46px;">
+                            <h3 style="color: red;font-weight: bold;">Fecha de Cierre: {{ informado.frevision }}</h3>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-label>
+        </ion-item>
+    </ion-list>
+
 </ion-content>

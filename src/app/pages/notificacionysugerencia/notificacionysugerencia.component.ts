@@ -21,6 +21,7 @@ export class NotificacionysugerenciaComponent implements OnInit {
   enviando = false;
   buscando   = false;
   sugerencias = [];
+  titulo = '';
 
   constructor( public baseLocal: BaselocalService,
                private router: Router,
@@ -33,6 +34,7 @@ export class NotificacionysugerenciaComponent implements OnInit {
     if ( !this.baseLocal.user ) {
       this.router.navigateByUrl('/login');
     }
+    this.titulo = ( this.tipo === 'S' ) ? 'Sugerencias' : 'Notificaciones';
     this.revisaNoS();
   }
 
