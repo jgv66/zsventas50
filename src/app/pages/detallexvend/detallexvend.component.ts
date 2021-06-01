@@ -37,7 +37,7 @@ export class DetallexvendComponent {
   }
 
   revisa( data ) {
-    console.log(data);
+    // console.log(data);
     this.buscando = false;
     if ( data === undefined || data.length === 0 ) {
       this.funciones.muestraySale('ATENCION : No existe detalle', 2 );

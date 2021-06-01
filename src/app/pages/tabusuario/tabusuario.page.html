@@ -79,8 +79,9 @@
                         </ion-col>
                         <ion-col size="6" (click)="rescataDato(item)">
                             <h2 style="font-weight: bold;margin-left: 5px;">{{ item.tipo }}</h2>
-                            <p *ngIf=" desde !== hasta " style="font-size: 70%; color: medium; margin-left: 5px;">{{ desde | date:"dd/MM/yyyy" }} al {{ hasta | date:"dd/MM/yyyy" }}</p>
-                            <p *ngIf=" desde === hasta " style="font-size: 70%; color: medium; margin-left: 5px;">{{ desde | date:"dd/MM/yyyy" }}</p>
+                            <p style="font-size: 70%; color: medium; margin-left: 5px;">{{ periodo }}</p>
+                            <!-- <p *ngIf=" item.fechadesde !== item.fechahasta " style="font-size: 70%; color: medium; margin-left: 5px;">{{ item.fechadesde | date:"dd/MM/yyyy" }} al {{ item.fechahasta | date:"dd/MM/yyyy" }}</p>
+                            <p *ngIf=" item.fechadesde === item.fechahasta " style="font-size: 70%; color: medium; margin-left: 5px;">{{ item.fechadesde | date:"dd/MM/yyyy" }}</p> -->
                         </ion-col>
                         <ion-col size="3.8" (click)="rescataDato(item)">
                             <h2 class="ion-text-right" style="font-weight: bold;">${{ item.cuanto | number:"1.0-0" }}</h2>
@@ -102,8 +103,9 @@
                         </ion-col>
                         <ion-col size="7">
                             <h2 style="font-weight: bold;margin-left: 5px;">{{ item.tipo }}</h2>
-                            <p *ngIf=" desde !== hasta " style="font-size: 70%; color: medium; margin-left: 5px;">{{ desde | date:"dd/MM/yyyy" }} al {{ hasta | date:"dd/MM/yyyy" }}</p>
-                            <p *ngIf=" desde === hasta " style="font-size: 70%; color: medium; margin-left: 5px;">{{ desde | date:"dd/MM/yyyy" }}</p>
+                            <p style="font-size: 70%; color: medium; margin-left: 5px;">{{ periodo }}</p>
+                            <!-- <p *ngIf=" item.fechadesde !== item.fechahasta " style="font-size: 70%; color: medium; margin-left: 5px;">{{ item.fechadesde | date:"dd/MM/yyyy" }} al {{ item.fechahasta | date:"dd/MM/yyyy" }}</p>
+                            <p *ngIf=" item.fechadesde === item.fechahasta " style="font-size: 70%; color: medium; margin-left: 5px;">{{ item.fechadesde | date:"dd/MM/yyyy" }}</p> -->
                         </ion-col>
                     </ion-row>
                 </ion-grid>

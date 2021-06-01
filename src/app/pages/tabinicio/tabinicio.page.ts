@@ -679,7 +679,7 @@ export class TabinicioPage implements OnInit {
         } else if (data.opcion.texto === 'Notificaciones' ) {
             const dataParam = JSON.stringify({ codigo: producto.codigo, tecnico: producto.codtecnico, descrip: producto.descripcion });
             this.router.navigate(['/tabs/notif', dataParam]);
-        } else if (data.opcion.texto === 'NVI para reponer' ) {
+        } else if (data.opcion.texto === 'Reponer Stock' ) {
             if ( this.baseLocal.user.puedecrearnvi === true ) {
               const dataParam = JSON.stringify({ producto, usuario: this.baseLocal.user.usuario });
               this.router.navigate(['/tabs/crearnvi', dataParam]);

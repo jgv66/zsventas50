@@ -53,7 +53,7 @@ export class NotificacionysugerenciaComponent implements OnInit {
   }
   revisaNoSResultado( data ) {
     this.buscando = false;
-    console.log('revisaNoSResultado', data);
+    // console.log('revisaNoSResultado', data);
     try {
       if ( data === undefined || data.datos === [] ) {
         this.funciones.muestraySale('No existen sugerencias o notificaciones que desplegar', 2 );

@@ -15,7 +15,7 @@
 
     <ion-list *ngIf=" documentos ">
         <ion-list-header>
-            <ion-label>Los valores netos aquí presentados, corresponden a las líneas del documento que involucra al vendedor. Por lo tanto, en algunos casos, los montos podrían no corresponder al valor total neto del documento. Revise el detalle cuando tenga dudas.</ion-label>
+            <ion-label style="font-size: 85%;margin-right: 10px;">Los valores netos aquí presentados, corresponden a las líneas del documento que involucra al vendedor. Por lo tanto, en algunos casos, los montos podrían no corresponder al valor total neto del documento. Revise el detalle cuando tenga dudas.</ion-label>
         </ion-list-header>
         <ion-item *ngFor="let documento of documentos" detail (click)="muestraID( documento.id )">
 
