@@ -48,10 +48,14 @@ export class UltimosmovsPage implements OnInit {
   }
   
   revisa( data ) {
-    console.log(data);
+    // console.log(data);
     this.buscando = false;
     if ( data === undefined || data.length === 0 ) {
-      this.funciones.muestraySale('ATENCION : Código de producto no presenta movimientos.', 2 );
+      if ( this.sistema.tipo === 'N' ) {
+        this.funciones.muestraySale('Código de producto no presenta NVV pendientes.', 2 );
+      } else {
+        this.funciones.muestraySale('ATENCION : Código de producto no presenta movimientos.', 2 );
+      }
     } else {
       this.detalles = data;
     }
