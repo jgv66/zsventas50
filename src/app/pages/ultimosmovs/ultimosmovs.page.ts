@@ -25,19 +25,28 @@ export class UltimosmovsPage implements OnInit {
   }
 
   ngOnInit() {
-    this.titulo = ( this.sistema.tipo === 'V' ) ? 'Ultimas Ventas' : 'Ultimas Compras';
+    if ( this.sistema.tipo === 'N' ) {
+      this.titulo = 'Últimas NVV';
+    } else {
+      this.titulo = ( this.sistema.tipo === 'V' ) ? 'Ultimas Ventas' : 'Ultimas Compras';
+    }
     this.buscando = true;
     this.netWork.traeUnSP( 'ksp_traeUltimosMovimientos',
-                           { codigo:  this.sistema.codigo,
-                             empresa: this.baseLocal.user.EMPRESA,
-                             sistema: this.sistema.tipo,
-                             cliente: ( this.sistema.cliente ? this.sistema.cliente : null ) },
-                           { codigo: this.baseLocal.user.KOFU,
-                             nombre: this.baseLocal.user.NOKOFU })
-        .subscribe( data => { this.revisa( data ); },
-                    err  => { this.buscando = false;
-                              this.funciones.msgAlert( 'ATENCION', err ); });
+                          { codigo:  this.sistema.codigo,
+                            empresa: this.baseLocal.user.EMPRESA,
+                            sistema: this.sistema.tipo,
+                            cliente: ( this.sistema.cliente ? this.sistema.cliente : null ) },
+                          { codigo: this.baseLocal.user.KOFU,
+                            nombre: this.baseLocal.user.NOKOFU })
+        .subscribe( data => { 
+          this.revisa( data ); 
+        },
+        err  => { 
+          this.buscando = false;
+          this.funciones.msgAlert( 'ATENCION', err ); 
+        });
   }
+  
   revisa( data ) {
     console.log(data);
     this.buscando = false;

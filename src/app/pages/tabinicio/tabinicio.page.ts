@@ -666,6 +666,9 @@ export class TabinicioPage implements OnInit {
         if (data.opcion.texto === 'Últimas Ventas' ) {
             const dataParam = JSON.stringify({tipo: 'V', codigo: producto.codigo });
             this.router.navigate(['/tabs/ultmovs', dataParam]);
+        } else if (data.opcion.texto === 'Últimas NVV' ) {
+            const dataParam = JSON.stringify({tipo: 'N', codigo: producto.codigo });
+            this.router.navigate(['/tabs/ultmovs', dataParam]);
         } else if (data.opcion.texto === 'Últimas Compras' ) {
             if ( this.baseLocal.user.puedevercosto === true ) {
               const dataParam = JSON.stringify({tipo: 'C', codigo: producto.codigo });

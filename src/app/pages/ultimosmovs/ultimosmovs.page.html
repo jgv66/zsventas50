@@ -10,7 +10,7 @@
 
 <ion-progress-bar *ngIf=" buscando " type="indeterminate"></ion-progress-bar>
 
-<ion-content class="ion-no-padding">
+<ion-content>
 
     <ion-list>
         <ion-item *ngFor="let item of detalles" detail (click)="verDocumento( item.id )">
@@ -35,24 +35,24 @@
                     </ion-col>
                 </ion-row>
                 <ion-row style="font-size: 80%;">
-                    <ion-col size="2.5">
-                        <ion-label class="ion-text-right">Cantidad:</ion-label>
+                    <ion-col size="3">
+                        <ion-label class="ion-text-right">Cant.:</ion-label>
                     </ion-col>
-                    <ion-col size="3.5">
-                        <ion-label class="ion-text-left">{{ item.cantidad | number:"1.0-0" }}</ion-label>
+                    <ion-col size="3">
+                        <ion-label class="ion-text-left"><b>{{ item.cantidad | number:"1.0-0" }}</b></ion-label>
                     </ion-col>
-                    <ion-col size="2.5">
-                        <ion-label class="ion-text-right">Neto Unit.:</ion-label>
+                    <ion-col size="3">
+                        <ion-label class="ion-text-right">Net.Unit.:</ion-label>
                     </ion-col>
-                    <ion-col size="3.5">
-                        <ion-label class="ion-text-left">${{ item.netolinea | number:"1.0-0" }}</ion-label>
+                    <ion-col size="3">
+                        <ion-label class="ion-text-left"><b>${{ item.netolinea | number:"1.0-0" }}</b></ion-label>
                     </ion-col>
                 </ion-row>
                 <ion-row style="font-size: 80%;">
-                    <ion-col size="2.5">
+                    <ion-col size="3">
                         <ion-label class="ion-text-right">Vend.:</ion-label>
                     </ion-col>
-                    <ion-col size="7">
+                    <ion-col size="9">
                         <ion-label class="ion-text-left">{{ item.nombre_v }}</ion-label>
                     </ion-col>
                 </ion-row>

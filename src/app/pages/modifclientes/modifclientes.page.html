@@ -16,6 +16,21 @@
         <ion-list>
             <h3 class="ion-text-center">Datos a modificar</h3>
             <ion-item>
+                <ion-label position="stacked">Razón Social</ion-label>
+                <ion-input color="primary" type="text" name="nombre" [(ngModel)]="nombre"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label position="stacked">Dirección</ion-label>
+                <ion-input color="primary" type="text" name="direccion" [(ngModel)]="direccion"></ion-input>
+            </ion-item>
+            <ion-item>
+                <ion-label position="stacked">Comuna, Ciudad</ion-label>
+                <ion-input color="primary" type="text" name="comunayciudad" [(ngModel)]="comunayciudad" disabled="true"></ion-input>
+                <ion-button style="margin-top: 27px;" slot="end" (click)="buscarCiudad()" fill="clear" color="primary">
+                    <ion-icon slot="icon-only" name="search"></ion-icon>
+                </ion-button>
+            </ion-item>
+            <ion-item>
                 <ion-label position="stacked">Email</ion-label>
                 <ion-input color="primary" type="email" style="text-transform:lowercase;" name="email" [(ngModel)]="email"></ion-input>
             </ion-item>

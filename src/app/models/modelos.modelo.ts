@@ -45,7 +45,9 @@ export interface Cliente {
   razonsocial: string;
   direccion: string;
   comuna: string;
+  codcomuna: string;
   ciudad: string;
+  codciudad: string;
   vendedor: string;
   nombrevendedor: string;
   listaprecios: string;  // char(3)

@@ -16,12 +16,13 @@ export class TrespuntosComponent implements OnInit {
   sugerencias = [
     { texto: 'Últimas Ventas',   icon: 'cloud-upload' },
     { texto: 'Últimas Compras',  icon: 'cloud-download' },
+    { texto: 'Últimas NVV',      icon: 'layers-outline' },
     { texto: 'Reponer Stock',    icon: 'sync' },
     { texto: 'Sugerencias',      icon: 'bulb' },
     { texto: 'Notificaciones',   icon: 'notifications' },
     { texto: 'Copy & Paste',     icon: 'clipboard-outline' },
-    { texto: 'Redes Sociales',   icon: 'share' },
-    { texto: 'Ficha Técnica',    icon: 'attach' },
+    // { texto: 'Redes Sociales',   icon: 'share' },
+    // { texto: 'Ficha Técnica',    icon: 'attach' },
   ];
 
   clientes = [
@@ -36,7 +37,6 @@ export class TrespuntosComponent implements OnInit {
     { texto: 'Semana pasada', icon: '' },
     { texto: 'Este mes',      icon: '' },
     { texto: 'Mes pasado',    icon: '' },
-    // { texto: 'Este año',      icon: '' },
   ];
   constructor( private popoverCtrl: PopoverController,
                public  baseLocal: BaselocalService ) {}

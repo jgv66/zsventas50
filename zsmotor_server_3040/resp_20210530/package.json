@@ -1,0 +1,23 @@
+{
+  "name": "zsventas",
+  "version": "1.0.0",
+  "description": "servidor en zsmotorapp.cl/zsventas",
+  "main": "ktp_server_mssql.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "kinetik.cl",
+  "license": "ISC",
+  "requires": true,
+  "lockfileVersion": 1,
+  "dependencies": {
+    "async": "^3.1.0",
+    "express": "^4.17.1",
+    "file-exists": "^5.0.1",
+    "fs": "0.0.1-security",
+    "mssql": "^6.0.0",
+    "multer": "^1.4.2",
+    "nodemailer": "^6.3.1",
+    "path": "^0.12.7"
+  }
+}

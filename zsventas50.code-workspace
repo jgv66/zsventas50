@@ -2,9 +2,6 @@
     "folders": [
 		{
 			"path": "."
-		},
-		{
-			"path": "..\\..\\nodejs\\zsmotor_server_3040"
 		}
 	],
     "settings": {}
