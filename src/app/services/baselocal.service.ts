@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Usuario, Cliente } from '../models/modelos.modelo';
 
-import { Plugins } from '@capacitor/core';
-const { Storage } = Plugins;
+import { Storage } from '@capacitor/storage';
 
 @Injectable({
   providedIn: 'root'

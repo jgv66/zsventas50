@@ -1,13 +1,10 @@
 {
-    "appId": "cl.kinetik.zsventas50",
-    "appName": "ZS-Ventas",
-    "bundledWebRuntime": false,
-    "npmClient": "npm",
-    "webDir": "www",
-    "plugins": {
-        "SplashScreen": {
-            "launchShowDuration": 0
-        }
-    },
-    "cordova": {}
+	"appId": "io.ionic.starter",
+	"appName": "photoBook",
+	"webDir": "www",
+	"plugins": {
+		"SplashScreen": {
+			"launchShowDuration": 0
+		}
+	}
 }

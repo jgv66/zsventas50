@@ -20,9 +20,9 @@ export class TrespuntosComponent implements OnInit {
     { texto: 'Reponer Stock',    icon: 'sync' },
     { texto: 'Sugerencias',      icon: 'bulb' },
     { texto: 'Notificaciones',   icon: 'notifications' },
-    { texto: 'Copy & Paste',     icon: 'clipboard-outline' },
-    // { texto: 'Redes Sociales',   icon: 'share' },
-    // { texto: 'Ficha Técnica',    icon: 'attach' },
+    { texto: 'Copiar y Pegar',   icon: 'clipboard-outline' },
+    { texto: 'Redes Sociales',   icon: 'share' },
+    { texto: 'Ficha Técnica',    icon: 'attach' },
   ];
 
   clientes = [

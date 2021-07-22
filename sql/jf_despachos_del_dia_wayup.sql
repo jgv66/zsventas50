@@ -1,0 +1,73 @@
+/*
+declare @detalle nvarchar(MAX) ;
+exec jf_despachos_del_dia ; 
+--print @detalle ;
+*/
+
+IF OBJECT_ID('jf_despachos_del_dia', 'P') IS NOT NULL  
+    DROP PROCEDURE jf_despachos_del_dia;  
+GO  
+--CREATE PROCEDURE jf_despachos_del_dia ( @detalle as nvarchar(max) output ) with encryption 
+CREATE PROCEDURE jf_despachos_del_dia with encryption 
+AS 
+
+SET NOCOUNT ON;
+
+BEGIN
+	
+	WITH
+	ESTADO_PEDIDOS AS (SELECT ob_oid AS PEDIDO,bill_name AS NOMBRE,ob_ord_stt as estado,ope_date as FECHA_ENTREGA
+					   FROM SLOM_F WITH (NOLOCK)
+					   WHERE sitio ='MARATHON' ),
+	HISTORICO_PEDIDOS AS (SELECT ob_oid AS PEDIDO,bill_custnum AS RUT,bill_name AS NOMBRE,ope_user as OPERARIO,ob_ord_stt as estado,ope_date as FECHA_ENTREGA,fecha_despacho
+					   FROM SLOMH_F WITH (NOLOCK)
+					   WHERE sitio ='MARATHON' ),
+	OBSERVACIONES_DOC AS (SELECT E.FEEMDO AS FECHA,E.NUDO AS DOCUMENTO,OB.OBDO+' '+OB.TEXTO1+' '+OB.TEXTO2 AS OBSERVACION,D.TIDOPA AS DOC,D.NUDOPA AS B_O_F
+					   FROM [200.29.13.186,1451].ZSMOTOR1.dbo.MAEEDO AS E WITH (NOLOCK)
+					   INNER JOIN [200.29.13.186,1451].ZSMOTOR1.dbo.MAEEDOOB AS OB ON E.IDMAEEDO = OB.IDMAEEDO
+					   LEFT JOIN [200.29.13.186,1451].ZSMOTOR1.dbo.MAEDDO AS D ON D.IDMAEDDO = E.IDMAEEDO
+					   WHERE E.TIDO IN ('NVI','NVV') AND E.FEEMDO > DATEADD (DD,-15,GETDATE())),
+	DOC_RELACIONADO AS (SELECT DISTINCT D.TIDO AS TIPO,D.NUDO AS NUMERO,D.IDMAEDDO AS ID,D.TIDOPA AS DOC,D.NUDOPA AS B_O_F
+					   FROM [200.29.13.186,1451].ZSMOTOR1.dbo.MAEDDO AS D WITH (NOLOCK)
+					   WHERE D.TIDO IN ('FCV','GDV','BLV','GTI','GDP','GDI') AND D.FEEMLI > DATEADD (DD,-15,GETDATE())),
+	ESTADO_PEDIDO AS (SELECT DISTINCT P.ob_ord_stt AS ESTADO,EST.nom_estado AS NOMBRE_ESTADO
+					   FROM  SLESTADOPEDIDO AS EST WITH (NOLOCK)
+					   INNER JOIN SLOM_F AS P ON P.ob_ord_stt = EST.estado)
+	SELECT DISTINCT 
+		 td = CONVERT (nvarchar (10),HP.fecha_despacho,105),'',
+		 td = COALESCE (DR.TIPO+'  '+DR.NUMERO,'SIN_DOCUMENTO'),'',
+		 td = DO.TIDO+' '+DO.NUDO,'',
+		 td = rtrim(EP.NOMBRE) 
+	FROM [200.29.13.186,1451].ZSMOTOR1.dbo.MAEEDO AS DO WITH (NOLOCK)
+	INNER JOIN ESTADO_PEDIDOS AS EP ON EP.PEDIDO = DO.NUDO COLLATE Modern_Spanish_BIN
+	LEFT JOIN OBSERVACIONES_DOC AS OD ON OD.DOCUMENTO = DO.NUDO 
+	LEFT JOIN ESTADO_PEDIDO AS EST ON EST.ESTADO = EP.estado COLLATE Modern_Spanish_BIN
+	LEFT JOIN DOC_RELACIONADO AS DR ON DR.B_O_F = EP.PEDIDO COLLATE Modern_Spanish_BIN
+	LEFT JOIN HISTORICO_PEDIDOS AS HP ON HP.PEDIDO = HP.PEDIDO COLLATE Modern_Spanish_BIN
+	WHERE DO.TIDO IN ('NVI','NVV') 
+	  AND COALESCE (EP.FECHA_ENTREGA,HP.fecha_despacho,0)  > DATEADD (DD,-2,GETDATE())
+	  AND EST.NOMBRE_ESTADO  ='DESPACHADO'
+	FOR XML PATH('tr') 
+
+END
+go
+
+-- exec jf_xx1
+IF OBJECT_ID('jf_xx1', 'P') IS NOT NULL  
+    DROP PROCEDURE jf_xx1;  
+GO  
+CREATE PROCEDURE jf_xx1 ( @detalle as nvarchar(max) output )  with encryption 
+AS 
+
+BEGIN
+
+	SET NOCOUNT ON;
+	    
+	set @detalle = ( select top 10 td=KOPR,'',td=NOKOPR 
+					FROM [200.29.13.186,1451].ZSMOTOR1.dbo.MAEPR 
+					FOR XML path('tr') )
+
+end
+
+
+exec jf_xx1

@@ -663,6 +663,8 @@ export class TabinicioPage implements OnInit {
       const { data } = await popover.onDidDismiss();
       //
       if ( data ) {
+        console.log(data.opcion.texto,(data.opcion.texto === 'Ficha Técnica' ));
+        
         if (data.opcion.texto === 'Últimas Ventas' ) {
             const dataParam = JSON.stringify({tipo: 'V', codigo: producto.codigo });
             this.router.navigate(['/tabs/ultmovs', dataParam]);
@@ -692,9 +694,9 @@ export class TabinicioPage implements OnInit {
         } else if (data.opcion.texto === 'Compartir' ) {
             const dataParam = JSON.stringify({ producto, usuario: this.baseLocal.user.usuario });
             this.router.navigate(['/tabs/socialsh', dataParam]);
-        } else if (data.opcion.texto === 'Copy & Paste' ) {
+        } else if (data.opcion.texto === 'Copiar y Pegar' ) {
             this.copyPaste( producto )
-        } else if (data.opcion.texto === 'Ficha técnica' ) {
+        } else if (data.opcion.texto === 'Ficha Técnica' ) {
             const dataParam = JSON.stringify({ producto, usuario: this.baseLocal.user.usuario });
             this.router.navigate(['/tabs/fichatecnica', dataParam]);
         } else if (data.opcion.texto === 'Redes Sociales' ) {

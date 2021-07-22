@@ -4,8 +4,9 @@ import { LoadingController, AlertController, ToastController } from '@ionic/angu
 import { Usuario, Cliente } from '../models/modelos.modelo';
 import { BaselocalService } from './baselocal.service';
 import { Subject, Observable } from 'rxjs';
-import { Plugins, CameraResultType, CameraSource, CameraOptions } from '@capacitor/core';
-const { Storage, Camera } = Plugins;
+
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { Storage } from '@capacitor/storage';
 
 @Injectable({
   providedIn: 'root'
