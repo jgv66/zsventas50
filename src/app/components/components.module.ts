@@ -9,6 +9,7 @@ import { CardprodComponent } from './cardprod/cardprod.component';
 import { ListprodComponent } from './listprod/listprod.component';
 import { TrespuntosComponent } from './trespuntos/trespuntos.component';
 import { MovdoccliComponent } from './movdoccli/movdoccli.component';
+import { MenuclientesComponent } from 'src/app/components/menuclientes/menuclientes.component';
 
 @NgModule({
   declarations: [ CardprodComponent,
@@ -16,13 +17,15 @@ import { MovdoccliComponent } from './movdoccli/movdoccli.component';
                   ExpandheaderComponent,
                   FlashCardComponent,
                   TrespuntosComponent,
-                  MovdoccliComponent ],
+                  MovdoccliComponent,
+                  MenuclientesComponent ],
   exports:      [ CardprodComponent,
                   ListprodComponent,
                   ExpandheaderComponent,
                   FlashCardComponent,
                   TrespuntosComponent,
-                  MovdoccliComponent ],
+                  MovdoccliComponent,
+                  MenuclientesComponent ],
   imports:      [ CommonModule, IonicModule, FormsModule ]
 })
 

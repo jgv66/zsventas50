@@ -152,6 +152,10 @@
             <ion-list lines="none">
                 <ion-radio-group name="config.ordenar" [(ngModel)]="config.ordenar">
                     <ion-item>
+                        <ion-label>Código del producto</ion-label>
+                        <ion-radio value=""></ion-radio>
+                    </ion-item>
+                    <ion-item>
                         <ion-label>Precio menor a mayor</ion-label>
                         <ion-radio value="preciomenormayor"></ion-radio>
                     </ion-item>
@@ -166,10 +170,6 @@
                     <ion-item>
                         <ion-label>Stock mayor a menor</ion-label>
                         <ion-radio value="stockmayormenor"></ion-radio>
-                    </ion-item>
-                    <ion-item>
-                        <ion-label>Código del producto</ion-label>
-                        <ion-radio value=""></ion-radio>
                     </ion-item>
                 </ion-radio-group>
             </ion-list>

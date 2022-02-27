@@ -76,6 +76,7 @@ export class LoginPage implements OnInit {
         this.funciones.muestraySale( 'Hola ' + rs.NOKOFU.trim() + ', ' + this.funciones.textoSaludo(), 1 );
         this.baseLocal.guardaUltimoUsuario( rs );
         this.baseLocal.user = rs;
+        this.funciones.leerSucursales();
         //
         this.router.navigate(['/tabs/inicio']);
     }

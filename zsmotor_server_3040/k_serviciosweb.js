@@ -314,16 +314,12 @@ module.exports = {
             });
     },
     //
-    saveDefinitionIMG: function(sql, ib64, extension, usuario) {
+    saveDefinitionIMG: function(sql, ib64, extension, usuario, idmaeedo) {
         // 
         const query = `
-            if not exists ( select * from ktp_images where usuario = '${ usuario }' ) begin
-                insert into ktp_images ( usuario,fechains,img_exten,img_name ) values ('${ usuario }',getdate(),'${ extension }','${ ib64 }');
-            end 
-            else begin
-                update ktp_images set fechains=getdate(),img_exten='${ extension }',img_name='${ ib64 }' where usuario='${ usuario }';
-            end;
-        `;
+                    insert into ktb_documentos_attach (idmaeedo, usuario, fechains, img_exten, img_name, estado )
+                      values( ${ idmaeedo }, '${ usuario }', getdate(), '${ extension }', '${ ib64 }', 0);
+                    `;
         console.log('saveIMG', query);
         const request = new sql.Request();
         return request.query(query)
@@ -338,21 +334,51 @@ module.exports = {
                 return { resultado: 'error', datos: err };
             });
     },
-    // 
-    getImage: function(sql, body) {
+    //
+    deleteDefinitionIMG: (sql, name, id) => {
         // --------------------------------------------------------------------------------------------------
         const query = `
-            if exists ( select * from ktp_images with (nolock) where usuario = '${ body.datos.usuario }' ) begin
-                select 'ok' as resultado, img_name as image_name
-                from ktp_images with (nolock) 
-                where usuario = '${ body.datos.usuario }';
+            if exists ( select * from ktb_documentos_attach with (nolock) where idmaeedo = ${ id } and img_name = '${ name }') begin
+                update ktb_documentos_attach set estado = 1
+                where idmaeedo = ${ id }
+                  and img_name = '${ name }'
             end
             else begin
-                select 'nodata' as resultado
-            end; 
+                select 'nodata' as resultado; 
+            end;
         `;
+        console.log(query);
         //
-        // console.log(query);
+        const request = new sql.Request();
+        return request.query(query)
+            .then(resultado => {
+                return resultado.recordset;
+            })
+            .catch(err => {
+                // console.log(err);
+                return { resultado: 'error', datos: err };
+            });
+    },
+    // 
+    getImages: function(sql, body) {
+        // --------------------------------------------------------------------------------------------------
+        const query = `
+            if exists ( select * from ktb_documentos_attach with (nolock) where idmaeedo = ${ body.idmaeedo } ) begin
+                select  'ok' as resultado
+                        ,img_name as imgb64
+                        ,'' as pdf_name 
+                        ,cast((case when upper(img_exten)='PDF' then 1 else 0 end) as bit) as pdf
+                        ,idmaeedo
+                        ,convert(nvarchar(10), fechains, 103) as fecha
+                        ,convert(nvarchar(5), fechains, 108) as hora
+                from ktb_documentos_attach with (nolock)
+                where idmaeedo = ${ body.idmaeedo };
+            end
+            else begin
+                select 'nodata' as resultado; 
+            end;
+        `;
+        console.log(query);
         //
         const request = new sql.Request();
         return request.query(query)
@@ -463,4 +489,33 @@ module.exports = {
                 return { resultado: 'error', datos: err };
             });
     },
+    //
+    buscaDatos: function(sql, empresa, tipo, numero) {
+        // 
+        const query = `
+            select  edo.TIDO,edo.NUDO,edo.ENDO
+                    ,en.NOKOEN
+                    ,fu.NOKOFU,fu.EMAIL,fu.FOFU
+            from MAEEDO as edo with (nolock)
+            left join MAEEN as en with (nolock) on en.KOEN = edo.ENDO and en.SUEN = edo.SUENDO
+            left join TABFU as fu with (nolock) on fu.KOFU = edo.KOFUDO
+            where edo.EMPRESA = '${ empresa }'
+                and edo.TIDO = '${ tipo }' 
+                and edo.NUDO = '${ numero }';
+            `;
+        console.log('buscaDatos', query);
+        const request = new sql.Request();
+        return request.query(query)
+            .then(resultado => {
+                return resultado.recordset;
+            })
+            .then(resultado => {
+                return { resultado: 'ok', datos: resultado };
+            })
+            .catch(err => {
+                console.log('buscaDatos error ', err);
+                return { resultado: 'error', datos: err };
+            });
+    },
+    //    
 };

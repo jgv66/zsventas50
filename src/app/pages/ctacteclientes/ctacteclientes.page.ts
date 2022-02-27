@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { IonSegment, ModalController } from '@ionic/angular';
+
 import { NetworkengineService } from '../../services/networkengine.service';
 import { FuncionesService } from '../../services/funciones.service';
 import { BaselocalService } from '../../services/baselocal.service';
-import { IonSegment } from '@ionic/angular';
+import { DocumentoPage } from '../documento/documento.page';
 
 @Component({
   selector: 'app-ctacteclientes',
@@ -19,11 +21,15 @@ export class CtacteclientesPage implements OnInit {
   documentos    = [];
 
   constructor( private router: Router,
+               private modalCtrl: ModalController,
                private baseLocal: BaselocalService,
                private netWork: NetworkengineService,
                private funciones: FuncionesService ) { }
 
   ngOnInit() {
+    if ( !this.baseLocal.user ) {
+      this.router.navigateByUrl('/login');
+    }
     this.segment.value = 'todos';
     this.segmento      = '';
     this.cargaImpagos();
@@ -61,8 +67,15 @@ export class CtacteclientesPage implements OnInit {
     }
   }
 
-  muestraID( id ) {
-    this.router.navigate( ['/tabs/documento/' + id.toString() ]);
-  }
+  // muestraID( id ) {
+  //   this.router.navigate( ['/tabs/documento/' + id.toString() ]);
+  // }
+  async muestraID( id ) {
+    const modal = await this.modalCtrl.create({
+      component: DocumentoPage,
+      componentProps: { id }
+    });
+    await modal.present();
+  }  
 
 }

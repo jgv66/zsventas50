@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { PopoverController, ModalController, AlertController } from '@ionic/angular';
+import { PopoverController, ModalController } from '@ionic/angular';
 
 import { BaselocalService } from '../../services/baselocal.service';
 import { FuncionesService } from '../../services/funciones.service';
-import { NetworkengineService } from '../../services/networkengine.service';
 
 import { Cliente } from '../../models/modelos.modelo';
 
 import { MovdoccliComponent } from '../../components/movdoccli/movdoccli.component';
 import { BuscarclientesPage } from '../buscarclientes/buscarclientes.page';
+import { MenuclientesComponent } from 'src/app/components/menuclientes/menuclientes.component';
 import { ModifclientesPage } from '../modifclientes/modifclientes.page';
 import { TrespuntosComponent } from '../../components/trespuntos/trespuntos.component';
 import { PatentesPage } from '../patentes/patentes.page';
@@ -29,12 +29,16 @@ export class MenuseteoPage {
                private router: Router,
                private modalCtrl: ModalController,
                private popoverCtrl: PopoverController,
-               private alertCtrl: AlertController,
-               private funciones: FuncionesService,
-               private netWork: NetworkengineService ) {
+               private funciones: FuncionesService ) {
       //
       this.cliente = this.baseLocal.cliente;
       //
+  }
+
+  ngOnInit() {
+    if ( !this.baseLocal.user ) {
+      this.router.navigateByUrl('/login');
+    }
   }
 
   ionViewWillEnter() {
@@ -46,6 +50,24 @@ export class MenuseteoPage {
 
   salir() {
     this.router.navigate(['/tabs']);
+  }
+
+  async menuClientes( ev ) {
+    const popover = await this.popoverCtrl.create({
+      component: MenuclientesComponent,
+      componentProps: { baseLocal: this.baseLocal },
+      event: ev,
+      translucent: false
+    });
+    await popover.present();
+    //
+    const { data } = await popover.onDidDismiss();
+    if ( data ) {
+      if ( data.opcion.texto === 'Pendientes de pago' ) this.consultarImpagos( this.cliente );
+      if ( data.opcion.texto === 'Últimos documentos' ) this.ultimosDocs( ev );
+      if ( data.opcion.texto === 'Buscar un cliente'  ) this.buscarOtroCliente();
+      if ( data.opcion.texto === 'Crear un cliente'   ) this.crearClientes();
+    }
   }
 
   async buscarOtroCliente() {

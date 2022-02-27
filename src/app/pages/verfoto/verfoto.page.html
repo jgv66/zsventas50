@@ -1,0 +1,62 @@
+<ion-header>
+    <ion-toolbar color="dark">
+        <ion-buttons slot="start">
+            <ion-button (click)="salir()">
+                <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <img src="./assets/imgs/logo-zs.png" alt="" class="navbar-img">
+        <ion-title class="ion-text-left">{{ tipo }}-{{ numero}} </ion-title>
+
+        <ion-buttons slot="end">
+            <ion-button (click)="prepararEmail()">
+                <ion-icon slot="icon-only" name="mail-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+
+    </ion-toolbar>
+</ion-header>
+<ion-progress-bar *ngIf=" cargando " type="indeterminate"></ion-progress-bar>
+
+<ion-content>
+
+    <ion-card class="animated fadeIn" *ngIf=" enviarCorreo ">
+        <ion-card-content style="padding-top: 5px; text-align: justify;">
+            <h1 class="ion-text-center">Datos del envío</h1>
+            <ion-list lines="none">
+                <ion-item>
+                    <ion-label position="floating">Enviar e-mail a...</ion-label>
+                    <ion-input autocomplete="off" type="mail" value="email" [(ngModel)]="email"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="floating">Agregar copia a...</ion-label>
+                    <ion-input autocomplete="off" type="mail" value="copia" [(ngModel)]="copia"></ion-input>
+                </ion-item>
+                <ion-item>
+                    <ion-label position="floating">Observaciones...</ion-label>
+                    <ion-textarea autocomplete="off" type="text" value="obs" [(ngModel)]="obs"></ion-textarea>
+                </ion-item>
+            </ion-list>
+
+            <ion-progress-bar *ngIf=" enviando " type="indeterminate"></ion-progress-bar>
+
+            <ion-row style="font-size: 70%;margin-top: 10px;">
+                <ion-col size="12">
+                    <ion-button (click)="sendEmail()" expand="block" size="small">Enviar estos adjuntos vía email</ion-button>
+                </ion-col>
+            </ion-row>
+
+        </ion-card-content>
+    </ion-card>
+
+    <ion-list lines="none">
+        <ion-item *ngFor="let foto of fotos">
+            <ion-card style="margin-top: 20px;" mode="ios">
+                <img *ngIf=" foto.pdf === false  " [src]="foto.imgb64" onerror=" this.src='assets/images/no-img.png' " alt="imágen" class="picker" />
+                <a *ngIf=" foto.pdf === true  " [href]="foto.imgb64" target="_blank">{{ foto.pdf_name }}</a>
+                <ion-label>Fecha: {{ foto.fecha }} Hora: {{ foto.hora }}</ion-label>
+            </ion-card>
+        </ion-item>
+    </ion-list>
+
+</ion-content>

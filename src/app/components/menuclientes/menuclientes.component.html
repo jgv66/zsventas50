@@ -1,0 +1,5 @@
+<ion-list lines="none">
+    <ion-item *ngFor="let item of menu; let i = index;" detail (click)="onClick( i )" style="font-size:80%;">
+        <ion-label>{{ item.texto }}</ion-label>
+    </ion-item>
+</ion-list>

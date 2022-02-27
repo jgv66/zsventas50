@@ -4,7 +4,12 @@
             <ion-back-button text=' '></ion-back-button>
         </ion-buttons>
         <img src="./assets/imgs/logo-zs.png" alt="" class="navbar-img">
-        <ion-title>Cliente</ion-title>
+        <ion-title>Clientes</ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="menuClientes( $event )">
+                <ion-icon slot="icon-only" name="menu"></ion-icon>
+            </ion-button>
+        </ion-buttons>
     </ion-toolbar>
 </ion-header>
 
@@ -145,36 +150,6 @@
                 </ion-row>
 
             </ion-grid>
-
-            <ion-grid fixed>
-                <ion-row>
-                    <ion-col [size]="( baseLocal.cliente.codigo !== '' ) ? 4.5 : 7.5" *ngIf=" !baseLocal.user.esuncliente ">
-                        <ion-button expand="block" size="small" (click)="buscarOtroCliente()">
-                            <ion-icon slot="start" name="color-wand"></ion-icon>
-                            Buscar cliente
-                        </ion-button>
-                    </ion-col>
-
-                    <ion-col size="4.5" *ngIf=" baseLocal.cliente.codigo === '' && !baseLocal.user.esuncliente ">
-                        <ion-button expand="block" size="small" (click)="crearClientes()">
-                            <ion-icon slot="start" name="add"></ion-icon>
-                            Crear cliente
-                        </ion-button>
-                    </ion-col>
-
-                    <ion-col [size]=" baseLocal.user.esuncliente ? 7.5 : 4.5" *ngIf=" baseLocal.cliente.codigo !== '' " style="padding-left: 1px; padding-right: 1px;">
-                        <ion-button expand="block" size="small" (click)="consultarImpagos( cliente )"> Pendientes </ion-button>
-                    </ion-col>
-
-                    <ion-col [size]=" baseLocal.user.esuncliente ? 4.5 : 3" *ngIf=" baseLocal.cliente.codigo !== '' ">
-                        <ion-button expand="block" size="small" (click)="ultimosDocs( $event )">
-                            <ion-icon slot="icon-only" name="pulse"></ion-icon>
-                        </ion-button>
-                    </ion-col>
-
-                </ion-row>
-            </ion-grid>
-
         </ion-list>
     </ion-card>
 

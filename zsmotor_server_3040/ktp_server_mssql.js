@@ -37,7 +37,9 @@ app.use(bodyParser.urlencoded({ limit: '5mb', extended: false }));
 app.use("/public", express.static('public'));
 publicpath = path.resolve(__dirname, 'public');
 app.use('/static', express.static(publicpath));
-CARPETA_IMG = publicpath + '/img/';
+CARPETA_PDF = publicpath + '/pdf/';
+CARPETA_IMG = publicpath + '/attach/';
+console.log(CARPETA_PDF);
 console.log(CARPETA_IMG);
 
 // servidor escuchando puerto 3040
@@ -241,22 +243,23 @@ app.post('/soloEnviarCorreo',
 app.post('/grabadocumentos',
     function(req, res) {
         // los parametros
-        var carro = req.body.carro;
-        var modalidad = req.body.modalidad;
-        var tipodoc = req.body.tipodoc || 'PRE'; /* PRE, NVV, COV */
-        var xObs = req.body.cObs || '';
-        var xOcc = req.body.cOcc || ''; // incorporada 27/07/2018, se modifica ktp_encabezado -> occ varchar(40)
+        let carro = req.body.carro;
+        let modalidad = req.body.modalidad;
+        let tipodoc = req.body.tipodoc || 'PRE'; /* PRE, NVV, COV */
+        let xObs = req.body.cObs || '';
+        let xOcc = req.body.cOcc || ''; // incorporada 27/07/2018, se modifica ktp_encabezado -> occ varchar(40)
         let nKm = req.body.nKM || ''; // agregada el 21/10/2020, se modifica encabezado -> kilometraje varchar(20)
+        let sucOrigen = req.body.sucOrigen || ''; // agregada el 13/09/2021, 
         // const suc_destino = req.body.sucursalDestino || '';
         // variables
-        var xhoy = new Date();
-        var hora = xhoy.getTime();
+        let xhoy = new Date();
+        let hora = xhoy.getTime();
         //
-        var lineas = '';
-        var htmlBody = '';
-        var mailList = [];
-        var x1 = '';
-        var x2 = '',
+        let lineas = '';
+        let htmlBody = '';
+        let mailList = [];
+        let x1 = '';
+        let x2 = '',
             rsocial = '',
             copiasadic = '',
             nombreVend = '',
@@ -284,17 +287,18 @@ app.post('/grabadocumentos',
                     --
                     insert into ktp_encabezado (empresa,cliente,suc_cliente,vendedor,
                                                 fechaemision,monto,observacion,occ,kilometraje,modalidad,valido,
-                                                fechaentrega,horainicio,horafinal) 
+                                                fechaentrega,horainicio,horafinal,suc_origen) 
                                         values ('${carro[0].empresa}','${carro[0].cliente}','${carro[0].suc_cliente}','${carro[0].vendedor}',
                                                 getdate(),0,'${xObs.trim()}','${xOcc.trim()}','${nKm.toString()}','${modalidad}','',
-                                                getdate(),'${hora}','${hora}' ) ;
+                                                getdate(),'${hora}','${hora}','${sucOrigen}' ) ;
                     --
                     set @id = IDENT_CURRENT('ktp_encabezado');
                     --
                     %%%%detalle%%%%
                     --
                     update ktp_encabezado set monto=( select sum((d.cantidad1*d.precio)-d.descuentos) 
-                                                    from ktp_detalle as d where d.id_preventa=ktp_encabezado.id_preventa )  
+                                                      from ktp_detalle as d 
+                                                      where d.id_preventa=ktp_encabezado.id_preventa )  
                     where id_preventa=@id ;
                     --
 
@@ -795,6 +799,14 @@ app.post('/proalma',
             query = "exec " + xsp + " '" + xdatos.codproducto + "','" + xdatos.empresa + "' ;";
             _Activity.registra(sql, xusuario.codigo, xsp, xdatos.empresa);
             //        
+        } else if (xsp == 'ksp_BuscarNvv') {
+            //
+            if (xdatos.numero == undefined) { xdatos.numero = ''; } else { xdatos.numero = xdatos.numero.trim(); }
+            if (xdatos.empresa == undefined) { xdatos.empresa = '01'; } else { xdatos.empresa = xdatos.empresa.trim(); }
+            //
+            query = "exec " + xsp + " '" + xdatos.numero + "','" + xdatos.empresa + "' ;";
+            _Activity.registra(sql, xusuario.codigo, xsp, xdatos.empresa);
+            //               
         }
 
         conex
@@ -1031,6 +1043,9 @@ app.post('/imgUp',
             //
             const newPath = req.file.destination + req.file.originalname;
             const oldPath = req.file.path;
+            console.log(newPath);
+            console.log(oldPath);
+
             try {
                 // borrar antes de grabar
                 if (fileExist.sync(newPath)) {
@@ -1042,7 +1057,7 @@ app.post('/imgUp',
             }
             fs.renameSync(oldPath, newPath);
             // 
-            servicios.saveDefinitionIMG(sql, req.body.name, req.body.extension, req.body.usuario)
+            servicios.saveDefinitionIMG(sql, req.body.name, req.body.extension, req.body.usuario, req.body.idmaeedo)
                 .then(() => {
                     return res.status(200).json({ resultado: 'ok', mensaje: 'Imagen se guardó' });
                 })
@@ -1055,11 +1070,38 @@ app.post('/imgUp',
             next(e);
         }
     });
-
-app.post('/getimage',
+app.post('/dettachFile',
+    async(req, res, next) => {
+        //
+        const newPath = '/opt/zsventas/server/public/attach/' + req.body.data.imgb64;
+        console.log(req.body);
+        console.log(newPath);
+        console.log(fileExist.sync(newPath));
+        //
+        try {
+            // borrar archivo y borrar de tabla
+            if (fileExist.sync(newPath)) {
+                fs.unlinkSync(newPath);
+                servicios.deleteDefinitionIMG(sql, req.body.data.imgb64, req.body.data.idmaeedo)
+                    .then(() => {
+                        res.status(200).json({ resultado: 'ok', mensaje: 'Imagen se eliminó' });
+                    })
+                    .catch(function(error) {
+                        res.status(500).json({ resultado: 'error', datos: error });
+                    });
+                //
+            } else {
+                res.status(400).json({ resultado: 'error', mensaje: 'Imagen no existe' });
+            }
+            //file removed
+        } catch (err) {
+            console.error(err);
+        }
+    });
+app.post('/getimages',
     function(req, res) {
         //
-        servicios.getImage(sql, req.body)
+        servicios.getImages(sql, req.body.datos)
             .then(function(data) {
                 //
                 if (data.resultado === 'ok') {
@@ -1077,3 +1119,101 @@ app.post('/getimage',
             });
     });
 //---------------------------------- multer funcionó
+
+const contruyeHTML = async(encabezado, obs, adjuntos, xHTML) => {
+    //
+    // obtener el detalle del documento
+    console.log('antes->', xHTML);
+    //
+    return new Promise(resolve => {
+            // variables por empresa
+            xHTML = xHTML.replace('###-codCliente-###', encabezado[0].ENDO);
+            xHTML = xHTML.replace('###-rsocial-###', encabezado[0].NOKOEN);
+            xHTML = xHTML.replace('###-nombreVend-###', encabezado[0].NOKOFU);
+            xHTML = xHTML.replace('###-cCorreoVend-###', encabezado[0].EMAIL);
+            xHTML = xHTML.replace('###-documento-###', encabezado[0].TIDO + '-' + encabezado[0].NUDO);
+            xHTML = xHTML.replace('###-cFonoVend-###', encabezado[0].FOFU);
+            xHTML = xHTML.replace('###-cObs-###', obs);
+            // 
+            console.log("largo: ", adjuntos.length)
+            if (adjuntos.length > 0) {
+                let det = '<table border="0">';
+                adjuntos.forEach(elem => {
+                    if (elem.pdf === true) {
+                        det += `
+                        <tr>
+                            <td>
+                            <a href="${ elem.imgb64 }" target="_blank">PDF Adjunto ${ elem.pdf_name } </a>
+                            </td>
+                        </tr>
+                        `;
+                    } else {
+                        det += `
+                        <tr>
+                            <td>
+                            <img src="${ elem.imgb64 }" alt="imagenes" />
+                            </td>
+                        </tr>
+                        `;
+                    }
+                });
+                det += `
+                </table>
+                <br>
+                `;
+                xHTML = xHTML.replace('###-adjuntos-###', det);
+            } else {
+                xHTML = xHTML.replace('###-adjuntos-###', '');
+            }
+            //
+            const filenameHTM = `attach_${encabezado[0].TIDO}${encabezado[0].NUDO}.html`;
+            const fullpathHTM = path.join(CARPETA_PDF, filenameHTM);
+            //
+            fs.writeFile(fullpathHTM, xHTML, { encoding: 'utf-8' }, errData => {
+                if (!errData) {
+                    if (fileExist.sync(fullpathHTM)) {
+                        console.log('exito-> archivo no existe->', fullpathHTM);
+                        // El archivo no se necesita para convertirlo a PDF, basta pasarle el contenido html
+                        resolve(xHTML);
+                    }
+                } else {
+                    console.log('error en 581->', errData);
+                    // throw Error(errData);
+                    resolve();
+                }
+            });
+        },
+        reject => {
+            reject('Algo pasó....');
+        }
+    )
+};
+
+app.post('/soloEnviarAdjuntos',
+    async(req, res) => {
+        //
+        const xTo = req.body.cTo;
+        const xCc = req.body.cCc || '';
+        const tipo = req.body.tipo;
+        const numero = req.body.numero;
+        const vendedor = req.body.vendedor;
+        const obs = req.body.obs;
+        const adjuntos = JSON.parse(req.body.adjuntos);
+        //
+        const mailList = [];
+        //
+        _Activity.registra(sql, vendedor, 'soloEnviarAdjuntos', xTo, xCc, '');
+        //
+        console.log('correo soloEnviarAdjuntos', xTo);
+        console.log('correo soloEnviarAdjuntos', adjuntos);
+        //
+        mailList.push({ cc: xCc, to: xTo });
+        //
+        let htmlBody = await correos.adjuntos();
+        const datos = await servicios.buscaDatos(sql, '01', tipo, numero);
+        console.log(datos);
+        htmlBody = await contruyeHTML(datos.datos, obs, adjuntos, htmlBody);
+        //
+        correos.enviarCorreo(res, nodemailer, mailList, htmlBody);
+        //
+    });

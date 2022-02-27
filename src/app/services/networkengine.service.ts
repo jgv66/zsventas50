@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NetworkengineService {
 
-  url = 'https://zsmotorapps.cl/appventas';
+  url = environment.API_URL;
 
   constructor( private http: HttpClient ) {
     console.log('<<< NetworkengineService >>>');
@@ -17,6 +18,12 @@ export class NetworkengineService {
     const accion = '/soloEnviarCorreo';
     const url    = this.url  + accion;
     const body   = { carro: pCarro, cTo, cCc, cObs: cTextoObs, cotizar: soloCotizar };
+    return this.http.post( url, body );
+  }
+
+  soloEnviarAdjuntos( body )  {
+    console.log('soloEnviarAdjuntos()->', body);
+    const url  = this.url + '/soloEnviarAdjuntos';
     return this.http.post( url, body );
   }
 
@@ -35,6 +42,12 @@ export class NetworkengineService {
     return this.http.post( url, body );
   }
 
+  consultaEstandarGet( cSP: string ) {
+    const accion = '/' + cSP;
+    const url    = this.url + accion;
+    return this.http.get( url );
+  }
+
   rescataSeteoCliente() {
     const accion = '/seteocliente';
     const url    = this.url  + accion;
@@ -42,10 +55,10 @@ export class NetworkengineService {
     return this.http.post( url, body );
   }
 
-  grabarDocumentos( pCarro, pModalidad, cTipodoc, cTextoObs, cTextoOcc, cKilometraje )  {
+  grabarDocumentos( pCarro, pModalidad, cTipodoc, cTextoObs, cTextoOcc, cKilometraje, sucursalOrigen )  {
     const accion = '/grabadocumentos';
     const url    = this.url  + accion;
-    const body   = { carro: pCarro, modalidad: pModalidad, tipodoc: cTipodoc, cObs: cTextoObs, cOcc: cTextoOcc, nKM: cKilometraje };
+    const body   = { carro: pCarro, modalidad: pModalidad, tipodoc: cTipodoc, cObs: cTextoObs, cOcc: cTextoOcc, nKM: cKilometraje, sucOrigen: sucursalOrigen };
     return this.http.post( url, body );
   }
 

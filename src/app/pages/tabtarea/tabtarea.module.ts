@@ -9,6 +9,8 @@ import { TabtareaPage } from './tabtarea.page';
 import { ComponentsModule } from '../../components/components.module';
 import { MedidasnuevasPageModule } from '../medidasnuevas/medidasnuevas.module';
 import { MedidasnuevasPage } from '../medidasnuevas/medidasnuevas.page';
+import { AdjuntarrecepcionesPage } from '../adjuntarrecepciones/adjuntarrecepciones.page';
+import { AdjuntarrecepcionesPageModule } from '../adjuntarrecepciones/adjuntarrecepciones.module';
 
 const routes: Routes = [
   {
@@ -18,14 +20,15 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  entryComponents: [ MedidasnuevasPage ],
+  entryComponents: [ MedidasnuevasPage, AdjuntarrecepcionesPage ],
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),    
     ComponentsModule,
-    MedidasnuevasPageModule
+    MedidasnuevasPageModule,
+    AdjuntarrecepcionesPageModule
   ],
   declarations: [TabtareaPage]
 })

@@ -1,8 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
-import { FuncionesService } from '../../services/funciones.service';
-import { BaselocalService } from '../../services/baselocal.service';
 import { Router } from '@angular/router';
 import { AlertController, ModalController, IonList, IonCardContent } from '@ionic/angular';
+
+import { FuncionesService } from '../../services/funciones.service';
+import { BaselocalService } from '../../services/baselocal.service';
 import { NetworkengineService } from '../../services/networkengine.service';
 import { BuscarvendedorPage } from '../buscarvendedor/buscarvendedor.page';
 import { AvisoservicioPage } from '../avisoservicio/avisoservicio.page';
@@ -15,13 +16,13 @@ import { AvisoservicioPage } from '../avisoservicio/avisoservicio.page';
 export class TabcarritoPage {
 
   @ViewChild('lista', { static: false }) lista: IonList;
+  @ViewChild( 'filtros', {static: false} ) filt: IonCardContent;
 
   collapsedOcc  = true;
   collapsedObs  = true;
   collapsedKM   = true;
   collapsedSave = true;
-
-  @ViewChild( 'filtros', {static: false} ) filt: IonCardContent;
+  collapsedSuc  = true;
 
   enviando = false;
   queHacerConCarrito = 'Acción a realizar?';
@@ -31,22 +32,26 @@ export class TabcarritoPage {
   cTo = '';
   cCc = '';
 
+  sucOrigen = '';
+
   constructor( public funciones: FuncionesService,
                public baseLocal: BaselocalService,
                private netWork: NetworkengineService,
                private alertCtrl: AlertController,
                private modalCtrl: ModalController,
-               private router: Router ) { }
+               private router: Router ) { 
+    this.sucOrigen = this.baseLocal.user.KOSU;
+  }
 
   toggleAccordion( caso ) {
     if ( caso === 1 ) {
-      this.collapsedOcc = ! this.collapsedOcc;
+      this.collapsedSuc = !this.collapsedSuc;
     } else if ( caso === 2 ) {
-      this.collapsedObs = ! this.collapsedObs;
+      this.collapsedObs = !this.collapsedObs;
     } else if ( caso === 3 ) {
-      this.collapsedKM = ! this.collapsedKM;
+      this.collapsedKM = !this.collapsedKM;
     } else if ( caso === 4 ) {
-      this.collapsedSave = ! this.collapsedSave;
+      this.collapsedSave = !this.collapsedSave;
     }
   }
 
@@ -128,7 +133,7 @@ export class TabcarritoPage {
   }
   enviarCarrito( cTipoDoc ) {
     this.enviando = true;
-    this.netWork.grabarDocumentos( this.funciones.miCarrito, this.baseLocal.user.MODALIDAD, cTipoDoc, this.textoObs, this.textoOcc, this.cantidadKM.toString() )
+    this.netWork.grabarDocumentos( this.funciones.miCarrito, this.baseLocal.user.MODALIDAD, cTipoDoc, this.textoObs, this.textoOcc, this.cantidadKM.toString(), this.sucOrigen )
         .subscribe( data => { this.enviando = false;
                               this.revisaExitooFracaso( data ); },
                     err  => { this.enviando = false;
@@ -149,6 +154,7 @@ export class TabcarritoPage {
           this.funciones.miCarrito = [];
           this.funciones.initCarro();
           this.funciones.refreshCarrito(); // next method updates the stream value
+          this.sucOrigen = this.baseLocal.user.KOSU;
           //
           this.router.navigate(['/tabs/inicio']);
           //

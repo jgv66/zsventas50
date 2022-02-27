@@ -1,10 +1,17 @@
 <ion-header>
     <ion-toolbar color="dark">
         <ion-buttons slot="start">
-            <ion-back-button text=' '></ion-back-button>
+            <ion-button (click)="salir()">
+                <ion-icon slot="icon-only" name="arrow-back-outline"></ion-icon>
+            </ion-button>
         </ion-buttons>
         <img src="./assets/imgs/logo-zs.png" alt="" class="navbar-img">
-        <ion-title>Detalle del documento</ion-title>
+        <ion-title>Documento</ion-title>
+        <ion-buttons slot="end" *ngIf=" detalle[0].attached ">
+            <ion-button (click)="verAdjuntos( detalle[0] )">
+                <ion-icon slot="icon-only" name="document-attach-outline"></ion-icon>
+            </ion-button>
+        </ion-buttons>
     </ion-toolbar>
 </ion-header>
 

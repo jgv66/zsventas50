@@ -77,7 +77,7 @@ export class CrearnviPage implements OnInit {
                           listapre: this.item.producto.listaprecio,
                           metodolista: this.item.producto.metodolista }];
       //
-      this.netWork.grabarDocumentos( miCarrito, this.baseLocal.user.MODALIDAD, 'NVI', 'Solicitud desde KTP', '', '' )
+      this.netWork.grabarDocumentos( miCarrito, this.baseLocal.user.MODALIDAD, 'NVI', 'Solicitud desde KTP', '', '', this.item.producto.sucursal )
           .subscribe( data => { this.grabando = false;
                                 this.revisaExitooFracaso( data ); },
                       err  => { this.grabando = false;

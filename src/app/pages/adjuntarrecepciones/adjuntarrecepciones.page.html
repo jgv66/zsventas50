@@ -1,0 +1,91 @@
+<ion-header>
+    <ion-toolbar color="dark">
+        <ion-buttons slot="start">
+            <ion-button (click)="salir()">
+                <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <img src="./assets/imgs/logo-zs.png" alt="" class="navbar-img">
+        <ion-title class="ion-text-center">Adjuntar recepción</ion-title>
+    </ion-toolbar>
+    <ion-grid>
+        <ion-row style="max-height: 42px;margin-top:10px;">
+            <ion-col size="9" style="max-height: 40px;top:-14px;">
+                <ion-searchbar mode="ios" animated search-icon="x" type="text" name="numero" [(ngModel)]="numero" showCancelButton="focus" cancelButtonText=" " placeholder="Digite Nro. NVV..."></ion-searchbar>
+            </ion-col>
+            <ion-col size="3" style="height: 32px; padding-top: 0px;">
+                <ion-button expand="block" (click)="aBuscarNvv()" style="height:32px;">
+                    Buscar
+                </ion-button>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-header>
+
+<ion-progress-bar *ngIf=" cargando " type="indeterminate"></ion-progress-bar>
+
+<ion-content class="animated fadeIn">
+
+    <ion-list>
+        <ion-item *ngFor="let nvv of notas">
+            <ion-grid fixed>
+                <ion-row class="mas-junto">
+                    <ion-col size="7">
+                        <ion-item lines="none">
+                            <ion-label><b>{{ nvv.td }}: {{ nvv.numero }}</b></ion-label>
+                        </ion-item>
+                    </ion-col>
+                    <ion-col size="5">
+                        <ion-item lines="none">
+                            <ion-label><b>${{ nvv.monto | number:"1.0-0" }}</b></ion-label>
+                        </ion-item>
+                    </ion-col>
+                </ion-row>
+                <ion-row class="mas-junto">
+                    <ion-col size="12">
+                        <ion-item style="font-size: 100%;" lines="none">
+                            <!-- <ion-icon class="icono" slot="start" size="small" name="car-outline"></ion-icon> -->
+                            <ion-label><b>{{ nvv.cliente }} </b></ion-label>
+                        </ion-item>
+                    </ion-col>
+                </ion-row>
+                <ion-row class="mas-junto">
+                    <ion-col size="7">
+                        <ion-item style="font-size: 80%;" lines="none">
+                            <ion-icon class="icono" slot="start" size="small" name="calendar-outline"></ion-icon>
+                            <ion-label><b>{{ nvv.emision }} - {{ nvv.lahora.substring(0,5) }} </b></ion-label>
+                        </ion-item>
+                    </ion-col>
+                    <ion-col size="5">
+                        <ion-item lines="none">
+                            <ion-icon class="icono" slot="start" size="small" [name]=" ( nvv.estado === 'Cerrada' ) ? 'lock-closed-outline' : 'lock-open-outline' "></ion-icon>
+                            <ion-label style="font-size: 80%;"><b>{{ nvv.estado }}</b></ion-label>
+                        </ion-item>
+                    </ion-col>
+                </ion-row>
+                <ion-row class="mas-junto">
+                    <ion-col size="9">
+                        <ion-item lines="none">
+                            <ion-icon class="icono" slot="start" size="small" name="person-outline"></ion-icon>
+                            <ion-label style="font-size: 80%;"><b>{{ nvv.nombrevendedor }}</b></ion-label>
+                        </ion-item>
+                    </ion-col>
+                </ion-row>
+                <ion-row style="margin-top: 25px;">
+                    <ion-col size="4" *ngIf=" nvv.attached > 0 " style="margin-right: 0px;">
+                        <ion-button (click)="verAdjuntos( nvv )" expand="block" size="small">
+                            {{ nvv.attached | number:"1.0-0" }} Adjunto{{ nvv.attached>1 ? 's' : '' }}
+                        </ion-button>
+                    </ion-col>
+                    <ion-col size="8">
+                        <ion-button (click)="adjuntarArchivos( nvv.id )" expand="block" size="small">
+                            Adjuntar archivo o Tomar foto
+                        </ion-button>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+
+        </ion-item>
+    </ion-list>
+
+</ion-content>

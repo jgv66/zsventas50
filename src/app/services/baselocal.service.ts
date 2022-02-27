@@ -15,6 +15,7 @@ export class BaselocalService {
   empresa: number;
   soloCotizar = false;
   lasMarcas = [];
+  lasSucursales = [];
 
   constructor() {
     console.log('<<< BaseLocalProvider >>>');

@@ -1,8 +1,11 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { ModalController } from '@ionic/angular';
+
 import { BaselocalService } from '../../services/baselocal.service';
 import { NetworkengineService } from '../../services/networkengine.service';
 import { FuncionesService } from '../../services/funciones.service';
+import { DocumentoPage } from '../documento/documento.page';
 
 @Component({
   selector: 'app-ultimosdocs',
@@ -18,6 +21,7 @@ export class UltimosdocsPage implements OnInit {
 
   constructor( public baseLocal: BaselocalService,
                private router: Router,
+               private modalCtrl: ModalController,
                private parametros: ActivatedRoute,
                private netWork: NetworkengineService,
                private funciones: FuncionesService ) {
@@ -25,6 +29,13 @@ export class UltimosdocsPage implements OnInit {
   }
 
   ngOnInit() {
+    // if ( !this.baseLocal.user ) {
+    //   this.router.navigateByUrl('/login');
+    // }
+    this.traeDocumentos();
+  }
+
+  traeDocumentos() {
     this.buscando = true;
     this.netWork.traeUnSP(  'ksp_traeUltimosDocs',
                             { cliente: this.baseLocal.cliente.codigo,
@@ -35,8 +46,9 @@ export class UltimosdocsPage implements OnInit {
         .subscribe( data => { this.revisa( data );           },
                     err  => { this.funciones.msgAlert( 'ATENCION', err ); });
   }
+  
   revisa( data ) {
-    console.log(data);
+    // console.log(data);
     this.buscando = false;
     const rs = data;
     if ( data === undefined || data.length === 0 ) {
@@ -46,8 +58,16 @@ export class UltimosdocsPage implements OnInit {
     }
   }
 
-  muestraID( id ) {
-    this.router.navigate( ['/tabs/documento/' + id.toString() ]);
+
+  // muestraID( id ) {
+  //   this.router.navigate( ['/tabs/documento/' + id.toString() ]);
+  // }
+  async muestraID( id ) {
+    const modal = await this.modalCtrl.create({
+      component: DocumentoPage,
+      componentProps: { id }
+    });
+    await modal.present();
   }
 
 }

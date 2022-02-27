@@ -38,24 +38,24 @@ export class TabusuarioPage implements OnInit {
     if ( !this.baseLocal.user ) {
       this.router.navigateByUrl('/login');
     }
-    this.getMyImage()
+    // this.getMyImage()
     this.getMisVentas();
     this.getMisContribuciones();
   }
   
-  getMyImage() {
-    this.netWork.consultaEstandar( 'getimage',
-                                   { usuario: this.baseLocal.user.KOFU },
-                                   { codigo:  this.baseLocal.user.KOFU,
-                                     nombre:  this.baseLocal.user.NOKOFU } )
-        .subscribe( data => { this.miImagen( data );           },
-                    err  => { this.funciones.msgAlert( 'ATENCION', err ); });    
-  }
-  miImagen( data ) {
-    if ( data.resultado === 'ok') {
-      this.miFoto = this.funciones.url + '/static/img/' + data.datos[0].image_name;
-    }
-  }
+  // getMyImage() {
+  //   this.netWork.consultaEstandar( 'getimage',
+  //                                  { usuario: this.baseLocal.user.KOFU },
+  //                                  { codigo:  this.baseLocal.user.KOFU,
+  //                                    nombre:  this.baseLocal.user.NOKOFU } )
+  //       .subscribe( data => { this.miImagen( data );           },
+  //                   err  => { this.funciones.msgAlert( 'ATENCION', err ); });    
+  // }
+  // miImagen( data ) {
+  //   if ( data.resultado === 'ok') {
+  //     this.miFoto = this.funciones.url + '/static/img/' + data.datos[0].image_name;
+  //   }
+  // }
 
   doRefresh(event) {
     this.deberes = [];
@@ -165,10 +165,10 @@ export class TabusuarioPage implements OnInit {
   }
 
   async tomarFoto() {
-    // Take a photo
-    await this.funciones.addImage( this.baseLocal.user.KOFU );
-    // console.log(this.funciones.xfoto);
-    this.miFoto = ( this.funciones.xfoto === undefined ) ? this.miFoto : this.funciones.xfoto;
+    // // Take a photo
+    // await this.funciones.addImage( this.baseLocal.user.KOFU );
+    // // console.log(this.funciones.xfoto);
+    // this.miFoto = ( this.funciones.xfoto === undefined ) ? this.miFoto : this.funciones.xfoto;
   }
 
   async opcionFechas( event ) {

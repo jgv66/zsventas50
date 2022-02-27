@@ -106,27 +106,28 @@
             </ion-item>
         </ion-item-sliding>
 
-        <!-- orden de compra -->
-        <!-- <ion-card style="margin: 10px;">
+        <!-- sucursal del documento -->
+        <ion-card style="margin: 10px; margin-bottom: 15px;">
             <ion-card-header (click)="toggleAccordion(1)">
-                <ion-card-title class="ion-text-left">OC Cliente
-                    <ion-icon style="margin-left: 50px" mode="ios" [name]=" (collapsedOcc) ? 'arrow-forward' : 'arrow-down' "></ion-icon>
+                <ion-card-title class="ion-text-left header90">Sucursal del documento
+                    <ion-icon style="margin-left: 16px" mode="ios" [name]=" (collapsedSuc) ? 'chevron-forward-outline' : 'chevron-down-outline' "></ion-icon>
                 </ion-card-title>
             </ion-card-header>
-            <ion-card-content [ngClass]="{ 'collapsed': collapsedOcc }" style="padding: 0px">
+            <ion-card-content [ngClass]="{ 'collapsed': collapsedSuc }" style="padding: 0px">
                 <ion-item>
-                    <ion-label>Número de OCC: </ion-label>
-                    <ion-input type="text" name="textoOcc" [(ngModel)]="textoOcc"></ion-input>
+                    <ion-label style="width: 120px;">Sucursal</ion-label>
+                    <ion-select name="sucOrigen" [(ngModel)]="sucOrigen" interface="popover" mode="ios" style="max-width: 100% !important;">
+                        <ion-select-option *ngFor="let s of baseLocal.lasSucursales" value="{{ s.sucursal }}">{{ s.nombre }}</ion-select-option>
+                    </ion-select>
                 </ion-item>
             </ion-card-content>
-        </ion-card> -->
+        </ion-card>
 
         <!-- observaciones -->
-        <ion-card style="margin: 10px; margin-bottom: 15px;">
-            <!-- <h5 style="margin-left: 10px;"><b>Observaciones</b></h5> -->
+        <ion-card style="margin: 10px; margin-bottom: 15px !important;">
             <ion-card-header (click)="toggleAccordion(2)">
-                <ion-card-title class="ion-text-left">Observaciones
-                    <ion-icon style="margin-left: 50px" mode="ios" [name]=" (collapsedObs) ? 'arrow-forward' : 'arrow-down' "></ion-icon>
+                <ion-card-title class="ion-text-left header90">Observaciones
+                    <ion-icon style="margin-left: 16px;" mode="ios" [name]=" (collapsedObs) ? 'chevron-forward-outline' : 'chevron-down-outline' "></ion-icon>
                 </ion-card-title>
             </ion-card-header>
             <ion-card-content [ngClass]="{ 'collapsed': collapsedObs }" style="padding: 0px">
@@ -142,10 +143,9 @@
 
         <!-- que se graba? -->
         <ion-card style="margin: 10px;" *ngIf=" sumaCarrito() > 0 ">
-            <!-- <h5 style="margin-left: 10px;"><b>Opciones de grabación</b></h5> -->
             <ion-card-header (click)="toggleAccordion(4)">
-                <ion-card-title class="ion-text-left">Opción de grabación
-                    <ion-icon style="margin-left: 50px" mode="ios" [name]=" (collapsedSave) ? 'arrow-forward' : 'arrow-down' "></ion-icon>
+                <ion-card-title class="ion-text-left header90">Opción de grabación
+                    <ion-icon style="margin-left: 16px" mode="ios" [name]=" (collapsedSave) ? 'chevron-forward-outline' : 'chevron-down-outline' "></ion-icon>
                 </ion-card-title>
             </ion-card-header>
             <ion-card-content [ngClass]="{ 'collapsed': collapsedSave }" style="padding: 0px">

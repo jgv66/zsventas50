@@ -23,6 +23,7 @@ BEGIN
 				,en.NOKOEN as cliente
 				,convert( nvarchar(10),ddo.FEEMLI,103) as fecha
 				,rtrim(fu.NOKOFU) as nombre_v
+				,( select COUNT(*) from ktb_documentos_attach as att with (nolock) where att.idmaeedo = ddo.IDMAEEDO and estado = 0 ) as attached
 		from MAEDDO		AS ddo with (nolock)
 		left join MAEEN as en  with (nolock) on en.KOEN=ddo.ENDO and en.SUEN = ddo.SUENDO
 		left join TABFU as fu  with (nolock) on fu.KOFU=ddo.KOFULIDO 
@@ -44,6 +45,7 @@ BEGIN
 						,(case when ddo.UDTRPR = 1 then ddo.PPPRNERE1 else ddo.PPPRNERE2 END ) as netolinea
 						,en.NOKOEN as cliente
 						,convert( nvarchar(10),ddo.FEEMLI,103) as fecha
+						,( select COUNT(*) from ktb_documentos_attach as att with (nolock) where att.idmaeedo = ddo.IDMAEEDO and estado = 0 ) as attached
 				from MAEDDO AS ddo with (nolock)
 				left join MAEEN as en  with (nolock) on en.KOEN=ddo.ENDO and en.SUEN = ddo.SUENDO
 				where ddo.EMPRESA=@empresa
@@ -61,6 +63,7 @@ BEGIN
 						,(case when ddo.UDTRPR = 1 then ddo.PPPRNERE1 else ddo.PPPRNERE2 END ) as netolinea
 						,en.NOKOEN as cliente
 						,convert( nvarchar(10),ddo.FEEMLI,103) as fecha
+						,( select COUNT(*) from ktb_documentos_attach as att with (nolock) where att.idmaeedo = ddo.IDMAEEDO and estado = 0 ) as attached
 				from MAEDDO AS ddo with (nolock)
 				left join MAEEN as en  with (nolock) on en.KOEN=ddo.ENDO and en.SUEN = ddo.SUENDO
 				where ddo.EMPRESA=@empresa
@@ -79,6 +82,7 @@ BEGIN
 					,(case when ddo.UDTRPR = 1 then ddo.PPPRNERE1 else ddo.PPPRNERE2 END ) as netolinea
 					,en.NOKOEN as cliente
 					,convert( nvarchar(10),ddo.FEEMLI,103) as fecha
+					,( select COUNT(*) from ktb_documentos_attach as att with (nolock) where att.idmaeedo = ddo.IDMAEEDO and estado = 0 ) as attached
 			from MAEDDO AS ddo with (nolock)
 			left join MAEEN as en  with (nolock) on en.KOEN=ddo.ENDO and en.SUEN = ddo.SUENDO
 			where ddo.EMPRESA=@empresa
@@ -87,7 +91,5 @@ BEGIN
 			order by ddo.FEEMLI desc;
 		end;
 	end;
-
-END
-
--- AICUBVOL00191
+END;
+go

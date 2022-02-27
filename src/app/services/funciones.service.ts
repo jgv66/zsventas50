@@ -7,13 +7,15 @@ import { Subject, Observable } from 'rxjs';
 
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Storage } from '@capacitor/storage';
+import { environment } from '../../environments/environment.prod';
+import { NetworkengineService } from './networkengine.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FuncionesService {
   
-  url = 'https://zsmotorapps.cl/appventas';
+  url = environment.API_URL;
 
   listSizeSubject: Subject<number>;
   misCompras: Observable<number>;
@@ -48,6 +50,7 @@ export class FuncionesService {
                 private alertCtrl: AlertController,
                 private toastCtrl: ToastController,
                 private baseLocal: BaselocalService,
+                private network: NetworkengineService,
                 private http: HttpClient ) {
       //
       console.log('<<< FuncionesService >>>');
@@ -380,7 +383,7 @@ export class FuncionesService {
     }
   }
 
-  async addImage( usrCode ) {
+  async addImage( usrCode, idmaeedo ) {
     //
     this.xfoto = undefined;
     //
@@ -400,25 +403,30 @@ export class FuncionesService {
       this.xfoto = 'data:image/jpeg;base64,'+ image.base64String;
       //
       const blobData  = this.b64toBlob(image.base64String, `image/${image.format}`);
-      const imageName = usrCode +'.'+ image.format ;
+      const id_imagen = ( ( new Date() ).getTime() ).toString();
+      const imageName = usrCode+'-'+id_imagen+'.'+ image.format ;
       //
-      this.uploadImageBlob( blobData, imageName, image.format, usrCode )
+      this.uploadImageBlob( blobData, imageName, image.format, usrCode, idmaeedo )
         .subscribe((newImage) => {
           console.log(newImage);
+          return newImage;
         });
+    } else {
+      return null;
     }
+
   }
 
-  uploadImageBlob(blobData, name, ext, usr ) {
+  uploadImageBlob(blobData, name, ext, usr, idmaeedo ) {
     //
     const url = this.url + '/imgUp';
     //
     const formData = new FormData();
     formData.append('kfoto', blobData, name );
-    formData.append('name',      name);
-    
-    formData.append('extension', ext);
-    formData.append('usuario',   usr );    
+    formData.append('name',      name       );
+    formData.append('idmaeedo',  idmaeedo   );
+    formData.append('extension', ext        );
+    formData.append('usuario',   usr        );    
     //
     console.log('uploadImageBlob->',formData);
     return this.http.post( url, formData );
@@ -471,4 +479,12 @@ export class FuncionesService {
     return ret.value;
   }
 
+  leerSucursales() {
+    this.network.consultaEstandarGet('ws/sucursales')
+        .subscribe( (sucs:any) => {
+          // console.log(sucs);
+          this.baseLocal.lasSucursales = sucs.datos;
+        });
+  }
+  
 }

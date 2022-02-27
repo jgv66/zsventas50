@@ -8,7 +8,7 @@
         <ion-title class="ion-text-center">App ZS Motor</ion-title>
         <ion-buttons slot="end">
             <ion-button (click)="ConfiguracionLocal()">
-                <ion-icon slot="icon-only" name="menu"></ion-icon>
+                <ion-icon slot="icon-only" name="person-outline"></ion-icon>
             </ion-button>
         </ion-buttons>
     </ion-toolbar>
@@ -80,18 +80,7 @@
                 <ion-card style="font-size:90%;margin-top:10px;margin-bottom:10px;margin-left:5px;margin-right:5px;">
 
                     <ion-card-header *ngIf=" baseLocal.config.imagenes " class="ion-no-padding">
-                        <img src="https://zsmotor.cl/storage/mobile/{{ producto.codigo }}/img_1.jpg" loading="lazy" onerror=" this.src='assets/imgs/no-img.png' " />
-                        <!-- <ion-slides pager="true" [options]="slideOpts">
-                            <ion-slide>
-                                <img src="https://zsmotor.cl/storage/mobile/{{ producto.codigo }}/img_1.jpg" loading="lazy" onerror=" this.src='assets/imgs/no-img.png' " />
-                            </ion-slide>
-                            <ion-slide>
-                                <img src="https://zsmotor.cl/storage/mobile/{{ producto.codigo }}/img_2.jpg" loading="lazy" onerror=" this.src='assets/imgs/no-img.png' " />
-                            </ion-slide>
-                            <ion-slide>
-                                <img src="https://zsmotor.cl/storage/mobile/{{ producto.codigo }}/img_3.jpg" loading="lazy" onerror=" this.src='assets/imgs/no-img.png' " />
-                            </ion-slide>
-                        </ion-slides> -->
+                        <ion-img src="{{ producto.imagen | default:'assets/imgs/no-img.png' }}" loading="lazy"></ion-img>
                     </ion-card-header>
 
                     <ion-card-content class="ion-no-padding" style="font-size: 95%; ">
@@ -100,10 +89,10 @@
 
                             <ion-row style='max-height: 30px;'>
                                 <ion-col class="ion-text-left" [size]=" (config.codigotecnico===true) ? 5 : 10 ">
-                                    <h3><b>{{ producto.codigo }}</b></h3>
+                                    <h3 class="font90"><b>{{ producto.codigo }}</b></h3>
                                 </ion-col>
                                 <ion-col class="ion-text-left" size="5" *ngIf=" config.codigotecnico ">
-                                    <p><b>[T] {{ producto.codtecnico }}</b></p>
+                                    <p class="font90"><b>[T] {{ producto.codtecnico }}</b></p>
                                 </ion-col>
                                 <ion-col size="2" *ngIf=" !baseLocal.user.esuncliente ">
                                     <ion-button style="margin-top: -4px;" size="small" fill="clear" (click)="opcionPuntos( $event, producto )">
@@ -113,19 +102,21 @@
                             </ion-row>
                             <ion-row>
                                 <ion-col class="ion-text-left" size="12">
-                                    <p><b>{{ producto.descripcion }}</b></p>
+                                    <p class="font90"><b>{{ producto.descripcion }}</b></p>
                                 </ion-col>
                             </ion-row>
                             <ion-row *ngIf=" config.descripcionamplia && producto.ampliada !== producto.descripcion ">
                                 <ion-col class="ion-text-left" size="12">
-                                    <p>+<b>{{ producto.ampliada }}</b></p>
+                                    <p class="font90"><b>{{ producto.ampliada }}</b></p>
                                 </ion-col>
                             </ion-row>
                             <ion-row>
                                 <ion-col size="12" class="ion-text-wrap">
-                                    <p> Bodega: {{ producto.nombrebodega }}</p>
+                                    <p class="font90"> Bodega: {{ producto.nombrebodega }}</p>
                                 </ion-col>
                             </ion-row>
+
+                            <!-- stock's -->
                             <ion-row>
                                 <ion-col size="12">
                                     <ion-chip [color]=" producto.stock_ud1>0 ? 'primary' : 'danger'" (click)="cargaBodegas(producto)">
@@ -163,6 +154,7 @@
                                     <p>(<b>{{ producto.metodolista }}/{{ producto.listaprecio }}</b>)</p>
                                 </ion-col>
                             </ion-row>
+                            <!-- descuento -->
                             <ion-row *ngIf=" ( producto.descuentomax > 0 && !config.ocultardscto ) ">
                                 <ion-col size="4" class="ion-text-right">
                                     <p><s>Precio {{ producto.tipolista }}: </s></p>
@@ -174,7 +166,6 @@
                                     <p>(<b>{{ producto.metodolista }}/{{ producto.listaprecio }}</b>)</p>
                                 </ion-col>
                             </ion-row>
-                            <!-- descuento -->
                             <ion-row *ngIf=" producto.descuentomax > 0 && !config.ocultardscto ">
                                 <ion-col size="4" class="ion-text-right">
                                     <p>Descuento : </p>
@@ -233,3 +224,15 @@
     </ion-infinite-scroll>
 
 </ion-content>
+
+<!-- <ion-slides pager="true" [options]="slideOpts">
+    <ion-slide>
+        <img src="https://zsmotor.cl/storage/mobile/{{ producto.codigo }}/img_1.jpg" loading="lazy" onerror=" this.src='assets/imgs/no-img.png' " />
+    </ion-slide>
+    <ion-slide>
+        <img src="https://zsmotor.cl/storage/mobile/{{ producto.codigo }}/img_2.jpg" loading="lazy" onerror=" this.src='assets/imgs/no-img.png' " />
+    </ion-slide>
+    <ion-slide>
+        <img src="https://zsmotor.cl/storage/mobile/{{ producto.codigo }}/img_3.jpg" loading="lazy" onerror=" this.src='assets/imgs/no-img.png' " />
+    </ion-slide>
+</ion-slides> -->

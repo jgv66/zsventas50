@@ -99,7 +99,7 @@ module.exports = {
     //
     modifCliente: function(sql, body) {
         //
-        var query = "exec ksp_modifClientes '" + body.codigo + "','" + body.sucursal + "','" + body.email + "','" + body.nrocelu + "' ; ";
+        var query = `exec ksp_modifClientes '${body.codigo}','${body.sucursal}','${body.email}','${body.nrocelu}','${body.nombre}','${body.direccion}','${body.comuna}','${body.ciudad}' ;`;
         console.log(query);
         var request = new sql.Request();
         return request.query(query)
@@ -314,10 +314,12 @@ module.exports = {
             });
     },
     //
-    saveDefinitionIMG: function(sql, ib64, extension, usuario) {
+    saveDefinitionIMG: function(sql, ib64, extension, usuario, idmaeedo) {
         // 
-        var query = `insert into ktp_images ( usuario,        fechains,  img_exten,        img_name ) 
-                                     values ( '${ usuario }', getdate(), '${ extension }', '${ ib64 }' ) ;`;
+        const query = `
+                    insert into ktb_documentos_attach (idmaeedo, usuario, fechains, img_exten, img_name, estado )
+                      values( ${ idmaeedo }, '${ usuario }', getdate(), '${ extension }', '${ ib64 }', 0);
+                    `;
         console.log('saveIMG', query);
         const request = new sql.Request();
         return request.query(query)
@@ -332,21 +334,51 @@ module.exports = {
                 return { resultado: 'error', datos: err };
             });
     },
-    // 
-    getImage: function(sql, body) {
+    //
+    deleteDefinitionIMG: (sql, name, id) => {
         // --------------------------------------------------------------------------------------------------
         const query = `
-            if exists ( select * from ktp_images with (nolock) where usuario = '${ body.datos.usuario }' ) begin
-                select 'ok' as resultado, img_name as image_name
-                from ktp_images with (nolock) 
-                where usuario = '${ body.datos.usuario }';
+            if exists ( select * from ktb_documentos_attach with (nolock) where idmaeedo = ${ id } and img_name = '${ name }') begin
+                update ktb_documentos_attach set estado = 1
+                where idmaeedo = ${ id }
+                  and img_name = '${ name }'
             end
             else begin
-                select 'nodata' as resultado
-            end; 
+                select 'nodata' as resultado; 
+            end;
         `;
+        console.log(query);
         //
-        // console.log(query);
+        const request = new sql.Request();
+        return request.query(query)
+            .then(resultado => {
+                return resultado.recordset;
+            })
+            .catch(err => {
+                // console.log(err);
+                return { resultado: 'error', datos: err };
+            });
+    },
+    // 
+    getImages: function(sql, body) {
+        // --------------------------------------------------------------------------------------------------
+        const query = `
+            if exists ( select * from ktb_documentos_attach with (nolock) where idmaeedo = ${ body.idmaeedo } ) begin
+                select  'ok' as resultado
+                        ,img_name as imgb64
+                        ,'' as pdf_name 
+                        ,cast((case when upper(img_exten)='PDF' then 1 else 0 end) as bit) as pdf
+                        ,idmaeedo
+                        ,convert(nvarchar(10), fechains, 103) as fecha
+                        ,convert(nvarchar(5), fechains, 108) as hora
+                from ktb_documentos_attach with (nolock)
+                where idmaeedo = ${ body.idmaeedo };
+            end
+            else begin
+                select 'nodata' as resultado; 
+            end;
+        `;
+        console.log(query);
         //
         const request = new sql.Request();
         return request.query(query)
@@ -368,30 +400,7 @@ module.exports = {
     //
     misDeberes: (sql, body) => {
         // 
-        const query = `exec ksp_misDeberes '${ body.datos.usuario }','${ body.datos.empresa }','${ body.datos.desde }','${ body.datos.hasta }' ;`;
-        console.log(query);
-        //
-        const request = new sql.Request();
-        return request.query(query)
-            .then(resultado => {
-                return resultado.recordset;
-            })
-            .then(resultado => {
-                if (resultado) {
-                    return { resultado: 'ok', datos: resultado };
-                } else {
-                    return { resultado: 'error', datos: resultado };
-                }
-            })
-            .catch(err => {
-                console.log(err);
-                return { resultado: 'error', datos: err };
-            });
-    },
-    //        
-    misDeberesTop: (sql, body) => {
-        // 
-        const query = `exec ksp_misDeberesTop '${ body.datos.usuario }','${ body.datos.tipodoc }','${ body.datos.empresa }','${ body.datos.desde }','${ body.datos.hasta }' ;`;
+        const query = `exec ksp_misDeberes '${ body.datos.usuario }','${ body.datos.empresa }','${ body.datos.periodo }' ;`;
         console.log(query);
         //
         const request = new sql.Request();
@@ -414,7 +423,30 @@ module.exports = {
     //        
     misContribuciones: (sql, body) => {
         // 
-        const query = `exec ksp_misContribuciones '${ body.datos.usuario }','${ body.datos.desde }','${ body.datos.hasta }' ;`;
+        const query = `exec ksp_misContribuciones '${ body.datos.usuario }','${ body.datos.periodo }' ;`;
+        console.log(query);
+        //
+        const request = new sql.Request();
+        return request.query(query)
+            .then(resultado => {
+                return resultado.recordset;
+            })
+            .then(resultado => {
+                if (resultado) {
+                    return { resultado: 'ok', datos: resultado };
+                } else {
+                    return { resultado: 'error', datos: resultado };
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                return { resultado: 'error', datos: err };
+            });
+    },
+    //        
+    misDeberesTop: (sql, body) => {
+        // 
+        const query = `exec ksp_traeLosDocDelVendedor '${ body.datos.usuario }','${ body.datos.empresa }','${ body.datos.desde }','${ body.datos.hasta }','${ body.datos.tipodoc }' ;`;
         console.log(query);
         //
         const request = new sql.Request();
@@ -435,4 +467,26 @@ module.exports = {
             });
     },
     //   
+    traeMisNotifoSugerencia: (sql, body) => {
+        // 
+        const query = `exec ksp_traeMisNotoSug '${ body.datos.usuario }','${ body.datos.desde }','${ body.datos.hasta }','${ body.datos.tipo }','${ body.datos.estado }' ;`;
+        console.log(query);
+        //
+        const request = new sql.Request();
+        return request.query(query)
+            .then(resultado => {
+                return resultado.recordset;
+            })
+            .then(resultado => {
+                if (resultado) {
+                    return { resultado: 'ok', datos: resultado };
+                } else {
+                    return { resultado: 'error', datos: resultado };
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                return { resultado: 'error', datos: err };
+            });
+    },
 };

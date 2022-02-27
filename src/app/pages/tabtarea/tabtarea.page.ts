@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { MedidasnuevasPage } from '../medidasnuevas/medidasnuevas.page';
+import { AdjuntarrecepcionesPage } from '../adjuntarrecepciones/adjuntarrecepciones.page';
 
 @Component({
   selector: 'app-tabtarea',
@@ -15,11 +16,18 @@ export class TabtareaPage implements OnInit {
   }
 
   async medidasNuevas() {
-      const modal = await this.modalCtrl.create({
+    const modal = await this.modalCtrl.create({
       component: MedidasnuevasPage,
       componentProps: { value: 123 }
-      });
-      await modal.present();
+    });
+    await modal.present();
+  }
+
+  async adjuntarRecepciones() {
+    const modal = await this.modalCtrl.create({
+      component: AdjuntarrecepcionesPage,
+    });
+    await modal.present();
   }
 
 }
