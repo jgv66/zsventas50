@@ -518,4 +518,21 @@ module.exports = {
             });
     },
     //    
+    sport_: (sql, query) => {
+        // 
+        const request = new sql.Request();
+        return request.query(query)
+            .then(resultado => {
+                return resultado.recordset;
+            })
+            .then(resultado => {
+                return { resultado: 'ok', datos: resultado };
+            })
+            .catch(err => {
+                console.log('sport_ error ', err);
+                return { resultado: 'error', datos: err };
+            });
+    },
+    //      
+
 };

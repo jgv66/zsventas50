@@ -1,4 +1,4 @@
--- select top 10 * from MAEEDO order by IDMAEEDO DESC 
+-- select top 100 * from MAEEDO order by IDMAEEDO DESC 
 -- selec top 10 * from MAEDDO where IDMAEEDO=556048
 -- delete from MAEDDO WHERE IDMAEEDO=556048 ; delete from MAEEDO WHERE IDMAEEDO=556048 ; 
 
@@ -24,6 +24,7 @@ BEGIN
 			@suc_cliente	char(10),
 			@cpen			varchar(40),
 			@vendedor		char(3),
+			@vendedorReal   char(3),
 			@fechaemision   datetime,
 			@fechaultvenc	datetime,
 			@fecha1ervenc 	datetime,
@@ -67,7 +68,7 @@ BEGIN
 			@NUIMLI decimal(18,5),@POIMGLLI  decimal(18,5),@VAIMLI  decimal(18,5), @VANELI decimal(18,5), @VABRLI decimal(18,5), @PPPRNERE1 decimal(18,5), @PPPRNERE2 decimal(18,5) ;
 
 	--  >>>>>>>>> lectura de encabezado
-	select	@empresa=empresa,@cliente=cliente,@suc_cliente=suc_cliente,@vendedor=vendedor,
+	select	@empresa=empresa,@cliente=cliente,@suc_cliente=suc_cliente,@vendedor=vendedor,@vendedorReal=vendedor,
 			@fechaemision=cast(fechaemision as smalldatetime),@fechadespacho=cast(fechaentrega as smalldatetime),
 			@modalidad=modalidad,@obs=observacion,@occ=occ,@kilometraje=kilometraje,@sudo=suc_origen
 	from ktp_encabezado 
@@ -219,20 +220,21 @@ BEGIN
 				end;
 				--
 				insert into MAEDDO (IDMAEEDO,ARCHIRST,IDRST,EMPRESA,TIDO,NUDO,ENDO,SUENDO,ENDOFI,LILG,NULIDO,SULIDO,LUVTLIDO,
-									 BOSULIDO,KOFULIDO,NULILG,PRCT,TICT,TIPR,NUSEPR,KOPRCT,
-									 UDTRPR,RLUDPR,CAPRCO1,CAPRAD1,CAPREX1,CAPRNC1,UD01PR,CAPRCO2,CAPRAD2,CAPREX2,CAPRNC2,UD02PR,
-									 KOLTPR,MOPPPR,TIMOPPPR,TAMOPPPR,
-									 PPPRNELT,PPPRNE,PPPRBRLT,PPPRBR,
-									 NUDTLI,PODTGLLI,VADTNELI,VADTBRLI,
-									 POIVLI,VAIVLI,NUIMLI,POIMGLLI,
-									 VAIMLI,VANELI,VABRLI,
-									 TIGELI,EMPREPA,TIDOPA,NUDOPA,ENDOPA,NULIDOPA,LLEVADESP,FEEMLI,FEERLI,PPPRPM,OPERACION,CODMAQ,ESLIDO,PPPRNERE1,PPPRNERE2,
-									 ESFALI,CAFACO,CAFAAD,CAFAEX,CMLIDO,NULOTE,FVENLOTE,ARPROD,NULIPROD,NUCOCO,NULICO,PERIODO,FCRELOTE,SUBLOTE,NOKOPR,ALTERNAT,
-									 PRENDIDO,OBSERVA,KOFUAULIDO,KOOPLIDO,MGLTPR,PPOPPR,TIPOMG,ESPRODLI,CAPRODCO,CAPRODAD,CAPRODEX,CAPRODRE,TASADORIG,CUOGASDIF,
-									 SEMILLA,PROYECTO,POTENCIA,HUMEDAD,IDTABITPRE,IDODDGDV,LINCONDESP,PODEIVLI,VADEIVLI,PRIIDETIQ,KOLORESCA,KOENVASE,PPPRPMSUC,
-									 PPPRPMIFRS,COSTOTRIB,COSTOIFRS,SUENDOFI,COMISION,FLUVTCALZA,FEERLIMODI)
-				values ( @id,'',0,@empresa,@xtido,@nudoreal,@cliente,@suc_cliente,'','SI',right('0000'+rtrim(cast(@linea as varchar(9))),5),@sucursal,@luvt,
-					    @bodega,@vendedor,'',0,'',@TIPR,'',@codigo,
+									BOSULIDO,KOFULIDO,NULILG,PRCT,TICT,TIPR,NUSEPR,KOPRCT,
+									UDTRPR,RLUDPR,CAPRCO1,CAPRAD1,CAPREX1,CAPRNC1,UD01PR,CAPRCO2,CAPRAD2,CAPREX2,CAPRNC2,UD02PR,
+									KOLTPR,MOPPPR,TIMOPPPR,TAMOPPPR,
+									PPPRNELT,PPPRNE,PPPRBRLT,PPPRBR,
+									NUDTLI,PODTGLLI,VADTNELI,VADTBRLI,
+									POIVLI,VAIVLI,NUIMLI,POIMGLLI,
+									VAIMLI,VANELI,VABRLI,
+									TIGELI,EMPREPA,TIDOPA,NUDOPA,ENDOPA,NULIDOPA,LLEVADESP,FEEMLI,FEERLI,PPPRPM,OPERACION,CODMAQ,ESLIDO,PPPRNERE1,PPPRNERE2,
+									ESFALI,CAFACO,CAFAAD,CAFAEX,CMLIDO,NULOTE,FVENLOTE,ARPROD,NULIPROD,NUCOCO,NULICO,PERIODO,FCRELOTE,SUBLOTE,NOKOPR,ALTERNAT,
+									PRENDIDO,OBSERVA,KOFUAULIDO,KOOPLIDO,MGLTPR,PPOPPR,TIPOMG,ESPRODLI,CAPRODCO,CAPRODAD,CAPRODEX,CAPRODRE,TASADORIG,CUOGASDIF,
+									SEMILLA,PROYECTO,POTENCIA,HUMEDAD,IDTABITPRE,IDODDGDV,LINCONDESP,PODEIVLI,VADEIVLI,PRIIDETIQ,KOLORESCA,KOENVASE,PPPRPMSUC,
+									PPPRPMIFRS,COSTOTRIB,COSTOIFRS,SUENDOFI,COMISION,FLUVTCALZA,FEERLIMODI)
+				values ( @id,'',0,@empresa,@xtido,@nudoreal,@cliente,@suc_cliente,'','SI',right('0000'+rtrim(cast(@linea as varchar(9))),5),@sucursal,
+						case when @vendedorReal<>@vendedor then @vendedor else '' end, -- @luvt,
+					    @bodega,@vendedorReal,'',0,'',@TIPR,'',@codigo,
 					    @unidad_tr,@RLUD,
 						case when @unidad_tr=1 then @cantidad1 else @cantidad1*@RLUD end,
 						0,0,0,@UD01PR,

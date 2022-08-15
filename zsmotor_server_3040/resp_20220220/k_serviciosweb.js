@@ -489,4 +489,33 @@ module.exports = {
                 return { resultado: 'error', datos: err };
             });
     },
+    //
+    buscaDatos: function(sql, empresa, tipo, numero) {
+        // 
+        const query = `
+            select  edo.TIDO,edo.NUDO,edo.ENDO
+                    ,en.NOKOEN
+                    ,fu.NOKOFU,fu.EMAIL,fu.FOFU
+            from MAEEDO as edo with (nolock)
+            left join MAEEN as en with (nolock) on en.KOEN = edo.ENDO and en.SUEN = edo.SUENDO
+            left join TABFU as fu with (nolock) on fu.KOFU = edo.KOFUDO
+            where edo.EMPRESA = '${ empresa }'
+                and edo.TIDO = '${ tipo }' 
+                and edo.NUDO = '${ numero }';
+            `;
+        console.log('buscaDatos', query);
+        const request = new sql.Request();
+        return request.query(query)
+            .then(resultado => {
+                return resultado.recordset;
+            })
+            .then(resultado => {
+                return { resultado: 'ok', datos: resultado };
+            })
+            .catch(err => {
+                console.log('buscaDatos error ', err);
+                return { resultado: 'error', datos: err };
+            });
+    },
+    //    
 };

@@ -3,6 +3,8 @@ import { NetworkengineService } from '../../services/networkengine.service';
 import { BaselocalService } from '../../services/baselocal.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FuncionesService } from '../../services/funciones.service';
+import { ModalController } from '@ionic/angular';
+import { DocumentoPage } from '../documento/documento.page';
 
 @Component({
   selector: 'app-ultimosmovs',
@@ -20,6 +22,7 @@ export class UltimosmovsPage implements OnInit {
                private netWork: NetworkengineService,
                private funciones: FuncionesService,
                private router: Router,
+               private modalCtrl: ModalController,
                private parametros: ActivatedRoute ) {
       this.sistema = JSON.parse( this.parametros.snapshot.paramMap.get('dataP') );
   }
@@ -48,7 +51,7 @@ export class UltimosmovsPage implements OnInit {
   }
   
   revisa( data ) {
-    // console.log(data);
+    console.log(data);
     this.buscando = false;
     if ( data === undefined || data.length === 0 ) {
       if ( this.sistema.tipo === 'N' ) {
@@ -61,8 +64,15 @@ export class UltimosmovsPage implements OnInit {
     }
   }
 
-  verDocumento( id ) {
-    this.router.navigate( ['/tabs/documento/' + id.toString() ]);
+  async verDocumento( id ) {
+    const modal = await this.modalCtrl.create({
+    component: DocumentoPage,
+    componentProps: { id }
+    });
+      await modal.present();
   }
+  // verDocuxmento( id ) {
+  //   this.router.navigate( ['/tabs/documento/' + id.toString() ]);
+  // }
 
 }

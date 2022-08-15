@@ -38,12 +38,13 @@ app.use("/public", express.static('public'));
 publicpath = path.resolve(__dirname, 'public');
 app.use('/static', express.static(publicpath));
 CARPETA_PDF = publicpath + '/pdf/';
+CARPETA_HTML = publicpath + '/pdf/';
 CARPETA_IMG = publicpath + '/attach/';
 console.log(CARPETA_PDF);
 console.log(CARPETA_IMG);
 
-// servidor escuchando puerto 3040
-var server = app.listen(3040, function() {
+// servidor escuchando puerto 5060
+var server = app.listen(5060, function() {
     console.log("Escuchando http en el puerto: %s", server.address().port);
 });
 
@@ -1217,3 +1218,436 @@ app.post('/soloEnviarAdjuntos',
         correos.enviarCorreo(res, nodemailer, mailList, htmlBody);
         //
     });
+
+// --------------------------------------------sport
+app.post('/sport_usuarios', (req, res) => {
+    //        
+    console.log(req.body);
+    //
+    var query = '';
+    if (req.body.accion === 'select') {
+        //
+        query = `
+            select	u.*
+                    ,cat.descripcion as categoria_nombre
+                    ,pr1.NOKOPR as descrip1
+                    ,pr2.NOKOPR as descrip2
+                    ,pr3.NOKOPR as descrip3
+            from [ktb_sport_users] as u with (nolock)
+            left join [ktb_sport_categorias] as cat with (nolock) on cat.categoria=u.categoria
+            left join MAEPR as pr1 with (nolock) on pr1.KOPR=u.codigo1
+            left join MAEPR as pr2 with (nolock) on pr2.KOPR=u.codigo2
+            left join MAEPR as pr3 with (nolock) on pr3.KOPR=u.codigo3
+            where email = '${ req.body.email }' 
+                and clave = '${ req.body.pssw }' ;
+        `;
+        //
+    } else if (req.body.accion === 'insert') {
+        query = `
+                insert into [ktb_usuarios] (email,nombre,pssw) 
+                values ('${ req.body.email }',
+                        '${ req.body.nombre }',
+                        '${ req.body.pssw }') ;
+            `;
+    } else if (req.body.accion === 'update') {
+        query = `update [ktb_usuarios]
+                        set email='${ req.body.email }',
+                            nombre='${ req.body.nombre }',
+                            pssw='${ req.body.pssw }'
+                        where id = ${id} ;
+            `;
+    } else if (req.body.accion === 'update') {
+        query = `
+                delete [ktb_usuarios]
+                where id = ${ req.body.id } ;
+            `;
+    } else {
+        query = `
+                select 'sin accion en usuarios' as error ;
+            `;
+    }
+    //        
+    console.log(query);
+    //
+    servicios.sport_(sql, query)
+        .then(function(data) {
+            res.json(data); /* data viene en formato correcto */
+        });
+});
+
+app.post('/sport_categorias', (req, res) => {
+    //        
+    console.log(req.body);
+    //
+    var query = '';
+    if (req.body.accion === 'select') {
+        //
+        query = `
+                select * 
+                from [ktb_sport_categorias] with (nolock)
+                order by categoria ;
+            `;
+        //
+    } else if (req.body.accion === 'insert') {
+        query = `
+                insert into [ktb_usuarios] (email,nombre,pssw) 
+                values ('${ req.body.email }',
+                        '${ req.body.nombre }',
+                        '${ req.body.pssw }') ;
+            `;
+    } else if (req.body.accion === 'update') {
+        query = `update [ktb_usuarios]
+                        set email='${ req.body.email }',
+                            nombre='${ req.body.nombre }',
+                            pssw='${ req.body.pssw }'
+                        where id = ${id} ;
+            `;
+    } else if (req.body.accion === 'update') {
+        query = `
+                delete [ktb_usuarios]
+                where id = ${ req.body.id } ;
+            `;
+    } else {
+        query = `
+                select 'sin accion en usuarios' as error ;
+            `;
+    }
+    //        
+    console.log(query);
+    //
+    servicios.sport_(sql, query)
+        .then(function(data) {
+            res.json(data); /* data viene en formato correcto */
+        });
+});
+
+app.post('/sport_producto', (req, res) => {
+    //        
+    console.log(req.body);
+    //
+    var query = '';
+    if (req.body.accion === 'select') {
+        //
+        query = `
+                select pr.NOKOPR as descripcion 
+                from MAEPR as pr with (nolock)
+                where pr.KOPR = '${ req.body.codigo }' ;
+            `;
+        //
+    } else if (req.body.accion === 'insert') {
+        query = `
+                insert into [ktb_usuarios] (email,nombre,pssw) 
+                values ('${ req.body.email }',
+                        '${ req.body.nombre }',
+                        '${ req.body.pssw }') ;
+            `;
+    } else if (req.body.accion === 'update') {
+        query = `update [ktb_usuarios]
+                        set email='${ req.body.email }',
+                            nombre='${ req.body.nombre }',
+                            pssw='${ req.body.pssw }'
+                        where id = ${id} ;
+            `;
+    } else if (req.body.accion === 'update') {
+        query = `
+                delete [ktb_usuarios]
+                where id = ${ req.body.id } ;
+            `;
+    } else {
+        query = `
+                select 'sin accion en usuarios' as error ;
+            `;
+    }
+    //        
+    console.log(query);
+    //
+    servicios.sport_(sql, query)
+        .then(function(data) {
+            res.json(data); /* data viene en formato correcto */
+        });
+});
+
+app.post('/sport_instalaciones', (req, res) => {
+    //        
+    console.log(req.body);
+    //
+    var query = '';
+    if (req.body.accion === 'select') {
+        //
+        query = `
+                select *
+                from [ktb_sport_instalaciones] with (nolock)
+                order by lugar ;
+            `;
+        //
+    } else if (req.body.accion === 'insert') {
+        query = `
+                insert into [ktb_usuarios] (email,nombre,pssw) 
+                values ('${ req.body.email }',
+                        '${ req.body.nombre }',
+                        '${ req.body.pssw }') ;
+            `;
+    } else if (req.body.accion === 'update') {
+        query = `update [ktb_usuarios]
+                        set email='${ req.body.email }',
+                            nombre='${ req.body.nombre }',
+                            pssw='${ req.body.pssw }'
+                        where id = ${id} ;
+            `;
+    } else if (req.body.accion === 'update') {
+        query = `
+                delete [ktb_usuarios]
+                where id = ${ req.body.id } ;
+            `;
+    } else {
+        query = `
+                select 'sin accion en usuarios' as error ;
+            `;
+    }
+    //        
+    console.log(query);
+    //
+    servicios.sport_(sql, query)
+        .then(function(data) {
+            res.json(data); /* data viene en formato correcto */
+        });
+});
+
+app.post('/sport_asistentes', (req, res) => {
+    //        
+    console.log(req.body);
+    //
+    var query = '';
+    if (req.body.accion === 'select') {
+        //
+        query = `
+                select *,cast('' as varchar(50)) as imagen
+                from [ktb_sport_asistentes] with (nolock)
+                order by nombre ;
+            `;
+        //
+    } else if (req.body.accion === 'insert') {
+        query = `
+                insert into [ktb_usuarios] (email,nombre,pssw) 
+                values ('${ req.body.email }',
+                        '${ req.body.nombre }',
+                        '${ req.body.pssw }') ;
+            `;
+    } else if (req.body.accion === 'update') {
+        query = `update [ktb_usuarios]
+                        set email='${ req.body.email }',
+                            nombre='${ req.body.nombre }',
+                            pssw='${ req.body.pssw }'
+                        where id = ${id} ;
+            `;
+    } else if (req.body.accion === 'update') {
+        query = `
+                delete [ktb_usuarios]
+                where id = ${ req.body.id } ;
+            `;
+    } else {
+        query = `
+                select 'sin accion en usuarios' as error ;
+            `;
+    }
+    //        
+    console.log(query);
+    //
+    servicios.sport_(sql, query)
+        .then(function(data) {
+            res.json(data); /* data viene en formato correcto */
+        });
+});
+
+app.post('/sport_fechas', (req, res) => {
+    //        
+    console.log(req.body);
+    //
+    var query = '';
+    if (req.body.accion === 'select') {
+        //
+        query = `
+                select *,cast('' as varchar(50)) as imagen
+                from [ktb_sport_fechas] with (nolock)
+                order by id ;
+            `;
+        //
+    } else if (req.body.accion === 'insert') {
+        query = `
+                insert into [ktb_usuarios] (email,nombre,pssw) 
+                values ('${ req.body.email }',
+                        '${ req.body.nombre }',
+                        '${ req.body.pssw }') ;
+            `;
+    } else if (req.body.accion === 'update') {
+        query = `update [ktb_usuarios]
+                        set email='${ req.body.email }',
+                            nombre='${ req.body.nombre }',
+                            pssw='${ req.body.pssw }'
+                        where id = ${id} ;
+            `;
+    } else if (req.body.accion === 'update') {
+        query = `
+                delete [ktb_usuarios]
+                where id = ${ req.body.id } ;
+            `;
+    } else {
+        query = `
+                select 'sin accion en usuarios' as error ;
+            `;
+    }
+    //        
+    console.log(query);
+    //
+    servicios.sport_(sql, query)
+        .then(function(data) {
+            res.json(data); /* data viene en formato correcto */
+        });
+});
+
+app.post('/sport_pilotos', (req, res) => {
+    //        
+    console.log(req.body);
+    //
+    var query = '';
+    if (req.body.accion === 'select') {
+        //
+        query = `
+            select	u.*
+                    ,cat.descripcion as categoria_nombre
+                    ,pr1.NOKOPR as descrip1
+                    ,pr2.NOKOPR as descrip2
+                    ,pr3.NOKOPR as descrip3
+                    ,cast('' as varchar(50)) as imagen
+            from [ktb_sport_users] as u with (nolock)
+            left join [ktb_sport_categorias] as cat with (nolock) on cat.categoria=u.categoria
+            left join MAEPR as pr1 with (nolock) on pr1.KOPR=u.codigo1
+            left join MAEPR as pr2 with (nolock) on pr2.KOPR=u.codigo2
+            left join MAEPR as pr3 with (nolock) on pr3.KOPR=u.codigo3
+            where u.tipodeusuario = 'PILOTO' ;
+        `;
+        //
+    } else if (req.body.accion === 'insert') {
+        query = `
+                insert into [ktb_usuarios] (email,nombre,pssw) 
+                values ('${ req.body.email }',
+                        '${ req.body.nombre }',
+                        '${ req.body.pssw }') ;
+            `;
+    } else if (req.body.accion === 'update') {
+        query = `update [ktb_usuarios]
+                        set email='${ req.body.email }',
+                            nombre='${ req.body.nombre }',
+                            pssw='${ req.body.pssw }'
+                        where id = ${id} ;
+            `;
+    } else if (req.body.accion === 'update') {
+        query = `
+                delete [ktb_usuarios]
+                where id = ${ req.body.id } ;
+            `;
+    } else {
+        query = `
+                select 'sin accion en usuarios' as error ;
+            `;
+    }
+    //        
+    console.log(query);
+    //
+    servicios.sport_(sql, query)
+        .then(function(data) {
+            res.json(data); /* data viene en formato correcto */
+        });
+});
+
+app.post('/sport_emailasistente', (req, res) => {
+    //        
+    console.log(req.body);
+    //
+    var query = '';
+    if (req.body.accion === 'select') {
+        //
+        query = `
+            SELECT  com.email as comercial
+                    ,tec.email as tecnico
+            FROM ktb_sport_users as usr with (nolock)
+            left join ktb_sport_asistentes as com with (nolock) on usr.asistentecomercial=com.id
+            left join ktb_sport_asistentes as tec with (nolock) on usr.asistentetecnico=tec.id
+            where usr.id = ${ req.body.id } ;
+        `;
+        //
+    } else if (req.body.accion === 'insert') {
+        query = `
+                insert into [ktb_usuarios] (email,nombre,pssw) 
+                values ('${ req.body.email }',
+                        '${ req.body.nombre }',
+                        '${ req.body.pssw }') ;
+            `;
+    } else if (req.body.accion === 'update') {
+        query = `update [ktb_usuarios]
+                        set email='${ req.body.email }',
+                            nombre='${ req.body.nombre }',
+                            pssw='${ req.body.pssw }'
+                        where id = ${id} ;
+            `;
+    } else if (req.body.accion === 'update') {
+        query = `
+                delete [ktb_usuarios]
+                where id = ${ req.body.id } ;
+            `;
+    } else {
+        query = `
+                select 'sin accion en usuarios' as error ;
+            `;
+    }
+    //        
+    console.log(query);
+    //
+    servicios.sport_(sql, query)
+        .then(function(data) {
+            res.json(data); /* data viene en formato correcto */
+        });
+});
+
+app.post('/sport_enviarCorreo',
+    async(req, res) => {
+        //
+        console.log('sport_enviarCorreo------------', req.body);
+        _Activity.registra(sql, '', 'sport_enviarCorreo', req.body.toComercial, req.body.toTecnico, 'ziad@zsmotor.cl', 'jogv66@gmail.com');
+        //
+        // const filenameHTM = `solicitud_${ req.body.id }.html`;
+        //
+        const mailList = [{ cc: [req.body.toTecnico, 'ziad@zsmotor.cl', 'jogv66@gmail.com'], to: req.body.toComercial }];
+        htmlBody = await contruyeHTMLRally(req.body);
+        correos.enviarCorreo(res, nodemailer, mailList, htmlBody, 'ZS Motor Sport - Michelin - COPEC Rally-Mobil');
+        //
+    });
+
+contruyeHTMLRally = async(data) => {
+    //
+    return new Promise(resolve => {
+            //
+            let xHTML = correos.solicitudRally();
+            // console.log(xHTML);
+            xHTML = xHTML.replace('###_codigo_###', data.codigo); // titulo
+            xHTML = xHTML.replace('###_codigo_###', data.codigo); // detalle
+            xHTML = xHTML.replace('###_descripcion_###', data.descripcion); // detalle
+            xHTML = xHTML.replace('###_medida_###', data.medida); // detalle
+            xHTML = xHTML.replace('###_nombre_###', data.nombre); // detalle
+            xHTML = xHTML.replace('###_fono_###', data.fono); // detalle
+            xHTML = xHTML.replace('###_mail_###', data.mail); // detalle
+            xHTML = xHTML.replace('###_cantidad_###', data.cantidad); // detalle
+            xHTML = xHTML.replace('###_lugar_###', data.lugar); // detalle
+            xHTML = xHTML.replace('###_fecha_###', data.fecha); // detalle
+            xHTML = xHTML.replace('###_obs_###', data.obs); // detalle
+            // 
+            console.log(xHTML);
+            resolve(xHTML);
+            // 
+        },
+        reject => {
+            reject('Algo paso....');
+        }
+    );
+    //
+};

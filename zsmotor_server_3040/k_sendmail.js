@@ -7,8 +7,7 @@ module.exports = {
         return request.execute("ksp_TraeDetalleK");
         //
     },
-
-    enviarCorreo: function(res, nodemailer, mailList, htmlBody, textoSubject) {
+    enviarCorreo: (res, nodemailer, mailList, htmlBody, textoSubject) => {
         //
         sender = 'preventa@zsmotor.cl';
         psswrd = '4*SJM4yj';
@@ -49,7 +48,6 @@ module.exports = {
             }
         });
     },
-
     primeraParte: function(cObs, nombreVend, rsocial, codCliente, sucCliente, num, tipodoc, cOcc, cCorreoVend, cFonoVend) {
         return `
         <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -554,5 +552,102 @@ module.exports = {
         </body>
         </html>`;
     },
+    solicitudRally: () => {
+        //
+        return `
+        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+        <html xmlns="http://www.w3.org/1999/xhtml">
+        
+        <head>
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+            <meta name="viewport" content="width=device-width" />
+        
+            <style type="text/css">
+                * { margin: 0; padding: 0; font-size: 100%; font-family: 'Avenir Next', "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif; line-height: 1.65; }
+                img { max-width: 100%; margin: 0 auto; }
+                body, .body-wrap { width: 100% !important; height: 100%; background: #efefef; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; }
+                a { color: #71bc37; text-decoration: none; }
+                .text-center { text-align: center; }
+                .text-right { text-align: right; }
+                .text-left { text-align: left; }
+                .button { display: inline-block; color: white; background: #71bc37; border: solid #71bc37; border-width: 10px 20px 8px; font-weight: bold; border-radius: 4px; }
+                h1, h2, h3, h4, h5, h6 { margin-bottom: 20px; line-height: 1.25; }
+                h1 { font-size: 32px; }
+                h2 { font-size: 28px; }
+                h3 { font-size: 24px; }
+                h4 { font-size: 20px; }
+                h5 { font-size: 16px; }
+                p, ul, ol { font-size: 16px; font-weight: normal; margin-bottom: 20px; }
+                .container { display: block !important; clear: both !important; margin: 0 auto !important; max-width: 980px !important; }
+                .container table { width: 100% !important; border-collapse: collapse; }
+                .container .masthead { padding: 10px 10px 10px ; background: #222; color: white; }
+                .container .masthead h1 { margin: 0 auto !important; max-width: 90%; text-transform: uppercase; }
+                .container .rayaroja { max-height: 2px; background: #ca2121; color: #ca2121; }
+                .container .content { background: white; padding: 30px 35px; }
+                .container .content.footer { background: none; }
+                .container .content.footer p { margin-bottom: 0; color: #888;  text-align: center; font-size: 10px; }
+                .container .content.footer a { color: #888; text-decoration: none; font-weight: bold; }
+            </style>
+        </head>
+        
+        <body>
+            <table class="body-wrap">
+                <tr>
+                    <td class="container">
+                        <!-- Message start -->
+                        <table>
 
+                            <tr>
+                                <td align="left" class="masthead">
+                                <img src="https://zsmotor.cl/storage/mobile/ZS-Motor---Fondo-Blanco-.png" alt="zsmotor.cl" height="100px" width="275px"></img>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="rayaroja">
+                                    <p> </p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="content">
+        
+                                    <h3>Solicitud de Neumático: ###_codigo_### </h3>
+
+                                    <table border="1">
+                                        <tr><td>Descripcion          </td><td align="left">###_descripcion_###</td></tr>
+                                        <tr><td>Medida requerida     </td><td align="left">###_medida_###</td></tr>
+                                        <tr><td>Piloto               </td><td align="left">###_nombre_###</td></tr>
+                                        <tr><td>Teléfono             </td><td align="left">###_fono_###</td></tr>
+                                        <tr><td>EMail                </td><td align="left">###_mail_###</td></tr>
+                                        <tr><td>Cantidad             </td><td align="left">###_cantidad_### </td></tr>
+                                        <tr><td>Lugar de instalación solicitada</td><td align="left">###_lugar_###</td></tr>
+                                        <tr><td>Fecha de instalación solicitada</td><td align="left">###_fecha_###</td></tr>
+                                        <tr><td>Observaciones        </td><td align="left">###_obs_###</td></tr>
+                                        <tr><td>Imagen               </td><td><img src="https://zsmotor.cl/storage/mobile/###_codigo_###/img_1.jpg" width="200px" height="200px"/></td></tr>
+                                        <!--  KINETIK -->
+                                    </table>
+                                    <br>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="container">
+                        <!-- Message start -->
+                        <table>
+                            <tr>
+                                <td class="content footer" align="center">
+                                    <p><a href="https://www.kinetik.cl">Desarrollado por Kinetik - Soluciones Móviles</a></p>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+
+        </body>
+
+        </html>`;
+    },
 };

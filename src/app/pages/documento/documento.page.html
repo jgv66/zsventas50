@@ -7,7 +7,7 @@
         </ion-buttons>
         <img src="./assets/imgs/logo-zs.png" alt="" class="navbar-img">
         <ion-title>Documento</ion-title>
-        <ion-buttons slot="end" *ngIf=" detalle[0].attached ">
+        <ion-buttons slot="end" *ngIf=" detalle && detalle[0].attached ">
             <ion-button (click)="verAdjuntos( detalle[0] )">
                 <ion-icon slot="icon-only" name="document-attach-outline"></ion-icon>
             </ion-button>

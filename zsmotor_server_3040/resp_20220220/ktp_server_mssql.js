@@ -37,7 +37,9 @@ app.use(bodyParser.urlencoded({ limit: '5mb', extended: false }));
 app.use("/public", express.static('public'));
 publicpath = path.resolve(__dirname, 'public');
 app.use('/static', express.static(publicpath));
+CARPETA_PDF = publicpath + '/pdf/';
 CARPETA_IMG = publicpath + '/attach/';
+console.log(CARPETA_PDF);
 console.log(CARPETA_IMG);
 
 // servidor escuchando puerto 3040
@@ -1117,3 +1119,101 @@ app.post('/getimages',
             });
     });
 //---------------------------------- multer funcionó
+
+const contruyeHTML = async(encabezado, obs, adjuntos, xHTML) => {
+    //
+    // obtener el detalle del documento
+    console.log('antes->', xHTML);
+    //
+    return new Promise(resolve => {
+            // variables por empresa
+            xHTML = xHTML.replace('###-codCliente-###', encabezado[0].ENDO);
+            xHTML = xHTML.replace('###-rsocial-###', encabezado[0].NOKOEN);
+            xHTML = xHTML.replace('###-nombreVend-###', encabezado[0].NOKOFU);
+            xHTML = xHTML.replace('###-cCorreoVend-###', encabezado[0].EMAIL);
+            xHTML = xHTML.replace('###-documento-###', encabezado[0].TIDO + '-' + encabezado[0].NUDO);
+            xHTML = xHTML.replace('###-cFonoVend-###', encabezado[0].FOFU);
+            xHTML = xHTML.replace('###-cObs-###', obs);
+            // 
+            console.log("largo: ", adjuntos.length)
+            if (adjuntos.length > 0) {
+                let det = '<table border="0">';
+                adjuntos.forEach(elem => {
+                    if (elem.pdf === true) {
+                        det += `
+                        <tr>
+                            <td>
+                            <a href="${ elem.imgb64 }" target="_blank">PDF Adjunto ${ elem.pdf_name } </a>
+                            </td>
+                        </tr>
+                        `;
+                    } else {
+                        det += `
+                        <tr>
+                            <td>
+                            <img src="${ elem.imgb64 }" alt="imagenes" />
+                            </td>
+                        </tr>
+                        `;
+                    }
+                });
+                det += `
+                </table>
+                <br>
+                `;
+                xHTML = xHTML.replace('###-adjuntos-###', det);
+            } else {
+                xHTML = xHTML.replace('###-adjuntos-###', '');
+            }
+            //
+            const filenameHTM = `attach_${encabezado[0].TIDO}${encabezado[0].NUDO}.html`;
+            const fullpathHTM = path.join(CARPETA_PDF, filenameHTM);
+            //
+            fs.writeFile(fullpathHTM, xHTML, { encoding: 'utf-8' }, errData => {
+                if (!errData) {
+                    if (fileExist.sync(fullpathHTM)) {
+                        console.log('exito-> archivo no existe->', fullpathHTM);
+                        // El archivo no se necesita para convertirlo a PDF, basta pasarle el contenido html
+                        resolve(xHTML);
+                    }
+                } else {
+                    console.log('error en 581->', errData);
+                    // throw Error(errData);
+                    resolve();
+                }
+            });
+        },
+        reject => {
+            reject('Algo pasó....');
+        }
+    )
+};
+
+app.post('/soloEnviarAdjuntos',
+    async(req, res) => {
+        //
+        const xTo = req.body.cTo;
+        const xCc = req.body.cCc || '';
+        const tipo = req.body.tipo;
+        const numero = req.body.numero;
+        const vendedor = req.body.vendedor;
+        const obs = req.body.obs;
+        const adjuntos = JSON.parse(req.body.adjuntos);
+        //
+        const mailList = [];
+        //
+        _Activity.registra(sql, vendedor, 'soloEnviarAdjuntos', xTo, xCc, '');
+        //
+        console.log('correo soloEnviarAdjuntos', xTo);
+        console.log('correo soloEnviarAdjuntos', adjuntos);
+        //
+        mailList.push({ cc: xCc, to: xTo });
+        //
+        let htmlBody = await correos.adjuntos();
+        const datos = await servicios.buscaDatos(sql, '01', tipo, numero);
+        console.log(datos);
+        htmlBody = await contruyeHTML(datos.datos, obs, adjuntos, htmlBody);
+        //
+        correos.enviarCorreo(res, nodemailer, mailList, htmlBody);
+        //
+    });

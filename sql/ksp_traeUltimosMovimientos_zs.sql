@@ -46,8 +46,10 @@ BEGIN
 						,en.NOKOEN as cliente
 						,convert( nvarchar(10),ddo.FEEMLI,103) as fecha
 						,( select COUNT(*) from ktb_documentos_attach as att with (nolock) where att.idmaeedo = ddo.IDMAEEDO and estado = 0 ) as attached
+						,rtrim(fu.NOKOFU) as nombre_v
 				from MAEDDO AS ddo with (nolock)
 				left join MAEEN as en  with (nolock) on en.KOEN=ddo.ENDO and en.SUEN = ddo.SUENDO
+				left join TABFU as fu  with (nolock) on fu.KOFU=ddo.KOFULIDO 
 				where ddo.EMPRESA=@empresa
 				  and ddo.TIDO in  ( 'FCV','BLV','NCV' )
 				  and ddo.KOPRCT = @codigo
@@ -64,8 +66,10 @@ BEGIN
 						,en.NOKOEN as cliente
 						,convert( nvarchar(10),ddo.FEEMLI,103) as fecha
 						,( select COUNT(*) from ktb_documentos_attach as att with (nolock) where att.idmaeedo = ddo.IDMAEEDO and estado = 0 ) as attached
+						,rtrim(fu.NOKOFU) as nombre_v
 				from MAEDDO AS ddo with (nolock)
 				left join MAEEN as en  with (nolock) on en.KOEN=ddo.ENDO and en.SUEN = ddo.SUENDO
+				left join TABFU as fu  with (nolock) on fu.KOFU=ddo.KOFULIDO 
 				where ddo.EMPRESA=@empresa
 				  and ddo.TIDO in  ( 'FCV','BLV','NCV' )
 				  and ddo.KOPRCT = @codigo
@@ -83,8 +87,10 @@ BEGIN
 					,en.NOKOEN as cliente
 					,convert( nvarchar(10),ddo.FEEMLI,103) as fecha
 					,( select COUNT(*) from ktb_documentos_attach as att with (nolock) where att.idmaeedo = ddo.IDMAEEDO and estado = 0 ) as attached
+					,rtrim(fu.NOKOFU) as nombre_v
 			from MAEDDO AS ddo with (nolock)
 			left join MAEEN as en  with (nolock) on en.KOEN=ddo.ENDO and en.SUEN = ddo.SUENDO
+			left join TABFU as fu  with (nolock) on fu.KOFU=ddo.KOFULIDO 
 			where ddo.EMPRESA=@empresa
 			  and ddo.TIDO in  ( 'FCC','BLC','NCC','DIN','GRC' )
 			  and ddo.KOPRCT = @codigo

@@ -15,7 +15,7 @@ import { VerfotoPage } from '../verfoto/verfoto.page';
 export class DocumentoPage implements OnInit {
 
   @Input() id;
-
+  //id;
   buscando = false;
   detalle;
 
@@ -24,7 +24,10 @@ export class DocumentoPage implements OnInit {
                private funciones: FuncionesService,
                private modalCtrl: ModalController,
                private router: Router,
-               private parametros: ActivatedRoute ) {}
+               private parametros: ActivatedRoute ) {
+//    this.id = JSON.parse( this.parametros.snapshot.paramMap.get('id') );
+    console.log(this.id)                 
+  }
 
   ngOnInit() {
     if ( !this.baseLocal.user ) {
@@ -32,7 +35,7 @@ export class DocumentoPage implements OnInit {
     }
     this.buscando = true;
     this.netWork.traeUnSP( 'ksp_traeDocumento',
-                           { id: parseInt( this.id, 0 ) },
+                           { id: this.id },
                            { codigo: this.baseLocal.user.KOFU,
                              nombre: this.baseLocal.user.NOKOFU } )
         .subscribe( data => { this.revisa( data );           },
@@ -45,7 +48,7 @@ export class DocumentoPage implements OnInit {
   }
 
   revisa( data ) {
-    // console.log(data);
+    console.log(data);
     this.buscando = false;
     if ( data === undefined || data.length === 0 ) {
       this.funciones.muestraySale('ATENCION : Código de cliente no presenta documentos impagos', 2 );

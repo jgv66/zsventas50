@@ -337,7 +337,7 @@ export class TabinicioPage implements OnInit {
     } else if ( data.length > 0 ) {
       //
       data.forEach( item =>{
-        item.imagen = 'https://zsmotor.cl/storage/mobile/' + item.codigo + '/img_1.jpg';
+        item.imagen = 'https://img.zsmotor.cl/fotos/app/' + item.codigo + '-1.jpg';
       });
       this.listaProductos.push( ...data  );
       //
