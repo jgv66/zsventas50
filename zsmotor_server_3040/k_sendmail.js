@@ -92,7 +92,7 @@ module.exports = {
 
                             <tr>
                                 <td align="left" class="masthead">
-                                <img src="https://zsmotor.cl/storage/mobile///ZS-Motor---Fondo-Blanco-.png" alt="zsmotor.cl" height="100px" width="275px"></img>
+                                <img src="https://img.zsmotor.cl/fotos/app/ZS-Motor---Fondo-Blanco-.png" alt="zsmotor.cl" height="100px" width="275px"></img>
                                 </td>
                             </tr>
                             <tr>
@@ -205,7 +205,7 @@ module.exports = {
 
                             <tr>
                                 <td align="left" class="masthead">
-                                <img src="https://zsmotor.cl/storage/mobile///ZS-Motor---Fondo-Blanco-.png" alt="zsmotor.cl" height="100px" width="275px"></img>
+                                <img src="https://img.zsmotor.cl/fotos/app/ZS-Motor---Fondo-Blanco-.png" alt="zsmotor.cl" height="100px" width="275px"></img>
                                 </td>
                             </tr>
                             <tr>
@@ -297,7 +297,7 @@ module.exports = {
 
                             <tr>
                                 <td align="left" class="masthead">
-                                <img src="https://zsmotor.cl/storage/mobile///ZS-Motor---Fondo-Blanco-.png" alt="zsmotor.cl" height="100px" width="275px"></img>
+                                <img src="https://img.zsmotor.cl/fotos/app/ZS-Motor---Fondo-Blanco-.png" alt="zsmotor.cl" height="100px" width="275px"></img>
                                 </td>
                             </tr>
                             <tr>
@@ -392,7 +392,7 @@ module.exports = {
 
                             <tr>
                                 <td align="left" class="masthead">
-                                <img src="https://zsmotor.cl/storage/mobile///ZS-Motor---Fondo-Blanco-.png" alt="zsmotor.cl" height="100px" width="275px"></img>
+                                <img src="https://img.zsmotor.cl/fotos/app/ZS-Motor---Fondo-Blanco-.png" alt="zsmotor.cl" height="100px" width="275px"></img>
                                 </td>
                             </tr>
                             <tr>
@@ -504,7 +504,7 @@ module.exports = {
                         <table>
                             <tr>
                                 <td align="left" class="masthead">
-                                <img src="https://zsmotor.cl/storage/mobile///ZS-Motor---Fondo-Blanco-.png" alt="zsmotor.cl" height="100px" width="275px"></img>
+                                <img src="https://img.zsmotor.cl/fotos/app/ZS-Motor---Fondo-Blanco-.png" alt="zsmotor.cl" height="100px" width="275px"></img>
                                 </td>
                             </tr>
                             <tr>
@@ -599,7 +599,7 @@ module.exports = {
 
                             <tr>
                                 <td align="left" class="masthead">
-                                <img src="https://zsmotor.cl/storage/mobile/ZS-Motor---Fondo-Blanco-.png" alt="zsmotor.cl" height="100px" width="275px"></img>
+                                <img src="https://img.zsmotor.cl/fotos/app/ZS-Motor---Fondo-Blanco-.png" alt="zsmotor.cl" height="100px" width="275px"></img>
                                 </td>
                             </tr>
                             <tr>
@@ -623,7 +623,7 @@ module.exports = {
                                         <tr><td>Lugar de instalación solicitada</td><td align="left">###_lugar_###</td></tr>
                                         <tr><td>Fecha de instalación solicitada</td><td align="left">###_fecha_###</td></tr>
                                         <tr><td>Observaciones        </td><td align="left">###_obs_###</td></tr>
-                                        <tr><td>Imagen               </td><td><img src="https://zsmotor.cl/storage/mobile/###_codigo_###/img_1.jpg" width="200px" height="200px"/></td></tr>
+                                        <tr><td>Imagen               </td><td><img src="https://img.zsmotor.cl/fotos/app/###_codigo_###-1.jpg" width="200px" height="200px"/></td></tr>
                                         <!--  KINETIK -->
                                     </table>
                                     <br>

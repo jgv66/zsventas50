@@ -43,8 +43,8 @@ CARPETA_IMG = publicpath + '/attach/';
 console.log(CARPETA_PDF);
 console.log(CARPETA_IMG);
 
-// servidor escuchando puerto 5060
-var server = app.listen(5060, function() {
+// servidor escuchando puerto 3040
+var server = app.listen(3040, function() {
     console.log("Escuchando http en el puerto: %s", server.address().port);
 });
 
@@ -178,7 +178,7 @@ app.post('/soloEnviarCorreo',
         console.log('detalle del correo...');
         carro.forEach(element => {
             lineas += '<tr>';
-            lineas += '<td align="center"><img src="https://zsmotor.cl/storage/mobile/' + element.codigo.trim() + '/img_1.jpg" width="150px" height="150px"/></td>';
+            lineas += '<td align="center"><img src="https://img.zsmotor.cl/fotos/app/' + element.codigo.trim() + '-1.jpg" width="150px" height="150px"/></td>';
             lineas += '<td align="center">' + element.cantidad.toString() + '</td>';
             lineas += '<td align="center">' + element.codigo + '</td>';
             lineas += '<td align="center">' + element.descrip + '</td>';
@@ -386,7 +386,7 @@ app.post('/grabadocumentos',
                                             .then(data => {
                                                 data.recordset.forEach(element => {
                                                     lineas += '<tr>';
-                                                    lineas += '<td align="center"><img src="https://zsmotor.cl/storage/mobile/' + element.codigo.trim() + '/img_1.jpg" width="150px" height="150px"/></td>';
+                                                    lineas += '<td align="center"><img src="https://img.zsmotor.cl/fotos/app/' + element.codigo.trim() + '-1.jpg" width="150px" height="150px"/></td>';
                                                     lineas += '<td align="center">' + element.cantidad.toString() + '</td>';
                                                     lineas += '<td align="center">' + element.codigo + '</td>';
                                                     lineas += '<td align="center">' + element.descripcion + '</td>';
@@ -511,7 +511,7 @@ app.post('/pregraba',
                             .then(data => {
                                 data.recordset.forEach(element => {
                                     lineas += '<tr>';
-                                    lineas += '<td align="center"><img src="https://zsmotor.cl/storage/mobile/' + element.codigo.trim() + '/img_1.jpg" width="150px" height="150px"/></td>';
+                                    lineas += '<td align="center"><img src="https://img.zsmotor.cl/fotos/app/' + element.codigo.trim() + '-1.jpg" width="150px" height="150px"/></td>';
                                     lineas += '<td align="center">' + element.cantidad.toString() + '</td>';
                                     lineas += '<td align="center">' + element.codigo + '</td>';
                                     lineas += '<td align="center">' + element.descripcion + '</td>';
